@@ -1,4 +1,4 @@
-namespace CodebustersPAS_Server.API
+namespace API
 {
     public class WeatherForecast
     {
