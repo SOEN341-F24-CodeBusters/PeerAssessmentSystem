@@ -1,0 +1,6 @@
+@CodebustersPAS_Server.API_HostAddress = http://localhost:5011
+
+GET {{CodebustersPAS_Server.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
