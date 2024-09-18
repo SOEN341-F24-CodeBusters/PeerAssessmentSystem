@@ -1,38 +1,30 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Infrastructure.Migrations
-{
+namespace Infrastructure.Migrations {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
-    {
+    public partial class InitialCreate : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(
                 name: "Groups",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     TeacherId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Groups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Teams",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     TeamName = table.Column<string>(type: "TEXT", nullable: false),
                     GroupId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Teams", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Teams_Groups_GroupId",
@@ -44,8 +36,7 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Users",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", nullable: false),
                     LastName = table.Column<string>(type: "TEXT", nullable: false),
@@ -53,8 +44,7 @@ namespace Infrastructure.Migrations
                     GroupId = table.Column<Guid>(type: "TEXT", nullable: true),
                     TeamId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Users_Groups_GroupId",
@@ -98,8 +88,7 @@ namespace Infrastructure.Migrations
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropForeignKey(
                 name: "FK_Groups_Users_TeacherId",
                 table: "Groups");

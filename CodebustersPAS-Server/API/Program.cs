@@ -15,19 +15,16 @@ builder.Services.AddPASDbContext();
 var app = builder.Build();
 
 // Migrate Database
-using (var scope = app.Services.CreateScope())
-{
+using (var scope = app.Services.CreateScope()) {
     var db = scope.ServiceProvider.GetRequiredService<PeerAssessmentSystemDbContext>();
-    if (db.Database.GetPendingMigrations().Any())
-    {
+    if (db.Database.GetPendingMigrations().Any()) {
         db.Database.Migrate();
     }
 }
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
