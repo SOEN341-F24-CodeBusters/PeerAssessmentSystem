@@ -14,20 +14,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: './CodebustersPAS-Server'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4 
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
       - name: Restore dependencies
-        run: dotnet restore ./CodebustersPAS-Server/CodebustersPAS-Server.sln
+        run: dotnet restore CodebustersPAS-Server.sln
 
       - name: Build
-        run: dotnet build --no-restore ./CodebustersPAS-Server/CodebustersPAS-Server.sln
+        run: dotnet build --no-restore CodebustersPAS-Server.sln
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal ./CodebustersPAS-Server/CodebustersPAS-Server.sln
+        run: dotnet test --no-build --verbosity normal CodebustersPAS-Server.sln
