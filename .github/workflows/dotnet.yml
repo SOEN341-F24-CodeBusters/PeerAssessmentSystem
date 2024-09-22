@@ -24,10 +24,10 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore dependencies
-        run: dotnet restore --source CodebustersPAS-Server
+        run: dotnet restore --source CodebustersPAS-Server\CodebustersPAS-Server.sln
 
       - name: Build
-        run: dotnet build --no-restore --source CodebustersPAS-Server
+        run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal --source CodebustersPAS-Server
+        run: dotnet test --no-build --verbosity normal
