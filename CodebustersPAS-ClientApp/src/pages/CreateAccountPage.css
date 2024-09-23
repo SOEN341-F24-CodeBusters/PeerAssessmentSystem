@@ -1,0 +1,112 @@
+.create-account-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f6f9;
+  }
+  
+  .create-account-card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  h2 {
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    border-color: #007bff;
+  }
+  
+  .user-type {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .radio-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .radio-label input {
+    margin-right: 8px;
+  }
+  
+  .radio-label span {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .sign-up-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 8px;
+  }
+  
+  .sign-up-btn:hover {
+    background-color: #218838;
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .back-btn {
+    width: 48%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .back-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  
