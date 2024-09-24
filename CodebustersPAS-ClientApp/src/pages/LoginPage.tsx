@@ -1,15 +1,18 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
 const Login: React.FC = () => {
   const [userType, setUserType] = useState<'student' | 'instructor'>('student');
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate();
 
   const handleSignIn = (e: FormEvent) => {
     e.preventDefault();
     // Handling sign-in for both student or instructor
     console.log(`Signing in as ${userType} with username: ${username} and password: ${password}`);
+    navigate('/');
   };
 
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -73,9 +76,9 @@ const Login: React.FC = () => {
           <button type="submit" className="sign-in-btn">Sign In</button>
         </form>
 
-        <div className="sign-up-link">
+        <div className="no-account">
           <p>Don't have an account?</p>
-          <a href="/signup">Create one</a>
+          <button onClick={() => navigate('/signup')} className="sign-up-link">Sign Up</button>
         </div>
       </div>
     </div>
