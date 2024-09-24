@@ -113,13 +113,12 @@ const CreateAccount: React.FC = () => {
             />
           </div>
 
-          <div className="button-group">
-            <button type="button" className="back-btn" onClick={() => navigate('/')}>
-              Back
-            </button>
           <button type="submit" className="sign-up-btn">Sign Up</button>
-          </div>
         </form>
+        <div className="already-account">
+          <span>Already have an account? </span>
+          <button onClick={() => navigate('/')} className="sign-in-link">Sign In</button>
+        </div>
       </div>
     </div>
   );
