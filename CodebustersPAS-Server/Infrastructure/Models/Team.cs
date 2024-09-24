@@ -2,9 +2,8 @@
     public class Team {
         public Guid Id { get; set; }
 
-        public String TeamName { get; set; }
-        public Group Group { get; set; }
-
-        public List<User> Students { get; set; }
+        public required string TeamName { get; set; }
+        public required Group Group { get; set; }
+        public required List<Student> Students { get; set; }
     }
 }

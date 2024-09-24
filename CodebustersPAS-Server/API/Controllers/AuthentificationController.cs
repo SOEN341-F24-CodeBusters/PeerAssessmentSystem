@@ -2,12 +2,14 @@
 using Infrastructure;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static API.Controllers.StudentController;
 
 namespace API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 [ApiController]
 public class AuthentificationController : ControllerBase {
 
@@ -22,32 +24,60 @@ public class AuthentificationController : ControllerBase {
     [HttpPost, ActionName("LogIn")]
     public async Task<ActionResult> LogIn(LogInDTO logInDTO) {
 
-        User user = await _dbContext.Users.FirstAsync(User => User.username == logInDTO.username);
+        User user = await _dbContext.Users.FirstAsync(User => User.eamil == logInDTO.email);
 
         // Check password
         // Todo: hash password and not to store it as plain text
-        if(!logInDTO.password.Equals(user.Password)){
+        if (!logInDTO.password.Equals(user.Password)) {
             // WRONG PASSOWRD
             return Unauthorized();
         }
 
-        var claims = new List<Claim> {
-            new Claim(ClaimTypes.Name, user.FirstName)
-        };
+        var claims = new List<Claim> { };
 
-        var identity = new ClaimsIdentity(claims);
+        // Add claims
+        if ((await _dbContext.Students.FirstAsync(student => student.eamil.Equals(logInDTO.email)) is var student) && student is not null) {
+            claims.Add(new Claim(ClaimTypes.Role, "Student"));
+            claims.Add(new Claim("StudentId", student.StudentID.ToString()));
+        } else if (await _dbContext.Teachers.FirstAsync(student => student.eamil.Equals(logInDTO.email)) is not null) {
+            claims.Add(new Claim(ClaimTypes.Role, "Teacher"));
+        }
+
+        // Create Identity and sign in
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var principal = new ClaimsPrincipal(identity);
-
         await HttpContext.SignInAsync(principal);
 
-        throw new NotImplementedException();
+        return Ok();
     }
 
     [HttpPost, ActionName("SignUp")]
     public async Task<ActionResult> SignUp(SignUpDTO signUpDTO) {
 
+        if (signUpDTO.userType == 0) {
+            var student = _dbContext.Students.Add(
+                new Infrastructure.Models.Student {
+                    Id = new Guid(),
+                    FirstName = signUpDTO.firstName,
+                    LastName = signUpDTO.lastName,
+                    StudentID = signUpDTO.studentId,
+                    eamil = signUpDTO.email,
+                    Password = signUpDTO.password,
+                });
+        } else if (signUpDTO.userType == 0) {
+            var teacher = _dbContext.Teachers.Add(
+                new Infrastructure.Models.Teacher{
+                    Id = new Guid(),
+                    FirstName = signUpDTO.firstName,
+                    LastName = signUpDTO.lastName,
+                    eamil = signUpDTO.email,
+                    Password = signUpDTO.password,
+                });
+        }
 
-        throw new NotImplementedException();
+        await _dbContext.SaveChangesAsync();
+
+        return Ok();
     }
 
     [HttpPost, ActionName("LogOut")]
@@ -59,7 +89,7 @@ public class AuthentificationController : ControllerBase {
 
     public record LogInDTO(
         int userType,
-        string username,
+        string email,
         string password
     );
 
@@ -68,7 +98,7 @@ public class AuthentificationController : ControllerBase {
         string firstName,
         string lastName,
         int studentId,
-        string username,
+        string email,
         string password
     );
 }

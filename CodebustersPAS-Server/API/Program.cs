@@ -18,6 +18,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/";
     });
 
+builder.Services.AddAuthorization(option => {
+    option.AddPolicy("TeacherOnly", policy => { policy.RequireRole("Teacher"); });
+    option.AddPolicy("StudentOnly", policy => { policy.RequireRole("Student"); });
+});
+
 // Add Database
 builder.Services.AddPASDbContext();
 
