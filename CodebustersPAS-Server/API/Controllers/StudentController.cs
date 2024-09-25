@@ -22,9 +22,9 @@ namespace API.Controllers {
         [HttpGet, ActionName("GetGroupsAndTeams")]
         public async Task<ActionResult<IEnumerable<TeamDTO>>> GetTeams() {
 
-            var studentId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("StudentId")).Value);
+            var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
+            Student student = await _dbContext.Students.FirstAsync(e => e.Id.Equals(userId));
 
-            var student = await _dbContext.Students.FirstAsync(student => student.StudentID == studentId);
 
             var teams = await _dbContext.Teams.Where(teams => teams.Students.Contains(student)).ToListAsync();
 
@@ -41,7 +41,6 @@ namespace API.Controllers {
             }
 
             return teamDTOs;
-
         }
 
 

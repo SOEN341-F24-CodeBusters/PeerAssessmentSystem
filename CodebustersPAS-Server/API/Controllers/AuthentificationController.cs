@@ -36,9 +36,10 @@ public class AuthentificationController : ControllerBase {
         var claims = new List<Claim> { };
 
         // Add claims
+        claims.Add(new Claim("Guid", user.Id.ToString()));
+
         if ((await _dbContext.Students.FirstAsync(student => student.eamil.Equals(logInDTO.email)) is var student) && student is not null) {
             claims.Add(new Claim(ClaimTypes.Role, "Student"));
-            claims.Add(new Claim("StudentId", student.StudentID.ToString()));
         } else if (await _dbContext.Teachers.FirstAsync(student => student.eamil.Equals(logInDTO.email)) is not null) {
             claims.Add(new Claim(ClaimTypes.Role, "Teacher"));
         }
@@ -64,7 +65,7 @@ public class AuthentificationController : ControllerBase {
                     eamil = signUpDTO.email,
                     Password = signUpDTO.password,
                 });
-        } else if (signUpDTO.userType == 0) {
+        } else if (signUpDTO.userType == 1) {
             var teacher = _dbContext.Teachers.Add(
                 new Infrastructure.Models.Teacher{
                     Id = new Guid(),
