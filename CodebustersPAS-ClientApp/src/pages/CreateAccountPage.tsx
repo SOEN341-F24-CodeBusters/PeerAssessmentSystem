@@ -5,9 +5,9 @@ import './CreateAccountPage.css';
 const CreateAccount: React.FC = () => {
   const [userType, setUserType] = useState<'student' | 'instructor'>('student');
   const [firstName, setFirstName] = useState<string>('');
-  const [fullName, setFullName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
   const [studentID, setStudentID] = useState<string>('');
-  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
@@ -17,9 +17,9 @@ const CreateAccount: React.FC = () => {
     console.log({
       userType,
       firstName,
-      fullName,
+      lastName,
       studentID,
-      username,
+      email,
       password,
     });
     
@@ -65,12 +65,12 @@ const CreateAccount: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="fullName">Full Name</label>
+            <label htmlFor="lastName">Full Name</label>
             <input
-              id="fullName"
+              id="lastName"
               type="text"
-              value={fullName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
+              value={lastName}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
               required
               placeholder="Enter your full name"
             />
@@ -90,14 +90,14 @@ const CreateAccount: React.FC = () => {
           )}
 
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
             <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               required
-              placeholder="Choose a username"
+              placeholder="Enter your email"
             />
           </div>
 

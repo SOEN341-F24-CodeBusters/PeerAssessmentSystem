@@ -4,19 +4,19 @@ import './LoginPage.css';
 
 const Login: React.FC = () => {
   const [userType, setUserType] = useState<'student' | 'instructor'>('student');
-  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
   const handleSignIn = (e: FormEvent) => {
     e.preventDefault();
     // Handling sign-in for both student or instructor
-    console.log(`Signing in as ${userType} with username: ${username} and password: ${password}`);
+    console.log(`Signing in as ${userType} with email: ${email} and password: ${password}`);
     navigate('/');
   };
 
-  const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,14 +50,14 @@ const Login: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
             <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={handleUsernameChange}
+              id="email"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
               required
-              placeholder="Enter your username"
+              placeholder="Enter your email"
             />
           </div>
 
