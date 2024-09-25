@@ -65,14 +65,14 @@ const CreateAccount: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="lastName">Full Name</label>
+            <label htmlFor="lastName">Last Name</label>
             <input
               id="lastName"
               type="text"
               value={lastName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
               required
-              placeholder="Enter your full name"
+              placeholder="Enter your last name"
             />
           </div>
 
