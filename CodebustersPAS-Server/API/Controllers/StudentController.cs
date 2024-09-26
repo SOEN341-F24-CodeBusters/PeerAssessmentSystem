@@ -1,8 +1,9 @@
 ﻿using Infrastructure;
-using Infrastructure.Enums;
 using Infrastructure.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace API.Controllers {
     [Route("api/[controller]/[action]")]
@@ -17,63 +18,32 @@ namespace API.Controllers {
             _dbContext = dbContext;
         }
 
-        [HttpGet("{id}"), ActionName("GetStudent")]
-        public async Task<ActionResult<Student>> Get(Guid id) {
-            var student = await _dbContext.Users
-                .Where(User => User.type == UserType.Student)
-                .FirstOrDefaultAsync(User => User.Id.Equals(id));
+        [Authorize(Roles = "Student")]
+        [HttpGet, ActionName("GetGroupsAndTeams")]
+        public async Task<ActionResult<IEnumerable<TeamDTO>>> GetTeams() {
 
-            if (student is null) {
-                return NotFound();
+            var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
+            Student student = await _dbContext.Students.FirstAsync(e => e.Id.Equals(userId));
+
+
+            var teams = await _dbContext.Teams.Where(teams => teams.Students.Contains(student)).ToListAsync();
+
+
+            var teamDTOs = new List<TeamDTO>();
+
+            foreach (Team team in teams) {
+
+                teamDTOs.Add(new TeamDTO(
+                    team.TeamName,
+                    team.Group.Teacher.FirstName + " " + team.Group.Teacher.LastName,
+                    team.Group.Name,
+                    team.Students.Select(student => student.FirstName + " " + student.LastName)));
             }
 
-            return new Student(student.Id, student.FirstName, student.LastName);
+            return teamDTOs;
         }
 
-        [HttpGet, ActionName("GetAllStudent")]
-        public async Task<ActionResult<IEnumerable<Student>>> GetAll() {
-            var students = await _dbContext.Users
-                .Where(User => User.type == UserType.Student)
-                .ToListAsync();
 
-
-            return students
-                .Select(student => new Student(student.Id, student.FirstName, student.LastName))
-                .ToList();
-        }
-
-        [HttpPost, ActionName("CreateStudent")]
-        public async Task<ActionResult<Student>> Post(NewStudent student) {
-            var newStudent = _dbContext.Users.Add(
-               new User {
-                   Id = new Guid(),
-                   FirstName = student.FirstName,
-                   LastName = student.LastName,
-                   type = UserType.Student,
-               });
-            await _dbContext.SaveChangesAsync();
-
-            return new Student(newStudent.Entity.Id, newStudent.Entity.FirstName, newStudent.Entity.LastName);
-        }
-
-        [HttpDelete, ActionName("DeleteStudent")]
-        public async Task<ActionResult<Student>> Delete(Guid id) {
-
-            var student = await _dbContext.Users.FirstOrDefaultAsync(student => student.Id == id);
-
-            if (student is null) {
-                return NotFound();
-            }
-
-            var studentDTO = new Student(student.Id, student.FirstName, student.LastName);
-
-            _dbContext.Users.Remove(student);
-            await _dbContext.SaveChangesAsync();
-
-            return studentDTO;
-        }
-
-        public record Student(Guid id, string FirstName, string LastName);
-        public record NewStudent(string FirstName, string LastName);
+        public record TeamDTO(string teamName, string teacherName, string groupName, IEnumerable<string> studentList);
     }
 }

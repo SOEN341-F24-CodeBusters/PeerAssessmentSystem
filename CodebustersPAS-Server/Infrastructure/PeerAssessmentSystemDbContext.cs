@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure {
     public class PeerAssessmentSystemDbContext : DbContext {
         public DbSet<User> Users { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Team> Teams { get; set; }
 

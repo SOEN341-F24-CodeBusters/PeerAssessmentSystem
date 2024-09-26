@@ -2,7 +2,8 @@
     public class Group {
         public Guid Id { get; set; }
 
-        public User Teacher { get; set; }
-        public List<User> Students { get; set; }
+        public required string Name { get; set; }
+        public required Teacher Teacher { get; set; }
+        public required List<User> Students { get; set; }
     }
 }

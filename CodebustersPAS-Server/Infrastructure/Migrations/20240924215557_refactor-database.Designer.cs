@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PeerAssessmentSystemDbContext))]
-    partial class DbContextModelSnapshot : ModelSnapshot
+    [Migration("20240924215557_refactor-database")]
+    partial class refactordatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -21,10 +24,6 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("TeacherId")
@@ -83,13 +82,18 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("email")
+                    b.Property<Guid?>("TeamId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("eamil")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Users");
 
@@ -104,11 +108,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("StudentID")
                         .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("TeamId")
-                        .HasColumnType("TEXT");
-
-                    b.HasIndex("TeamId");
 
                     b.HasDiscriminator().HasValue("Student");
                 });
@@ -147,10 +146,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.Models.Group", null)
                         .WithMany("Students")
                         .HasForeignKey("GroupId");
-                });
 
-            modelBuilder.Entity("Infrastructure.Models.Student", b =>
-                {
                     b.HasOne("Infrastructure.Models.Team", null)
                         .WithMany("Students")
                         .HasForeignKey("TeamId");
