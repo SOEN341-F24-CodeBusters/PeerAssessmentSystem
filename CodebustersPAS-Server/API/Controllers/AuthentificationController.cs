@@ -24,7 +24,7 @@ public class AuthentificationController : ControllerBase {
     [HttpPost, ActionName("LogIn")]
     public async Task<ActionResult> LogIn(LogInDTO logInDTO) {
 
-        User user = await _dbContext.Users.FirstAsync(User => User.eamil == logInDTO.email);
+        User user = await _dbContext.Users.FirstAsync(User => User.email == logInDTO.email);
 
         // Check password
         // Todo: hash password and not to store it as plain text
@@ -38,9 +38,9 @@ public class AuthentificationController : ControllerBase {
         // Add claims
         claims.Add(new Claim("Guid", user.Id.ToString()));
 
-        if ((await _dbContext.Students.FirstAsync(student => student.eamil.Equals(logInDTO.email)) is var student) && student is not null) {
+        if ((await _dbContext.Students.FirstAsync(student => student.email.Equals(logInDTO.email)) is var student) && student is not null) {
             claims.Add(new Claim(ClaimTypes.Role, "Student"));
-        } else if (await _dbContext.Teachers.FirstAsync(student => student.eamil.Equals(logInDTO.email)) is not null) {
+        } else if (await _dbContext.Teachers.FirstAsync(student => student.email.Equals(logInDTO.email)) is not null) {
             claims.Add(new Claim(ClaimTypes.Role, "Teacher"));
         }
 
@@ -62,7 +62,7 @@ public class AuthentificationController : ControllerBase {
                     FirstName = signUpDTO.firstName,
                     LastName = signUpDTO.lastName,
                     StudentID = signUpDTO.studentId,
-                    eamil = signUpDTO.email,
+                    email = signUpDTO.email,
                     Password = signUpDTO.password,
                 });
         } else if (signUpDTO.userType == 1) {
@@ -71,7 +71,7 @@ public class AuthentificationController : ControllerBase {
                     Id = new Guid(),
                     FirstName = signUpDTO.firstName,
                     LastName = signUpDTO.lastName,
-                    eamil = signUpDTO.email,
+                    email = signUpDTO.email,
                     Password = signUpDTO.password,
                 });
         }
