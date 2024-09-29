@@ -1,43 +1,68 @@
 import React from "react";
-import styles from "./CourseListingStudentsPage.css";
+import "./CourseListingStudentsPage.css";
 import CourseItem from "./CourseItem";
 
 function PeerAssessment() {
-  const courseData = [
-    {
-      name: "SOEN341",
-      description: "This is description for the course",
-      startDate: "03/09/2024",
-      endDate: "02/12/2024",
-      status: "Ready",
-    },
-  ];
+  // const courseData = [
+  //   {
+  //     name: "SOEN341",
+  //     description: "This is description for the course",
+  //     startDate: "03/09/2024",
+  //     endDate: "02/12/2024",
+  //     status: "Ready",
+  //   },
+  // ];
+
+  const [courseData, setCourseData] = React.useState([]);
+
+  React.useEffect(() => {
+    updateCourseData();
+  }, []);
+
+  async function updateCourseData() {
+    let temp_data = await getCourseData();
+
+    setCourseData(temp_data);
+  }
+
+  async function getCourseData() {
+    //here needs to be actual request
+    let temp_data = [
+      {
+        name: "SOEN341",
+        description: "This is description for the course",
+        startDate: "03/09/2024",
+        endDate: "02/12/2024",
+        status: "Ready",
+      },
+    ];
+
+    return temp_data;
+  }
 
   return (
-    <main className={styles.container}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Peer Assessment</h1>
-        <nav className={styles.studentTab}>Student's Tab</nav>
+    <div className="container">
+      <header className="header">
+        <h1 className="title">Peer Assessment</h1>
+        <nav className="studentTab">Student's Tab</nav>
       </header>
-      <section className={styles.courseContainer}>
-        <div className={styles.courseHeader}>
-          <div className={styles.courseInfo}>
-            <h2 className={styles.courseListTitle}>
-              Your courses are listed here
-            </h2>
-            <div className={styles.courseColumns}>
-              <div>Course Name</div>
-              <div>Project Description</div>
-            </div>
-          </div>
-          <div className={styles.courseDuration}>Course Duration</div>
-          <div className={styles.status}>Status</div>
+
+      <section className="courseContainer">
+        <h2 className="courseListTitle">Your courses are listed here</h2>
+        <div className="courseColumns">
+          <h3>Course Name</h3>
+          <h3>Project Description</h3>
+          <h3>Course Duration</h3>
+          <h3>Status</h3>
         </div>
-        {courseData.map((course, index) => (
-          <CourseItem key={index} {...course} />
-        ))}
+
+        <div className="courseItems-list">
+          {courseData.map((course, index) => (
+            <CourseItem key={index} {...course} />
+          ))}
+        </div>
       </section>
-    </main>
+    </div>
   );
 }
 

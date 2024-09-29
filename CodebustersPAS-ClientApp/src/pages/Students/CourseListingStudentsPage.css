@@ -1,132 +1,90 @@
-.container {
-  background-color: rgba(43, 39, 56, 1);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  font-weight: 400;
-  padding: 44px 66px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
 }
 
-@media (max-width: 991px) {
-  .container {
-    padding: 0 20px;
-  }
+html {
+  font-size: 62.5%;
+  overflow-x: hidden;
+
+  scroll-behavior: smooth;
+}
+
+.container {
+  background-color: #1e1e1e;
+
+  height: 100vh;
+  width: 100vw;
+
+  padding: 44px 66px;
+
+  /* display: flex;
+  flex-direction: column;*/
 }
 
 .header {
   display: flex;
   gap: 20px;
   color: #fff;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-}
 
-@media (max-width: 991px) {
-  .header {
-    max-width: 100%;
-  }
+  margin-bottom: 30px;
 }
 
 .title {
-  font: 48px Quantico, sans-serif;
-}
-
-@media (max-width: 991px) {
-  .title {
-    font-size: 40px;
-  }
+  font: 32px Quantico, sans-serif;
 }
 
 .studentTab {
   border-radius: 15px;
-  overflow: hidden;
-  padding: 20px 50px;
-  font: 28px Inter, sans-serif;
+  padding: 15px 40px;
+  font: 24px Inter, sans-serif;
   border: 1px solid rgba(110, 84, 181, 1);
 }
 
-@media (max-width: 991px) {
-  .studentTab {
-    padding: 0 20px;
-  }
-}
-
+/* ******************************************** */
+/* Course Section */
 .courseContainer {
   border-radius: 20px;
   background-color: rgba(37, 37, 37, 1);
   display: flex;
-  margin-top: 27px;
+  flex-direction: column;
+
   width: 100%;
-  max-width: 1037px;
-  flex-direction: column;
-  overflow: hidden;
+  height: 100%;
+
   font-family: Inter, sans-serif;
-  padding: 17px 33px 670px;
-}
 
-@media (max-width: 991px) {
-  .courseContainer {
-    max-width: 100%;
-    padding: 0 20px 100px;
-  }
-}
-
-.courseHeader {
-  display: flex;
-  width: 928px;
-  max-width: 100%;
-  align-items: flex-end;
-  gap: 40px 100px;
-}
-
-.courseInfo {
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
+  padding: 17px 25px;
 }
 
 .courseListTitle {
-  color: rgba(166, 166, 166, 1);
-  font-size: 20px;
-  align-self: flex-start;
+  color: #a6a6a6;
+  font: 16px Inter, sans-serif;
+  font-style: normal;
+  line-height: normal;
+
+  margin-bottom: 32px;
 }
 
 .courseColumns {
-  align-self: flex-end;
   display: flex;
-  margin-top: 32px;
-  width: 370px;
-  max-width: 100%;
+
+  width: 100%;
   gap: 20px;
-  font-size: 16px;
+  font-size: 10px;
   color: #fff;
   justify-content: space-between;
+
+  margin-bottom: 5px;
+  padding: 0px 20px;
 }
 
-.courseDuration {
-  color: #fff;
-  font-size: 16px;
-  margin-top: 56px;
-  flex-grow: 1;
-  width: 112px;
-}
-
-@media (max-width: 991px) {
-  .courseDuration {
-    margin-top: 40px;
-  }
-}
-
-.status {
-  color: #fff;
-  font-size: 16px;
-  margin-top: 56px;
-}
-
-@media (max-width: 991px) {
-  .status {
-    margin-top: 40px;
-  }
+.courseItems-list {
 }
 
 .courseItem {
@@ -139,46 +97,25 @@
   overflow: hidden;
   font-size: 16px;
   color: #fff;
-  margin: 5px 0 -134px;
+  margin-bottom: 10px;
   padding: 23px 28px;
-}
-
-@media (max-width: 991px) {
-  .courseItem {
-    max-width: 100%;
-    margin-bottom: 10px;
-    padding: 0 20px;
-  }
 }
 
 .courseName {
   font-size: 20px;
-  align-self: stretch;
 }
 
 .courseDescription {
-  align-self: stretch;
   flex-grow: 1;
   width: 236px;
-  margin: auto 0;
 }
 
 .courseDates {
-  align-self: stretch;
   display: flex;
   gap: 3px;
-  white-space: nowrap;
   margin: auto 0;
-}
-
-@media (max-width: 991px) {
-  .courseDates {
-    white-space: initial;
-  }
 }
 
 .courseStatus {
   font-weight: 700;
-  align-self: stretch;
-  margin: auto 0;
 }
