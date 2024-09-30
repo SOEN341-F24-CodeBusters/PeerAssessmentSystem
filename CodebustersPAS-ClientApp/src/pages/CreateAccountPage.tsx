@@ -11,19 +11,43 @@ const CreateAccount: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleSignUp = (e: FormEvent) => {
+  const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();
+
+    const apiUrl = 'https://localhost:7010';
     
-    console.log({
+    const userData={
       userType,
       firstName,
       lastName,
-      studentID,
+      studentID: userType === 'student' ? studentID : null,
       email,
       password,
-    });
+    };
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (response.ok) {
+        console.log('User created successfully'+'User signed up<\n>'+userData);
+
+        navigate('/'); 
+      } else {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
+        alert('Sign-up failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Request failed:', error);
+      alert('An error occurred. Please check your connection and try again.');
+    }
+
     
-    navigate('/');
   };
 
   return (
@@ -121,6 +145,7 @@ const CreateAccount: React.FC = () => {
         </div>
       </div>
     </div>
+
   );
 };
 
