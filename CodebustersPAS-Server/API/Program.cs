@@ -26,6 +26,9 @@ builder.Services.AddAuthorization(option => {
 // Add Database
 builder.Services.AddPASDbContext();
 
+// Add cors
+builder.Services.AddCors();
+
 
 // ----- Configure and Start app ----- 
 var app = builder.Build();
@@ -43,6 +46,11 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true));
 
 app.UseHttpsRedirection();
 

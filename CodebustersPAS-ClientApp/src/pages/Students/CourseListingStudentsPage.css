@@ -1,0 +1,121 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+}
+
+html {
+  font-size: 62.5%;
+  overflow-x: hidden;
+
+  scroll-behavior: smooth;
+}
+
+.container {
+  background-color: #1e1e1e;
+
+  height: 100vh;
+  width: 100vw;
+
+  padding: 44px 66px;
+
+  /* display: flex;
+  flex-direction: column;*/
+}
+
+.header {
+  display: flex;
+  gap: 20px;
+  color: #fff;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 30px;
+}
+
+.title {
+  font: 32px Quantico, sans-serif;
+}
+
+.studentTab {
+  border-radius: 15px;
+  padding: 15px 40px;
+  font: 24px Inter, sans-serif;
+  border: 1px solid rgba(110, 84, 181, 1);
+}
+
+/* ******************************************** */
+/* Course Section */
+.courseContainer {
+  border-radius: 20px;
+  background-color: rgba(37, 37, 37, 1);
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
+  font-family: Inter, sans-serif;
+
+  padding: 17px 25px;
+}
+
+.courseListTitle {
+  color: #a6a6a6;
+  font: 16px Inter, sans-serif;
+  font-style: normal;
+  line-height: normal;
+
+  margin-bottom: 32px;
+}
+
+.courseColumns {
+  display: flex;
+
+  width: 100%;
+  gap: 20px;
+  font-size: 10px;
+  color: #fff;
+  justify-content: space-between;
+
+  margin-bottom: 5px;
+  padding: 0px 20px;
+}
+
+.courseItems-list {
+}
+
+.courseItem {
+  border-radius: 17px;
+  background-color: rgba(56, 55, 57, 1);
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 40px 91px;
+  overflow: hidden;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 10px;
+  padding: 23px 28px;
+}
+
+.courseName {
+  font-size: 20px;
+}
+
+.courseDescription {
+  flex-grow: 1;
+  width: 236px;
+}
+
+.courseDates {
+  display: flex;
+  gap: 3px;
+  margin: auto 0;
+}
+
+.courseStatus {
+  font-weight: 700;
+}
