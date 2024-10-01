@@ -17,7 +17,7 @@ const CreateAccount: React.FC = () => {
     const apiUrl = 'https://localhost:7010/api/Authentification/SignUp';
     
     const userData={
-      userType: userType == 'student' ? 0 : 1,
+      userType: userType === 'student' ? 0 : 1,
       firstName,
       lastName,
       studentID: userType === 'student' ? studentID : null,

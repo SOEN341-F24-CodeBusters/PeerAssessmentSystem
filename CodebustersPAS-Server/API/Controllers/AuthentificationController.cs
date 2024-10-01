@@ -26,6 +26,11 @@ public class AuthentificationController : ControllerBase {
 
         User user = await _dbContext.Users.FirstAsync(User => User.email == logInDTO.email);
 
+        // Check if user exists
+        if (user == null){
+            return Unauthorized(new { message = "Invalid email or password. Please make sure to sign up your account." }); // Return JSON on error
+        }
+
         // Check password
         // Todo: hash password and not to store it as plain text
         if (!logInDTO.password.Equals(user.Password)) {
@@ -49,7 +54,7 @@ public class AuthentificationController : ControllerBase {
         var principal = new ClaimsPrincipal(identity);
         await HttpContext.SignInAsync(principal);
 
-        return Ok();
+        return Ok(new { message = "Login successful." });
     }
 
     [HttpPost, ActionName("SignUp")]

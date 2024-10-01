@@ -8,11 +8,47 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleSignIn = (e: FormEvent) => {
+  const handleSignIn = async (e: FormEvent) => {
     e.preventDefault();
     // Handling sign-in for both student or instructor
+    const apiUrl = 'https://localhost:7010/api/Authentification/LogIn';
+    
+    const loginData = {
+      userType: userType === 'student' ? 0 : 1,
+      email,
+      password,
+    };
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json(); 
+        console.log('Login successful:', responseData);
+        
+        //navigate to corresponding user type's home page after successful logged in
+        navigate(userType === 'student' ? '/Students/PeerAssessment' : '/Teacher/PeerAssessment');
+        
+      }else{
+        const errorData = await response.json();
+        console.error('Login error:', errorData);
+        alert(errorData.message || 'Login failed. Please check your credentials and try again.'); // Display error message
+      }
+
+    } catch (error){
+      console.error('Request failed:', error);
+      alert('An error occurred. Please check your connection and try again.');
+    };
+
+
     console.log(`Signing in as ${userType} with email: ${email} and password: ${password}`);
-    navigate('/');
+
   };
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
