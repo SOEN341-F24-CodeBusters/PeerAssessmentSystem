@@ -40,3 +40,5 @@ The Peer Assessment System is a web application designed for university group pr
   - Editor -> Visual Studio Code
   - Framework -> Vite/React
   - Language -> JavaScript/TypeScript
+##  Additional Notes
+- Please see the sprint planning and detailed log on [Wiki](https://github.com/SOEN341-F24-CodeBusters/PeerAssessmentSystem/wiki)
