@@ -12,7 +12,7 @@ namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PeerAssessmentSystemDbContext))]
     [Migration("20240924215557_refactor-database")]
-    partial class refactordatabase
+    partial class RefactorDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
