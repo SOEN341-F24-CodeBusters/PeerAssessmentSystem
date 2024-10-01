@@ -14,10 +14,10 @@ const CreateAccount: React.FC = () => {
   const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();
 
-    const apiUrl = 'https://localhost:7010';
+    const apiUrl = 'https://localhost:7010/api/Authentification/SignUp';
     
     const userData={
-      userType,
+      userType: userType == 'student' ? 0 : 1,
       firstName,
       lastName,
       studentID: userType === 'student' ? studentID : null,
@@ -46,7 +46,7 @@ const CreateAccount: React.FC = () => {
       console.error('Request failed:', error);
       alert('An error occurred. Please check your connection and try again.');
     }
-
+    
     
   };
 
