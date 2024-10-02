@@ -2,15 +2,29 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
+import { AuthentificationApi } from '../services/server/apis/AuthentificationApi';
+
 const Login: React.FC = () => {
   const [userType, setUserType] = useState<'student' | 'instructor'>('student');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleSignIn = (e: FormEvent) => {
+  const authentificationApi = new AuthentificationApi();
+
+  const handleSignIn = async (e: FormEvent) => {
+    console.log("yeet")
     e.preventDefault();
     // Handling sign-in for both student or instructor
+
+    // AuthentificationApi.apiAuthentificationLogInPost()
+
+    var userTypeNumb:number = NaN;
+    if (userType == 'student') userTypeNumb = 0;
+    else if (userType == 'instructor') userTypeNumb = 1;
+
+    await authentificationApi.apiAuthentificationLogInPost({ logInDTO: { userType: userTypeNumb, email: email, password: password } })
+
     console.log(`Signing in as ${userType} with email: ${email} and password: ${password}`);
     navigate('/');
   };
@@ -73,7 +87,7 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <button type="submit" className="sign-in-btn">Sign In</button>
+          <input type="submit" value="Sign In" className="sign-in-btn" />
         </form>
 
         <div className="no-account">

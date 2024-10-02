@@ -1,0 +1,10 @@
+apis/AuthentificationApi.ts
+apis/StudentApi.ts
+apis/TeacherApi.ts
+apis/index.ts
+index.ts
+models/LogInDTO.ts
+models/SignUpDTO.ts
+models/TeamDTO.ts
+models/index.ts
+runtime.ts
