@@ -33,7 +33,7 @@ const Login: React.FC = () => {
         console.log('Login successful:', responseData);
         
         //navigate to corresponding user type's home page after successful logged in
-        navigate(userType === 'student' ? '/Students/PeerAssessment' : '/Teacher/PeerAssessment');
+        navigate(userType === 'student' ? '/Students/PeerAssessment' : '/Teacher/TeamOverview');
         
       }else{
         const errorData = await response.json();
