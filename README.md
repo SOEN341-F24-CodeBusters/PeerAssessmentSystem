@@ -9,9 +9,9 @@ Team Members and Roles
 | Louis Choiniere | 40218808 | DevOps & Backend |
 | Omar Selim | 40155915 | Fullstack |
 | Theodor Salcianu | 40209641 | Fullstack |
-| Pacifique Uwamukiza | 40227229 | Fullstack | .
-| Jingnan Wang | 40282296 | Frontend | 
-| Valeriia Nikandrova | 40157880 | Frontend |  
+| Pacifique Uwamukiza | 40227229 | Fullstack | 
+| Jingnan Wang | 40282296 | Fullstack |
+| Valeriia Nikandrova | 40157880 | Frontend |
 
 Repository: [Repository](https://github.com/SOEN341-F24-CodeBusters/PeerAssessmentSystem)
 -

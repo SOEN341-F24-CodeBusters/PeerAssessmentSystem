@@ -24,7 +24,12 @@ public class AuthentificationController : ControllerBase {
     [HttpPost, ActionName("LogIn")]
     public async Task<ActionResult> LogIn(LogInDTO logInDTO) {
 
-        User user = await _dbContext.Users.FirstAsync(User => User.email == logInDTO.email);
+        User? user = await _dbContext.Users.FirstOrDefaultAsync(User => User.email == logInDTO.email);
+
+        // Check if user exists
+        if (user is null){
+            return Unauthorized(new { message = "Invalid email or password. Please make sure to sign up your account." }); // Return JSON on error
+        }
 
         // Check password
         // Todo: hash password and not to store it as plain text
@@ -49,11 +54,17 @@ public class AuthentificationController : ControllerBase {
         var principal = new ClaimsPrincipal(identity);
         await HttpContext.SignInAsync(principal);
 
-        return Ok();
+        return Ok(new { message = "Login successful." });
     }
 
     [HttpPost, ActionName("SignUp")]
     public async Task<ActionResult> SignUp(SignUpDTO signUpDTO) {
+
+        // Check if user exists
+        User? user = await _dbContext.Users.FirstOrDefaultAsync(User => User.email == signUpDTO.email);
+        if(user is not null) {
+            return Unauthorized(new { message = "User with this email already exits." });
+        }
 
         if (signUpDTO.userType == 0) {
             var student = _dbContext.Students.Add(
@@ -61,7 +72,7 @@ public class AuthentificationController : ControllerBase {
                     Id = new Guid(),
                     FirstName = signUpDTO.firstName,
                     LastName = signUpDTO.lastName,
-                    StudentID = signUpDTO.studentId,
+                    StudentID = signUpDTO.studentId ?? 0,
                     email = signUpDTO.email,
                     Password = signUpDTO.password,
                 });
@@ -98,7 +109,7 @@ public class AuthentificationController : ControllerBase {
         int userType,
         string firstName,
         string lastName,
-        int studentId,
+        int? studentId,
         string email,
         string password
     );
