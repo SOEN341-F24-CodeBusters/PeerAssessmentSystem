@@ -72,7 +72,7 @@ public class AuthentificationController : ControllerBase {
                     Id = new Guid(),
                     FirstName = signUpDTO.firstName,
                     LastName = signUpDTO.lastName,
-                    StudentID = signUpDTO.studentId,
+                    StudentID = signUpDTO.studentId ?? 0,
                     email = signUpDTO.email,
                     Password = signUpDTO.password,
                 });
@@ -109,7 +109,7 @@ public class AuthentificationController : ControllerBase {
         int userType,
         string firstName,
         string lastName,
-        int studentId,
+        int? studentId,
         string email,
         string password
     );
