@@ -40,7 +40,7 @@ const CreateAccount: React.FC = () => {
       } else {
         const errorData = await response.json();
         console.error('Error:', errorData);
-        alert('Sign-up failed. Please try again.');
+        alert(errorData.message || 'Sign-up failed. Please try again.');
       }
     } catch (error) {
       console.error('Request failed:', error);

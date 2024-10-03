@@ -24,10 +24,10 @@ public class AuthentificationController : ControllerBase {
     [HttpPost, ActionName("LogIn")]
     public async Task<ActionResult> LogIn(LogInDTO logInDTO) {
 
-        User user = await _dbContext.Users.FirstAsync(User => User.email == logInDTO.email);
+        User? user = await _dbContext.Users.FirstOrDefaultAsync(User => User.email == logInDTO.email);
 
         // Check if user exists
-        if (user == null){
+        if (user is null){
             return Unauthorized(new { message = "Invalid email or password. Please make sure to sign up your account." }); // Return JSON on error
         }
 
@@ -59,6 +59,12 @@ public class AuthentificationController : ControllerBase {
 
     [HttpPost, ActionName("SignUp")]
     public async Task<ActionResult> SignUp(SignUpDTO signUpDTO) {
+
+        // Check if user exists
+        User? user = await _dbContext.Users.FirstOrDefaultAsync(User => User.email == signUpDTO.email);
+        if(user is not null) {
+            return Unauthorized(new { message = "User with this email already exits." });
+        }
 
         if (signUpDTO.userType == 0) {
             var student = _dbContext.Students.Add(
