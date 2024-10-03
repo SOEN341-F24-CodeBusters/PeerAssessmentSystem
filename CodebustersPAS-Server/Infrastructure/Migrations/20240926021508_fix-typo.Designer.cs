@@ -12,7 +12,7 @@ namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PeerAssessmentSystemDbContext))]
     [Migration("20240926021508_fix-typo")]
-    partial class fixtypo
+    partial class FixTypo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
