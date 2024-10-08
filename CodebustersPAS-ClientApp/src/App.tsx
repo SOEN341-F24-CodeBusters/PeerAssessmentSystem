@@ -6,7 +6,7 @@ import CreateAccount from "./pages/CreateAccountPage";
 
 import PeerAssessment from "./pages/Students/PeerAssessment";
 
-import CreateTeam from './pages/Teacher/CreateTeam/CreateTeam.tsx';
+import TeamOverview from "./pages/Teacher/CreateTeam/TeamOverview.jsx";
 
 
 const App: React.FC = () => {
@@ -19,7 +19,7 @@ const App: React.FC = () => {
 
           <Route path="/Students/PeerAssessment" element={<PeerAssessment />} />
 
-          <Route path="/Teacher/TeamOverview" element={<CreateTeam />} /> {}
+          <Route path="/Teacher/TeamOverview" element={<TeamOverview />} /> {}
 
         </Routes>
       </div>
