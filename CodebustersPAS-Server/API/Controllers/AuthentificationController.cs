@@ -43,9 +43,9 @@ public class AuthentificationController : ControllerBase {
         // Add claims
         claims.Add(new Claim("Guid", user.Id.ToString()));
 
-        if ((await _dbContext.Students.FirstAsync(student => student.email.Equals(logInDTO.email)) is var student) && student is not null) {
+        if (user.student is not null) {
             claims.Add(new Claim(ClaimTypes.Role, "Student"));
-        } else if (await _dbContext.Teachers.FirstAsync(student => student.email.Equals(logInDTO.email)) is not null) {
+        } else if (user.Teacher is not null) {
             claims.Add(new Claim(ClaimTypes.Role, "Teacher"));
         }
 
@@ -67,23 +67,29 @@ public class AuthentificationController : ControllerBase {
         }
 
         if (signUpDTO.userType == 0) {
-            var student = _dbContext.Students.Add(
-                new Infrastructure.Models.Student {
+            var student = _dbContext.Users.Add(
+                new Infrastructure.Models.User {
                     Id = new Guid(),
                     FirstName = signUpDTO.firstName,
                     LastName = signUpDTO.lastName,
-                    StudentID = signUpDTO.studentId ?? 0,
                     email = signUpDTO.email,
                     Password = signUpDTO.password,
+                    student = new Infrastructure.Models.Student {
+                        Id = new Guid(),
+                        StudentID = (int)signUpDTO.studentId!
+                    }
                 });
         } else if (signUpDTO.userType == 1) {
-            var teacher = _dbContext.Teachers.Add(
-                new Infrastructure.Models.Teacher{
+            var teacher = _dbContext.Users.Add(
+                new Infrastructure.Models.User {
                     Id = new Guid(),
                     FirstName = signUpDTO.firstName,
                     LastName = signUpDTO.lastName,
                     email = signUpDTO.email,
                     Password = signUpDTO.password,
+                    Teacher = new Infrastructure.Models.Teacher {
+                        Id = new Guid()
+                    }
                 });
         }
 
