@@ -101,7 +101,8 @@ public class TeacherController : Controller {
         _dbContext.Teams.Add(new Team {
             Id = new Guid(),
             TeamName = name,
-            Group = group
+            Group = group,
+            Students = new List<Student>()
         });
         await _dbContext.SaveChangesAsync();
 
@@ -109,12 +110,27 @@ public class TeacherController : Controller {
     }
 
     [HttpPost, ActionName("team/add-student")]
-    public async Task<ActionResult> AddStudentToTeam(Guid teamId, int StudentId) {
+    public async Task<ActionResult> AddStudentToTeam(Guid teamId, int studentId) {
 
         var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
         Teacher teacher = await _dbContext.Teachers.FirstAsync(e => e.Id.Equals(userId));
 
-        throw new NotImplementedException();
+        Team? team = await _dbContext.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
+        if (team is null) return NotFound("Team not found");
+
+        var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.StudentID == studentId);
+
+        if (student is null) {
+            student = new Student {
+                Id = new Guid(),
+                StudentID = studentId,
+            };
+            _dbContext.Students.Add(student);
+        }
+
+        team.Students.Add(student);
+
+        return Ok();
     }
 
     public record TC_TeamDTO(

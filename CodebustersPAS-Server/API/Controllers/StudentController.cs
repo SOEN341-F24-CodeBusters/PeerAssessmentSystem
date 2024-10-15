@@ -37,9 +37,9 @@ public class StudentController : ControllerBase {
 
             teamDTOs.Add(new TeamDTO(
                 team.TeamName,
-                team.Group.Teacher.user.FirstName + " " + team.Group.Teacher.user.LastName,
+                team.Group.Teacher.user!.FirstName + " " + team.Group.Teacher.user!.LastName,
                 team.Group.Name,
-                team.Students.Select(student => team.Group.Teacher.user.FirstName + " " + team.Group.Teacher.user.LastName)));
+                team.Students.Select(s => s.user?.FirstName + " " + s.user?.LastName)));
         }
 
         return teamDTOs;
