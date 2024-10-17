@@ -3,6 +3,7 @@ using Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Linq;
 
 namespace API.Controllers {
@@ -35,9 +36,9 @@ namespace API.Controllers {
 
                 teamDTOs.Add(new TeamDTO(
                     team.TeamName,
-                    team.Group.Teacher.FirstName + " " + team.Group.Teacher.LastName,
+                    team.Group.Teacher.user.FirstName + " " + team.Group.Teacher.user.LastName,
                     team.Group.Name,
-                    team.Students.Select(student => student.FirstName + " " + student.LastName)));
+                    team.Students.Select(student => team.Group.Teacher.user.FirstName + " " + team.Group.Teacher.user.LastName)));
             }
 
             return teamDTOs;
