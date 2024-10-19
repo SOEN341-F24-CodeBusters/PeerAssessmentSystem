@@ -22,29 +22,41 @@ public class StudentController : ControllerBase {
 
     [Authorize(Roles = "Student")]
     [HttpGet, ActionName("GetGroupsAndTeams")]
-    public async Task<ActionResult<IEnumerable<TeamDTO>>> GetTeams() {
+    public async Task<ActionResult<IEnumerable<SC_TeamDTO>>> GetTeams() {
 
-        var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
-        Student student = await _dbContext.Students.FirstAsync(e => e.Id.Equals(userId));
+        Student student = await FetchLoggedInStudent(HttpContext);
 
+        var teams = await _dbContext.Teams
+            .Include(t => t.Group)
+                .ThenInclude(g => g.Teacher)
+                    .ThenInclude(t => t.User)
+            .Include(t => t.Students)
+            .Where(teams => teams.Students.Contains(student))
+            .ToListAsync();
 
-        var teams = await _dbContext.Teams.Where(teams => teams.Students.Contains(student)).ToListAsync();
-
-
-        var teamDTOs = new List<TeamDTO>();
-
-        foreach (Team team in teams) {
-
-            teamDTOs.Add(new TeamDTO(
+        var teamDTOs = teams.Select(
+            team => new SC_TeamDTO(
                 team.TeamName,
-                team.Group.Teacher.user!.FirstName + " " + team.Group.Teacher.user!.LastName,
+                team.Group.Teacher.User!.FirstName + " " + team.Group.Teacher.User!.LastName,
                 team.Group.Name,
-                team.Students.Select(s => s.user?.FirstName + " " + s.user?.LastName)));
-        }
+                team.Students.Select(s => new SC_StudentDTO(s.StudentID, s.User?.FirstName + " " + s.User?.LastName))
+            )
+        );
 
-        return teamDTOs;
+        return Ok(teamDTOs);
+    }
+
+    private async Task<Student> FetchLoggedInStudent(HttpContext httpContext) {
+        Guid userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
+        User user = await _dbContext.Users
+            .Include(u => u.student)
+            .FirstAsync(e => e.Id.Equals(userId));
+        Student student = user.student!;
+
+        return student;
     }
 
 
-    public record TeamDTO(string teamName, string teacherName, string groupName, IEnumerable<string> studentList);
+    public record SC_TeamDTO(string teamName, string teacherName, string groupName, IEnumerable<SC_StudentDTO> studentList);
+    public record SC_StudentDTO(int studentId, string name);
 }

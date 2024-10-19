@@ -23,23 +23,14 @@ public class TeacherController : Controller {
     [HttpGet, ActionName("groups")]
     public async Task<ActionResult<IEnumerable<TC_TeamDTO>>> GetGroups() {
 
-        var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
-        Teacher teacher = await _dbContext.Teachers.FirstAsync(e => e.Id.Equals(userId));
+        Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 
         IList<Group> groups = await _dbContext.Groups.Where(group => group.Teacher.Id == teacher.Id).ToListAsync();
 
         var groupDTO = groups.Select(
             group => new TC_GroupDto(
                 group.Id,
-                group.Name,
-                group.Students?.Select(
-                    student => new TC_StudentDTO(
-                        student.Id,
-                        student.StudentID,
-                        student.user?.FirstName,
-                        student.user?.LastName
-                    )
-                )
+                group.Name
             )
         );
 
@@ -49,11 +40,12 @@ public class TeacherController : Controller {
     [HttpGet, ActionName("teams")]
     public async Task<ActionResult<IEnumerable<TC_TeamDTO>>> GetTeams() {
 
-        var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
-        User user = await _dbContext.Users.FirstAsync(e => e.Id.Equals(userId));
-        Teacher teacher = user.Teacher!;
+        Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 
-        IList<Team> teams = await _dbContext.Teams.Where(team => team.Group.Teacher.Id == teacher.Id).ToListAsync();
+        IList<Team> teams = await _dbContext.Teams
+            .Include(t => t.Students)
+                .ThenInclude(s => s.User)
+            .Where(team => team.Group.Teacher.Id == teacher.Id).ToListAsync();
 
         var teamDTO = teams.Select(
             team => new TC_TeamDTO(
@@ -63,8 +55,8 @@ public class TeacherController : Controller {
                     student => new TC_StudentDTO(
                         student.Id,
                         student.StudentID,
-                        student.user?.FirstName,
-                        student.user?.LastName
+                        student.User?.FirstName,
+                        student.User?.LastName
                     )
                 )
             )
@@ -76,8 +68,7 @@ public class TeacherController : Controller {
     [HttpPost, ActionName("group")]
     public async Task<ActionResult> CreateGroup(string name) {
 
-        var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
-        Teacher teacher = await _dbContext.Teachers.FirstAsync(e => e.Id.Equals(userId));
+        Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 
         _dbContext.Groups.Add(new Group {
             Id = new Guid(),
@@ -92,8 +83,7 @@ public class TeacherController : Controller {
     [HttpPost, ActionName("team")]
     public async Task<ActionResult> CreateTeam(string name, Guid groupId) {
 
-        var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
-        Teacher teacher = await _dbContext.Teachers.FirstAsync(e => e.Id.Equals(userId));
+        Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 
         var group = await _dbContext.Groups.FirstOrDefaultAsync(g => g.Id == groupId);
         if (group is null) return NotFound("Group not found");
@@ -112,8 +102,7 @@ public class TeacherController : Controller {
     [HttpPost, ActionName("team/add-student")]
     public async Task<ActionResult> AddStudentToTeam(Guid teamId, int studentId) {
 
-        var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
-        Teacher teacher = await _dbContext.Teachers.FirstAsync(e => e.Id.Equals(userId));
+        Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 
         Team? team = await _dbContext.Teams.FirstOrDefaultAsync(t => t.Id == teamId);
         if (team is null) return NotFound("Team not found");
@@ -126,11 +115,25 @@ public class TeacherController : Controller {
                 StudentID = studentId,
             };
             _dbContext.Students.Add(student);
+            await _dbContext.SaveChangesAsync();
         }
 
+        team.Students ??= new List<Student>();
         team.Students.Add(student);
 
+        await _dbContext.SaveChangesAsync();
+
         return Ok();
+    }
+
+    private async Task<Teacher> FetchLoggedInTeacher(HttpContext httpContext) {
+        Guid userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
+        User user = await _dbContext.Users
+            .Include(u => u.teacher)
+            .FirstAsync(e => e.Id.Equals(userId));
+        Teacher teacher = user.teacher!;
+
+        return teacher;
     }
 
     public record TC_TeamDTO(
@@ -148,7 +151,6 @@ public class TeacherController : Controller {
 
     public record TC_GroupDto(
         Guid id,
-        string Name,
-        IEnumerable<TC_StudentDTO>? students
+        string Name
     );
 }
