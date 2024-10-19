@@ -17,6 +17,21 @@ namespace Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
+            modelBuilder.Entity("GroupStudent", b =>
+                {
+                    b.Property<Guid>("GroupsId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("StudentsId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("GroupsId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("GroupStudent");
+                });
+
             modelBuilder.Entity("Infrastructure.Models.Group", b =>
                 {
                     b.Property<Guid>("Id")
@@ -110,6 +125,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TeacherId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("email")
