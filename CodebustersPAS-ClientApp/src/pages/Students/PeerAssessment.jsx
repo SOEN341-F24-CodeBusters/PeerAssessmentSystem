@@ -42,9 +42,14 @@ function PeerAssessment() {
       });
   
       if (response.ok) {
-        const responseData = await response.json(); 
+        const contentType = response.headers.get('Content-Type');
+        let responseData;
+        if (contentType && contentType.includes('application/json')) {
+        responseData = await response.json(); 
         console.log('Logout successful:', responseData)
-
+      } else {
+        console.log('Logout successful with no response data.');
+      }
         navigate('/');
       } else {
         console.error('Logout failed with status:', response.status);
