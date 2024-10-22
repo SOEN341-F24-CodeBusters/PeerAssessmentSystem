@@ -6,13 +6,11 @@ namespace Infrastructure.Models {
 
         [Key]
         public Guid Id { get; set; }
-
         public int StudentID { get; set; }
 
+        public Guid? UserID { get; set; }
+        public User? User { get; set; }
 
-        [NotMapped]
-        public User? user { get; set; }
-        public List<Group> Groups { get; set; }
-        public List<Team> Teams { get; set; }
+        public List<Team>? Teams { get; set; }
     }
 }

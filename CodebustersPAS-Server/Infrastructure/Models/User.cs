@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Infrastructure.Models {
     public class User {
         public Guid Id { get; set; }
@@ -8,7 +10,9 @@ namespace Infrastructure.Models {
         public required string Password { get; set; }
 
 
+        [NotMapped]
         public Student? student { get; set; }
-        public Teacher? Teacher { get; set; }
+        [NotMapped]
+        public Teacher? teacher { get; set; }
     }
 }

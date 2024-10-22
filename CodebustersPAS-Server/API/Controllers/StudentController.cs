@@ -6,45 +6,57 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Linq;
 
-namespace API.Controllers {
-    [Route("api/[controller]/[action]")]
-    [ApiController]
-    public class StudentController : ControllerBase {
+namespace API.Controllers;
 
-        private readonly ILogger<StudentController> _logger;
-        private readonly PeerAssessmentSystemDbContext _dbContext;
+[Route("api/[controller]/[action]")]
+[ApiController]
+public class StudentController : ControllerBase {
 
-        public StudentController(ILogger<StudentController> logger, PeerAssessmentSystemDbContext dbContext) {
-            _logger = logger;
-            _dbContext = dbContext;
-        }
+    private readonly ILogger<StudentController> _logger;
+    private readonly PeerAssessmentSystemDbContext _dbContext;
 
-        [Authorize(Roles = "Student")]
-        [HttpGet, ActionName("GetGroupsAndTeams")]
-        public async Task<ActionResult<IEnumerable<TeamDTO>>> GetTeams() {
-
-            var userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
-            Student student = await _dbContext.Students.FirstAsync(e => e.Id.Equals(userId));
-
-
-            var teams = await _dbContext.Teams.Where(teams => teams.Students.Contains(student)).ToListAsync();
-
-
-            var teamDTOs = new List<TeamDTO>();
-
-            foreach (Team team in teams) {
-
-                teamDTOs.Add(new TeamDTO(
-                    team.TeamName,
-                    team.Group.Teacher.user.FirstName + " " + team.Group.Teacher.user.LastName,
-                    team.Group.Name,
-                    team.Students.Select(student => team.Group.Teacher.user.FirstName + " " + team.Group.Teacher.user.LastName)));
-            }
-
-            return teamDTOs;
-        }
-
-
-        public record TeamDTO(string teamName, string teacherName, string groupName, IEnumerable<string> studentList);
+    public StudentController(ILogger<StudentController> logger, PeerAssessmentSystemDbContext dbContext) {
+        _logger = logger;
+        _dbContext = dbContext;
     }
+
+    [Authorize(Roles = "Student")]
+    [HttpGet, ActionName("GetGroupsAndTeams")]
+    public async Task<ActionResult<IEnumerable<SC_TeamDTO>>> GetTeams() {
+
+        Student student = await FetchLoggedInStudent(HttpContext);
+
+        var teams = await _dbContext.Teams
+            .Include(t => t.Group)
+                .ThenInclude(g => g.Teacher)
+                    .ThenInclude(t => t.User)
+            .Include(t => t.Students)
+            .Where(teams => teams.Students.Contains(student))
+            .ToListAsync();
+
+        var teamDTOs = teams.Select(
+            team => new SC_TeamDTO(
+                team.TeamName,
+                team.Group.Teacher.User!.FirstName + " " + team.Group.Teacher.User!.LastName,
+                team.Group.Name,
+                team.Students.Select(s => new SC_StudentDTO(s.StudentID, s.User?.FirstName + " " + s.User?.LastName))
+            )
+        );
+
+        return Ok(teamDTOs);
+    }
+
+    private async Task<Student> FetchLoggedInStudent(HttpContext httpContext) {
+        Guid userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
+        User user = await _dbContext.Users
+            .Include(u => u.student)
+            .FirstAsync(e => e.Id.Equals(userId));
+        Student student = user.student!;
+
+        return student;
+    }
+
+
+    public record SC_TeamDTO(string teamName, string teacherName, string groupName, IEnumerable<SC_StudentDTO> studentList);
+    public record SC_StudentDTO(int studentId, string name);
 }
