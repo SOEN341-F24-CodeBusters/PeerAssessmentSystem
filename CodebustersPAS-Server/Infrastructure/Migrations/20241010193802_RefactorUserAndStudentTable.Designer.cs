@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PeerAssessmentSystemDbContext))]
-    partial class DbContextModelSnapshot : ModelSnapshot
+    [Migration("20241010193802_RefactorUserAndStudentTable")]
+    partial class RefactorUserAndStudentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -61,13 +64,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("StudentID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("UserID")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserID")
-                        .IsUnique();
 
                     b.ToTable("Students");
                 });
@@ -78,13 +75,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserID")
-                        .IsUnique();
 
                     b.ToTable("Teachers");
                 });
@@ -134,7 +125,14 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("studentId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
+
+                    b.HasIndex("studentId");
 
                     b.ToTable("Users");
                 });
@@ -154,6 +152,21 @@ namespace Infrastructure.Migrations
                     b.ToTable("StudentTeam");
                 });
 
+            modelBuilder.Entity("GroupStudent", b =>
+                {
+                    b.HasOne("Infrastructure.Models.Group", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infrastructure.Models.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Infrastructure.Models.Group", b =>
                 {
                     b.HasOne("Infrastructure.Models.Teacher", "Teacher")
@@ -165,27 +178,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Student", b =>
-                {
-                    b.HasOne("Infrastructure.Models.User", "User")
-                        .WithOne("student")
-                        .HasForeignKey("Infrastructure.Models.Student", "UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Teacher", b =>
-                {
-                    b.HasOne("Infrastructure.Models.User", "User")
-                        .WithOne("teacher")
-                        .HasForeignKey("Infrastructure.Models.Teacher", "UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Infrastructure.Models.Team", b =>
                 {
                     b.HasOne("Infrastructure.Models.Group", "Group")
@@ -195,6 +187,21 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.User", b =>
+                {
+                    b.HasOne("Infrastructure.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
+
+                    b.HasOne("Infrastructure.Models.Student", "student")
+                        .WithMany()
+                        .HasForeignKey("studentId");
+
+                    b.Navigation("Teacher");
+
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("StudentTeam", b =>
@@ -210,13 +217,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("TeamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.User", b =>
-                {
-                    b.Navigation("student");
-
-                    b.Navigation("teacher");
                 });
 #pragma warning restore 612, 618
         }
