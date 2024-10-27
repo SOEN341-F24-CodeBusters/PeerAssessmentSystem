@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import "./CourseListingStudentsPage.css";
+import "./1CourseListingStudentsPage.css";
 import CourseItem from "./CourseItem";
+import TeamItem from "./TeamItem";
 
 function PeerAssessment() {
   // const courseData = [
@@ -72,10 +73,10 @@ function PeerAssessment() {
       console.error('Request failed:', error);
       alert('An error occurred. Please check your connection and try again.');
     }*/
-    let teamData = [
+    const teamData = [
       {
         teamName: "Demo1",
-        members: [tina, louis, pacifique, theo, omar, valeriia],
+        members: ["tina", "louis", "pacifique", "theo", "omar", "valeriia"],
       },
     ];
     setTeamData(teamData);
@@ -123,8 +124,8 @@ function PeerAssessment() {
             <p>You are not assigned in any team yet</p>
           )}
         </div>
-
       </section>
+      
     </div>
   );
 }

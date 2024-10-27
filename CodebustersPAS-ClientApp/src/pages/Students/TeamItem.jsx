@@ -1,5 +1,5 @@
 import React from "react";
-import "./CourseListingStudentsPage.css";
+import "./1CourseListingStudentsPage.css";
 
 function TeamItem({ teamName, members }) {
   return (
