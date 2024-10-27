@@ -1,18 +1,9 @@
 import React, { useState } from "react";
-import "./1CourseListingStudentsPage.css";
+import "./CourseListingStudentsPage.css";
 import CourseItem from "./CourseItem";
 import TeamItem from "./TeamItem";
 
 function PeerAssessment() {
-  // const courseData = [
-  //   {
-  //     name: "SOEN341",
-  //     description: "This is description for the course",
-  //     startDate: "03/09/2024",
-  //     endDate: "02/12/2024",
-  //     status: "Ready",
-  //   },
-  // ];
 
   const [courseData, setCourseData] = React.useState([]);
   const [teamData, setTeamData] = useState([]);

@@ -1,5 +1,5 @@
 import React from "react";
-import "./1CourseListingStudentsPage.css";
+import "./CourseListingStudentsPage.css";
 
 function CourseItem({ name, description, startDate, endDate, status }) {
   return (

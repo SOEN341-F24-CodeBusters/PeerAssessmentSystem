@@ -1,119 +1,116 @@
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-body {
-  font-family: Inter, sans-serif;
-}
 
 html {
   font-size: 62.5%;
   overflow-x: hidden;
-
   scroll-behavior: smooth;
+}
+
+body {
+  font-family: Inter, sans-serif;
 }
 
 .container {
   background-color: #1e1e1e;
-
   height: 100vh;
   width: 100vw;
-
-  padding: 44px 66px;
-
-  /* display: flex;
-  flex-direction: column;*/
+  padding: 4.4rem 6.6rem;
 }
 
 .header {
   display: flex;
-  gap: 20px;
+  gap: 2rem;
   color: #fff;
   align-items: center;
   justify-content: space-between;
-
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
 }
 
 .title {
-  font: 32px Quantico, sans-serif;
+  font-size: 3.2rem;
+  font-family: Quantico, sans-serif;
 }
 
 .studentTab {
-  border-radius: 15px;
-  padding: 15px 40px;
-  font: 24px Inter, sans-serif;
+  border-radius: 1.5rem;
+  padding: 1.5rem 4rem;
+  font-size: 2.4rem;
   border: 1px solid rgba(110, 84, 181, 1);
 }
 
-/* ******************************************** */
-/* Course Section */
+/* Course and Team Sections */
 .courseContainer, .teamContainer {
-  border-radius: 20px;
+  border-radius: 2rem;
   background-color: rgba(37, 37, 37, 1);
   display: flex;
   flex-direction: column;
-
   width: 100%;
   height: 100%;
-
-  font-family: Inter, sans-serif;
-
-  padding: 17px 25px;
+  padding: 1.7rem 2.5rem;
 }
 
 .courseListTitle, .teamListTitle {
   color: #a6a6a6;
-  font: 16px Inter, sans-serif;
-  font-style: normal;
-  line-height: normal;
-
-  margin-bottom: 32px;
+  font-size: 1.6rem;
+  margin-bottom: 3.2rem;
 }
 
 .courseColumns, .teamColumns {
   display: flex;
-
   width: 100%;
-  gap: 20px;
-  font-size: 10px;
+  gap: 1rem;
+  font-size: 1.4rem;
   color: #fff;
   justify-content: space-between;
-
-  margin-bottom: 5px;
-  padding: 0px 20px;
+  margin-bottom: 0.5rem;
+  padding: 0px 2rem;
 }
 
-.courseItems-list {
+.courseItems-list, .teamItems-list {
+  display: flex;             
+  flex-direction: column;     
+  gap: 1rem;                  
+  width: 100%;              
+  overflow-y: auto; 
 }
 
+/* Item Styles */
 .courseItem, .teamItem {
-  border-radius: 17px;
+  border-radius: 1.7rem;
   background-color: rgba(56, 55, 57, 1);
   display: flex;
   width: 100%;
   align-items: center;
-  gap: 40px 91px;
+  gap: 4rem;
   overflow: hidden;
-  font-size: 16px;
+  font-size: 1.6rem;
   color: #fff;
-  margin-bottom: 10px;
-  padding: 23px 28px;
+  margin-bottom: 1rem;
+  padding: 2.3rem 2.8rem;
+  transition: background-color 0.3s ease;
+}
+
+.courseItem:hover, .teamItem:hover {
+  background-color: rgba(66, 65, 67, 1);
 }
 
 .courseName, .teamName {
-  font-size: 20px;
+  font-size: 2rem;
 }
 
 .courseDescription, .teamMembers {
   flex-grow: 1;
-  width: 236px;
+  width: 23.6rem;
 }
 
 .courseDates {
   display: flex;
-  gap: 3px;
+  gap: 0.3rem;
   margin: auto 0;
 }
 
