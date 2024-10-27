@@ -126,6 +126,60 @@ public class TeacherController : Controller {
         return Ok();
     }
 
+    [HttpPost, ActionName("upload-csv")]
+    public async Task<ActionResult> UploadFile(IFormFile file, string groupName) {
+
+        Teacher teacher = await FetchLoggedInTeacher(HttpContext);
+
+        if (file == null || file.Length == 0) {
+            return BadRequest("No file uploaded");
+        }
+
+        // Create group
+        Group group = new Group {
+            Id = new Guid(),
+            Name = groupName,
+            Teacher = teacher
+        };
+
+        // Create teams that will be in group created above
+        List<Team> teams = new List<Team>();
+
+        // Read the file
+        using var reader = new StreamReader(file.OpenReadStream());
+        while (!reader.EndOfStream) {
+            var line = await reader.ReadLineAsync();
+
+            if (line is null) {
+                continue;
+            }
+
+            var values = line.Split(',');
+
+            // Create team from first value in row
+            Team team = new Team {
+                Id = new Guid(),
+                TeamName = values[0].Trim(),
+                Group = group,
+                Students = new List<Student>()
+            };
+
+            // Create students in team from the rest of the values in row
+            team.Students.AddRange(values.Skip(1).Select(value => new Student {
+                Id = new Guid(),
+                StudentID = int.Parse(value.Trim())
+            }));
+
+            teams.Add(team);
+        }
+
+        _dbContext.Groups.Add(group);
+        _dbContext.Teams.AddRange(teams);
+        await _dbContext.SaveChangesAsync();
+
+        return Ok();
+    }
+
     private async Task<Teacher> FetchLoggedInTeacher(HttpContext httpContext) {
         Guid userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
         User user = await _dbContext.Users
