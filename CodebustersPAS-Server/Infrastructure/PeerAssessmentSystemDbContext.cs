@@ -21,5 +21,23 @@ namespace Infrastructure {
         // The following configures EF to create a Sqlite database file in the special "local" folder
         protected override void OnConfiguring(DbContextOptionsBuilder options)
                 => options.UseSqlite($"Data Source={DbPath}");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.student)
+                .WithOne(s => s.User)
+                .HasForeignKey<Student>(e => e.UserID)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.teacher)
+                .WithOne(t => t.User)
+                .HasForeignKey<Teacher>(e => e.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

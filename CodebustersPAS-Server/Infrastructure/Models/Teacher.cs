@@ -7,7 +7,7 @@ namespace Infrastructure.Models {
         [Key]
         public Guid Id { get; set; }
 
-        [NotMapped]
-        public User? user { get; set; }
+        public Guid UserID { get; set; }
+        public User? User { get; set; }
     }
 }
