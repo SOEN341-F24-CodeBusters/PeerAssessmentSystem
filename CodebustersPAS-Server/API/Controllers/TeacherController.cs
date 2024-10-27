@@ -21,7 +21,7 @@ public class TeacherController : Controller {
     }
 
     [HttpGet, ActionName("groups")]
-    public async Task<ActionResult<IEnumerable<TC_TeamDTO>>> GetGroups() {
+    public async Task<ActionResult<IEnumerable<TC_GroupDto>>> GetGroups() {
 
         Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 
