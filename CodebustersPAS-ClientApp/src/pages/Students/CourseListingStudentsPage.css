@@ -48,7 +48,7 @@ html {
 
 /* ******************************************** */
 /* Course Section */
-.courseContainer {
+.courseContainer, .teamContainer {
   border-radius: 20px;
   background-color: rgba(37, 37, 37, 1);
   display: flex;
@@ -62,7 +62,7 @@ html {
   padding: 17px 25px;
 }
 
-.courseListTitle {
+.courseListTitle, .teamListTitle {
   color: #a6a6a6;
   font: 16px Inter, sans-serif;
   font-style: normal;
@@ -71,7 +71,7 @@ html {
   margin-bottom: 32px;
 }
 
-.courseColumns {
+.courseColumns, .teamColumns {
   display: flex;
 
   width: 100%;
@@ -87,7 +87,7 @@ html {
 .courseItems-list {
 }
 
-.courseItem {
+.courseItem, .teamItem {
   border-radius: 17px;
   background-color: rgba(56, 55, 57, 1);
   display: flex;
@@ -101,11 +101,11 @@ html {
   padding: 23px 28px;
 }
 
-.courseName {
+.courseName, .teamName {
   font-size: 20px;
 }
 
-.courseDescription {
+.courseDescription, .teamMembers {
   flex-grow: 1;
   width: 236px;
 }

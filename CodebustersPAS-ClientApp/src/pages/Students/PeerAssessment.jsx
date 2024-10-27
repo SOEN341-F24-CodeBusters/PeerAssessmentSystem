@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CourseListingStudentsPage.css";
 import CourseItem from "./CourseItem";
 
@@ -14,14 +14,15 @@ function PeerAssessment() {
   // ];
 
   const [courseData, setCourseData] = React.useState([]);
+  const [teamData, setTeamData] = useState([]);
 
   React.useEffect(() => {
     updateCourseData();
+    getTeamData();
   }, []);
 
   async function updateCourseData() {
     let temp_data = await getCourseData();
-
     setCourseData(temp_data);
   }
 
@@ -39,6 +40,49 @@ function PeerAssessment() {
 
     return temp_data;
   }
+
+
+  async function getTeamData() {
+
+    /*const apiUrl = 'https://localhost:7010/api/';
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify(teamData),
+      });
+
+      if (response.ok){
+        //const responseData = await response.json(); 
+        //console.log('Login successful:', responseData);
+
+        const data = await response.json();
+        setTeamData(data);
+        console.log('Team is displayed');
+
+      }else{
+        const errorData = await response.json();
+        console.error('Error fetching team data:', errorData);
+        alert(errorData);
+      }
+    }catch (error) {
+      console.error('Request failed:', error);
+      alert('An error occurred. Please check your connection and try again.');
+    }*/
+    let teamData = [
+      {
+        teamName: "Demo1",
+        members: [tina, louis, pacifique, theo, omar, valeriia],
+      },
+    ];
+    setTeamData(teamData);
+    
+  };
+
+
 
   return (
     <div className="container">
@@ -61,6 +105,25 @@ function PeerAssessment() {
             <CourseItem key={index} {...course} />
           ))}
         </div>
+      </section>
+      
+      <section className="teamContainer">
+        <h2 className="teamListTitle">Your teams are listed here</h2>
+        <div className="teamColumns">
+          <h3>Team Name</h3>
+          <h3>Members</h3>
+        </div>
+
+        <div className="teamItems-list">
+          {teamData.length > 0 ? (
+            teamData.map((team, index) => (
+              <TeamItem key={index} {...team} />
+            ))
+          ) : (
+            <p>You are not assigned in any team yet</p>
+          )}
+        </div>
+
       </section>
     </div>
   );
