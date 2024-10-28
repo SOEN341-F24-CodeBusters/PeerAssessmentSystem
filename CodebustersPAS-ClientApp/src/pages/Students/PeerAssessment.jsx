@@ -36,24 +36,21 @@ function PeerAssessment() {
 
   async function getTeamData() {
 
-    /*const apiUrl = 'https://localhost:7010/api/';
+    const apiUrl = 'https://localhost:7010/api/Students/GetGroupsAndTeams';
 
     try {
       const response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json', 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`, 
         },
-        body: JSON.stringify(teamData),
       });
 
       if (response.ok){
-        //const responseData = await response.json(); 
-        //console.log('Login successful:', responseData);
-
         const data = await response.json();
         setTeamData(data);
-        console.log('Team is displayed');
+        console.log('Team is fetched successfully:', data);
 
       }else{
         const errorData = await response.json();
@@ -63,14 +60,15 @@ function PeerAssessment() {
     }catch (error) {
       console.error('Request failed:', error);
       alert('An error occurred. Please check your connection and try again.');
-    }*/
+    }
+    /*For deisplay test: 
     const teamData = [
       {
         teamName: "Demo1",
         members: ["tina", "louis", "pacifique", "theo", "omar", "valeriia"],
       },
     ];
-    setTeamData(teamData);
+    setTeamData(teamData);*/
     
   };
 
