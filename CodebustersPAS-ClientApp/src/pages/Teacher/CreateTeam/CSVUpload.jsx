@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 
+console.log("CSVUpload rendered");
+
+
 const CSVUpload = () => {
   const [csvData, setCsvData] = useState([]);
   const [error, setError] = useState("");

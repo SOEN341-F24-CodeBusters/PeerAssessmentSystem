@@ -48,8 +48,9 @@ const TeamOverview = () => {
             <button className="create-team-btn" onClick={handleOpenPopup}>
                 {editIndex !== null ? 'Edit Team' : 'Create Teams +'}
             </button>
-            <CSVUpload onTeamsUpload={handleTeamsUpload} /> {/* Use the CSVUpload component */}
-
+            <div className="csv-upload">
+                <CSVUpload onTeamsUpload={handleTeamsUpload} />
+            </div>
             <div className="teams-container">
                 {teams.map((team, index) => (
                     <div key={index} id={index} className="team-card">
