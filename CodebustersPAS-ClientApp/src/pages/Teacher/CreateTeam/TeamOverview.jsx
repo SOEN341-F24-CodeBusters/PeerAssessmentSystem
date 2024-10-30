@@ -45,12 +45,12 @@ const TeamOverview = () => {
 
     return (
         <div className="team-overview-container">
-            <button className="create-team-btn" onClick={handleOpenPopup}>
-                {editIndex !== null ? 'Edit Team' : 'Create Teams +'}
-            </button>
             <div className="csv-upload">
                 <CSVUpload onTeamsUpload={handleTeamsUpload} />
             </div>
+            <button className="create-team-btn" onClick={handleOpenPopup}>
+                {editIndex !== null ? 'Edit Team' : 'Create Teams +'}
+            </button>
             <div className="teams-container">
                 {teams.map((team, index) => (
                     <div key={index} id={index} className="team-card">

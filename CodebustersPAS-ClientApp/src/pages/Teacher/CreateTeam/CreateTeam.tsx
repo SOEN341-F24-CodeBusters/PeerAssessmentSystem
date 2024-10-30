@@ -9,7 +9,6 @@ import './CreateTeam.css';
 const CreateTeam: React.FC = () => {
 
     return (<>
-        <>HELLLLOOOOO</>
         <div>
             <CreateTeamPopup onClose={() => {}} onCreateTeam={() => {}} editName={undefined}/>
         </div>

@@ -24,7 +24,7 @@ const CSVUpload = () => {
   };
 
   // Handle file upload and parsing
-  const handleFileUpload = (event) => {
+  /*const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       Papa.parse(file, {
@@ -35,7 +35,7 @@ const CSVUpload = () => {
             setCsvData(parsedData);
             setError("");
           } else {
-            setError("Invalid CSV format. Ensure required columns: Team Name, Class, Student Names, and IDs.");
+            setError("Invalid CSV format. Ensure required columns: Team Name, Student IDs.");
           }
         },
         error: function () {
@@ -45,17 +45,17 @@ const CSVUpload = () => {
         skipEmptyLines: true
       });
     }
-  };
+  };*/
 
   // Function to validate the CSV data format
-  const validateCSV = (data) => {
+  /*const validateCSV = (data) => {
     const requiredFields = ["Team Name", "Student ID 1", "Student ID 2", "Student ID 3"];
     if (data.length > 0) {
       const firstRow = data[0];
       return requiredFields.every(field => field in firstRow);
     }
     return false;
-  };
+  };*/
 
   const handleUploadCSV = async () => {
     if (!groupName) {
@@ -98,7 +98,7 @@ const CSVUpload = () => {
         onChange={(e) => setGroupName(e.target.value)} 
       />
       <button onClick={downloadTemplate}>Download CSV Template</button>
-      <input type="file" accept=".csv" onChange={handleFileUpload} />
+      <input type="file" accept=".csv"  />
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {uploadStatus && <p style={{ color: 'green' }}>{uploadStatus}</p>}
@@ -125,10 +125,8 @@ const CSVUpload = () => {
               {csvData.map((row, index) => (
                 <tr key={index}>
                   <td>{row['Team Name']}</td>
-                  <td>{row['Class']}</td>
                   {Array.from({ length: 6 }, (_, i) => (
                     <React.Fragment key={i}>
-                      <td>{row[`Student ${i + 1} Name`] || ""}</td>
                       <td>{row[`Student ${i + 1} ID`] || ""}</td>
                     </React.Fragment>
                   ))}
