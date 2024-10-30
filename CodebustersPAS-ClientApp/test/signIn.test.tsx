@@ -19,7 +19,7 @@ describe("Sign In Page", {}, () => {
             </MemoryRouter>
         );
 
-        expect(screen.getByText("Sign In", { selector: 'h2' })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Sign In' })).toBeInTheDocument();
+        expect(screen.getByText("Sign In", { selector: 'h2' }));
+        expect(screen.getByRole('button', { name: 'Sign In' }));
     });
 });
