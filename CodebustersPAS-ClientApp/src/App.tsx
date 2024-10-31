@@ -9,11 +9,11 @@ import Navbar from './pages/NavBar';
 const App: React.FC = () => {
   const location = useLocation();
 
-  const hideLogoutRoutes = ['/', '/signup'];
+  const showLogout = !['/', '/signup'].includes(location.pathname);
 
   return (
       <div className="App">
-      <Navbar showLogout={hideLogoutRoutes.indexOf(location.pathname) === -1}/>
+      <Navbar showLogout={showLogout}/>
       <div className="content"></div>
         <Routes>
           <Route path="/" element={<SignIn />} /> {}

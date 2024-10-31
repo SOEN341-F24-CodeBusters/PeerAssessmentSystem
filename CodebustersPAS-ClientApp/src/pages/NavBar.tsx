@@ -16,8 +16,12 @@ const Navbar: React.FC<NavbarProps> = ({ showLogout }) => {
       </div>
       <div className="navbar-links">
         <div className="left-links">
-        <Link to="/">Login</Link>
-        <Link to="/signup">Register</Link>
+        {!showLogout && (
+            <>
+          <Link to="/">Login</Link>
+          <Link to="/signup">Register</Link>
+          </>
+          )}
         </div>
         {showLogout && <LogoutButton />}
       </div>
