@@ -30,49 +30,12 @@ function PeerAssessment() {
     return temp_data;
   }
 
-  const handleLogout = async () => {
-    const apiUrl = 'https://localhost:7010/api/Authentification/LogOut';
-
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      if (response.ok) {
-        const contentType = response.headers.get('Content-Type');
-        let responseData;
-        if (contentType && contentType.includes('application/json')) {
-        responseData = await response.json(); 
-        console.log('Logout successful:', responseData)
-      } else {
-        console.log('Logout successful with no response data.');
-      }
-        navigate('/');
-      } else {
-        console.error('Logout failed with status:', response.status);
-      }
-    } catch (error) {
-      console.error('An error occurred during logout:', error);
-    }
-  };
-
   return (
     <div className="container">
       <header className="header">
         <h1 className="title">Peer Assessment</h1>
         <nav className="studentTab">Student's Tab</nav>
-        <button
-          onClick={handleLogout} className="logout-button"
-          onMouseEnter={(e) => (e.target.classList.add('hover'))}
-          onMouseLeave={(e) => (e.target.classList.remove('hover'))}
-        >
-          Logout
-        </button>
       </header>
-
       <section className="courseContainer">
         <h2 className="courseListTitle">Your courses are listed here</h2>
         <div className="courseColumns">

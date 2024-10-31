@@ -20,46 +20,10 @@ const CreateTeamPopup = ({ onClose, onCreateTeam, editName }) => {
         }
     };
 
-    const handleLogout = async () => {
-        const apiUrl = 'https://localhost:7010/api/Authentification/LogOut';
-    
-        try {
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-      
-          if (response.ok) {
-            const contentType = response.headers.get('Content-Type');
-            let responseData;
-            if (contentType && contentType.includes('application/json')) {
-            responseData = await response.json(); 
-            console.log('Logout successful:', responseData)
-          } else {
-            console.log('Logout successful with no response data.');
-          }
-            navigate('/');
-          } else {
-            console.error('Logout failed with status:', response.status);
-          }
-        } catch (error) {
-          console.error('An error occurred during logout:', error);
-        }
-      };
-
     return ( 
             <div className="popup-container">
                 <div className="popup-header">
                     <h2>{editName ? 'Edit Team' : 'Create Team'}</h2>
-                <button
-                    onClick={handleLogout} className="logout-button"
-                    onMouseEnter={(e) => (e.target.classList.add('hover'))}
-                    onMouseLeave={(e) => (e.target.classList.remove('hover'))}
-                >
-                    Logout
-                </button>
                 </div>
                 <div className="popup-content"></div>
                     <input

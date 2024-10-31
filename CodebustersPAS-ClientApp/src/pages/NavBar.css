@@ -1,11 +1,12 @@
 .navbar {
     width: 100%;
-    background-color: #9c0404de;
+    background-color: #b80505;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 1rem;
+    justify-content: space-between;
     position: fixed;
     top: 0;
     left: 0;
@@ -24,6 +25,25 @@
     font-size: 1.2rem;
     font-weight: bold;
   }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+  }
+
+  .left-links {
+    display: flex;
+  }
+
+  .logout-link {
+    color: white; 
+    text-decoration: none;
+  }
+
+  .logout-link:hover,
+.navbar-links a:hover {
+  text-decoration: underline;
+}
   
   .navbar-links a:hover {
     text-decoration: underline;
