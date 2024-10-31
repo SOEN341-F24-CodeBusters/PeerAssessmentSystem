@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,27 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PeerAssessmentSystemDbContext))]
-    partial class DbContextModelSnapshot : ModelSnapshot
+    [Migration("20241019024433_refactorTables")]
+    partial class refactorTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
-
-            modelBuilder.Entity("GroupStudent", b =>
-                {
-                    b.Property<Guid>("GroupsId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("StudentsId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("GroupsId", "StudentsId");
-
-                    b.HasIndex("StudentsId");
-
-                    b.ToTable("GroupStudent");
-                });
 
             modelBuilder.Entity("Infrastructure.Models.Group", b =>
                 {
@@ -125,9 +113,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("TeacherId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("email")

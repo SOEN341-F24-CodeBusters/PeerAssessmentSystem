@@ -15,13 +15,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => {
         options.Cookie.Name = "CodebustersPASAuth";
-        options.LoginPath = "/";
+
+        options.Events.OnRedirectToLogin = context => {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+
+        options.Events.OnRedirectToAccessDenied = context => {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        };
     });
 
-builder.Services.AddAuthorization(option => {
-    option.AddPolicy("TeacherOnly", policy => { policy.RequireRole("Teacher"); });
-    option.AddPolicy("StudentOnly", policy => { policy.RequireRole("Student"); });
-});
+builder.Services.AddAuthorization();
 
 // Add Database
 builder.Services.AddPASDbContext();
@@ -54,6 +60,7 @@ app.UseCors(x => x
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

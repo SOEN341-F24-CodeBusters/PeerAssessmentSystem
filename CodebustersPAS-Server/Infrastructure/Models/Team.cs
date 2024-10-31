@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Models {
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Infrastructure.Models {
     public class Team {
         public Guid Id { get; set; }
 
