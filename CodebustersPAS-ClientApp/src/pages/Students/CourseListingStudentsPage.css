@@ -119,23 +119,3 @@ html {
 .courseStatus {
   font-weight: 700;
 }
-
-/* ******************************************** */
-/* Logout Button */
-
-.logout-button {
-  background-color: #f44336; /* Red color for emphasis */
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-left: auto; /* Pushes the button to the right */
-  margin-right: 1rem;
-  font-size: 2rem;
-}
-
-.logout-button.hover {
-  background-color: #d32f2f; /* Darker red for hover */
-}
