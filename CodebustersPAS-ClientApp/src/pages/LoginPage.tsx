@@ -26,6 +26,7 @@ const Login: React.FC = () => {
           'Content-Type': 'application/json', 
         },
         body: JSON.stringify(loginData),
+        credentials: 'include', // Include credentials to store cookies
       });
 
       if (response.ok) {
