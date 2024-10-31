@@ -36,7 +36,7 @@ function PeerAssessment() {
 
   async function getTeamData() {
 
-    const apiUrl = 'https://localhost:7010/api/Students/GetGroupsAndTeams';
+    const apiUrl = 'https://localhost:7010/api/Student/GetGroupsAndTeams';
 
     try {
       const response = await fetch(apiUrl, {
