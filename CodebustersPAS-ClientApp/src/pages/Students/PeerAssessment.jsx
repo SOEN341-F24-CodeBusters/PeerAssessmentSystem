@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./CourseListingStudentsPage.css";
 import CourseItem from "./CourseItem";
 import TeamItem from "./TeamItem";
@@ -19,7 +20,7 @@ function PeerAssessment() {
   }
 
   async function getCourseData() {
-    //here needs to be actual request
+    // Here needs to be the actual request.
     let temp_data = [
       {
         name: "SOEN341",
@@ -29,7 +30,6 @@ function PeerAssessment() {
         status: "Ready",
       },
     ];
-
     return temp_data;
   }
 
@@ -80,7 +80,6 @@ function PeerAssessment() {
         <h1 className="title">Peer Assessment</h1>
         <nav className="studentTab">Student's Tab</nav>
       </header>
-
       <section className="courseContainer">
         <h2 className="courseListTitle">Your courses are listed here</h2>
         <div className="courseColumns">
@@ -120,3 +119,4 @@ function PeerAssessment() {
 }
 
 export default PeerAssessment;
+
