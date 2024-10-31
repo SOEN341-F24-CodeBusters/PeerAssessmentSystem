@@ -39,7 +39,7 @@ public class AuthentificationController : ControllerBase {
         // Todo: hash password and not to store it as plain text
         if (!logInDTO.password.Equals(user.Password)) {
             // WRONG PASSOWRD
-            return Unauthorized();
+            return Unauthorized(new { message = "Invalid email or password. Please make sure to sign up your account." });
         }
 
         var claims = new List<Claim> { };

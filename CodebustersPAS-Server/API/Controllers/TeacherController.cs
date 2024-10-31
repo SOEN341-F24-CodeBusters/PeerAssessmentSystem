@@ -127,7 +127,7 @@ public class TeacherController : Controller {
     }
 
     [HttpPost, ActionName("upload-csv")]
-    public async Task<ActionResult> UploadFile(IFormFile file, string groupName) {
+    public async Task<ActionResult> UploadFile([FromForm] IFormFile file, [FromForm] string groupName) {
 
         Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 

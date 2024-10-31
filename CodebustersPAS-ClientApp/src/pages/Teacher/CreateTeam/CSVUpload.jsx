@@ -63,18 +63,18 @@ const CSVUpload = () => {
       return;
     }
 
+    const fileInput = document.querySelector('input[type="file"]');
+    const csvBlob = fileInput.files[0];
+    
     const formData = new FormData();
-    const csvBlob = new Blob([Papa.unparse(csvData)], { type: "text/csv" });
-    formData.append("file", csvBlob, "teams.csv");
+    formData.append("file", csvBlob);
     formData.append("groupName", groupName);
 
     try {
       const response = await fetch("https://localhost:7010/api/Teacher/upload-csv", {
         method: "POST",
+        credentials: "include",
         body: formData,
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}` // Adjust to token retrieval method
-        }
       });
 
       if (response.ok) {
