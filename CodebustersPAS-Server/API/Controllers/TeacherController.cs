@@ -123,7 +123,7 @@ public class TeacherController : Controller {
     }
 
     [HttpPost, ActionName("upload-csv")]
-    public async Task<ActionResult> UploadFile(IFormFile file, string groupName) {
+    public async Task<ActionResult> UploadFile([FromForm] IFormFile file, [FromForm] string groupName) {
 
         Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 
@@ -159,10 +159,14 @@ public class TeacherController : Controller {
             };
 
             // Create students in team from the rest of the values in row
-            team.Students.AddRange(values.Skip(1).Select(value => new Student {
-                Id = new Guid(),
-                StudentID = int.Parse(value.Trim())
-            }));
+            team.Students.AddRange(values
+                .Skip(1)
+                .Where(value => !string.IsNullOrWhiteSpace(value))
+                .Select(value => new Student {
+                    Id = new Guid(),
+                    StudentID = int.Parse(value.Trim())
+                })
+            );
 
             group.Teams.Add(team);
         }
