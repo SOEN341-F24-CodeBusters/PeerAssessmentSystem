@@ -22,7 +22,7 @@ public class StudentController : ControllerBase {
 
     [Authorize(Roles = "Student")]
     [HttpGet, ActionName("GetGroupsAndTeams")]
-    public async Task<ActionResult<IEnumerable<SC_TeamDTO>>> GetTeams() {
+    public async Task<ActionResult<IEnumerable<SC_TeamDTO>>> GetGroupsAndTeams() {
 
         Student student = await FetchLoggedInStudent(HttpContext);
 
