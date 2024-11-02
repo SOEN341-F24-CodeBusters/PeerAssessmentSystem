@@ -20,49 +20,44 @@ public class TeacherController : Controller {
         _dbContext = dbContext;
     }
 
-    [HttpGet, ActionName("groups")]
-    public async Task<ActionResult<IEnumerable<TC_GroupDto>>> GetGroups() {
+    [HttpGet, ActionName("GetGroupsAndTeams")]
+    public async Task<ActionResult<IEnumerable<TC_GroupDto>>> GetGroupsAndTeams() {
 
         Teacher teacher = await FetchLoggedInTeacher(HttpContext);
 
-        IList<Group> groups = await _dbContext.Groups.Where(group => group.Teacher.Id == teacher.Id).ToListAsync();
+        var groups = await _dbContext.Groups
+            .Where(group => group.Teacher.Id == teacher.Id)
+            .Include(g => g.Teams)
+                .ThenInclude(t => t.Students)
+                    .ThenInclude(s => s.User)
+            .ToListAsync();
 
-        var groupDTO = groups.Select(
-            group => new TC_GroupDto(
+
+        var groupDTO = groups
+            .OrderBy(g => g.Name)
+            .Select(group => new TC_GroupDto(
                 group.Id,
-                group.Name
-            )
-        );
-
-        return Ok(groupDTO);
-    }
-
-    [HttpGet, ActionName("teams")]
-    public async Task<ActionResult<IEnumerable<TC_TeamDTO>>> GetTeams() {
-
-        Teacher teacher = await FetchLoggedInTeacher(HttpContext);
-
-        IList<Team> teams = await _dbContext.Teams
-            .Include(t => t.Students)
-                .ThenInclude(s => s.User)
-            .Where(team => team.Group.Teacher.Id == teacher.Id).ToListAsync();
-
-        var teamDTO = teams.Select(
-            team => new TC_TeamDTO(
-                team.Id,
-                team.TeamName,
-                team.Students?.Select(
-                    student => new TC_StudentDTO(
-                        student.Id,
-                        student.StudentID,
-                        student.User?.FirstName,
-                        student.User?.LastName
+                group.Name,
+                group.Teams
+                    .OrderBy(t => t.TeamName)
+                    .Select(team => new TC_TeamDTO(
+                        team.Id,
+                        team.TeamName,
+                        team.Students
+                            .OrderBy(s => s.User?.LastName)
+                            .Select(student => new TC_StudentDTO(
+                                student.Id,
+                                student.StudentID,
+                                student.User?.FirstName,
+                                student.User?.LastName
+                                )
+                            )
+                        )
                     )
                 )
-            )
-        );
+            );
 
-        return Ok(teamDTO);
+        return Ok(groupDTO);
     }
 
     [HttpPost, ActionName("group")]
@@ -73,7 +68,8 @@ public class TeacherController : Controller {
         _dbContext.Groups.Add(new Group {
             Id = new Guid(),
             Name = name,
-            Teacher = teacher
+            Teacher = teacher,
+            Teams = new List<Team>()
         });
         await _dbContext.SaveChangesAsync();
 
@@ -139,11 +135,9 @@ public class TeacherController : Controller {
         Group group = new Group {
             Id = new Guid(),
             Name = groupName,
-            Teacher = teacher
+            Teacher = teacher,
+            Teams = new List<Team>()
         };
-
-        // Create teams that will be in group created above
-        List<Team> teams = new List<Team>();
 
         // Read the file
         using var reader = new StreamReader(file.OpenReadStream());
@@ -170,11 +164,10 @@ public class TeacherController : Controller {
                 StudentID = int.Parse(value.Trim())
             }));
 
-            teams.Add(team);
+            group.Teams.Add(team);
         }
 
         _dbContext.Groups.Add(group);
-        _dbContext.Teams.AddRange(teams);
         await _dbContext.SaveChangesAsync();
 
         return Ok();
@@ -205,6 +198,7 @@ public class TeacherController : Controller {
 
     public record TC_GroupDto(
         Guid id,
-        string Name
+        string Name,
+        IEnumerable<TC_TeamDTO> Teams
     );
 }
