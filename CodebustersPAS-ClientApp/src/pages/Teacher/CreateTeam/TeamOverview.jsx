@@ -7,7 +7,8 @@ const TeamOverview = () => {
     const [teams, setTeams] = useState([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [editIndex, setEditIndex] = useState(null); // New state for editing
-    
+    const [groupName, setGroupName] = useState(""); // State for group name
+
     const handleTeamsUpload = (data) => {
         // Process uploaded teams from CSV
         const teamsFromCsv = data.map((row) => ({
@@ -43,11 +44,28 @@ const TeamOverview = () => {
         setIsPopupOpen(true);
     };
 
+    // New handler for creating a group
+    const handleCreateGroup = () => {
+        console.log("Creating group:", groupName);
+        // Add any additional logic for creating a group, e.g., API call to save the group
+        setGroupName(""); // Clear the input after creation
+    };
+
     return (
         <div className="team-overview-container">
             <div className="csv-upload">
                 <CSVUpload onTeamsUpload={handleTeamsUpload} />
             </div>
+            <input
+                type="text"
+                placeholder="Enter Group Name"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+                className="group-name-input"
+            />
+            <button className="create-group-btn" onClick={handleCreateGroup}>
+                Create Group +
+            </button>
             <button className="create-team-btn" onClick={handleOpenPopup}>
                 {editIndex !== null ? 'Edit Team' : 'Create Teams +'}
             </button>
