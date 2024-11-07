@@ -26,6 +26,7 @@ const Login: React.FC = () => {
           'Content-Type': 'application/json', 
         },
         body: JSON.stringify(loginData),
+        credentials: 'include', // Include credentials to store cookies
       });
 
       if (response.ok) {
@@ -47,7 +48,7 @@ const Login: React.FC = () => {
     };
 
 
-    console.log(`Signing in as ${userType} with email: ${email} and password: ${password}`);
+    //console.log(`Signing in as ${userType} with email: ${email} and password: ${password}`);
 
   };
 

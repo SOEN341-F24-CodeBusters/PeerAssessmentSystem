@@ -22,7 +22,7 @@ public class StudentController : ControllerBase {
 
     [Authorize(Roles = "Student")]
     [HttpGet, ActionName("GetGroupsAndTeams")]
-    public async Task<ActionResult<IEnumerable<SC_TeamDTO>>> GetTeams() {
+    public async Task<ActionResult<IEnumerable<SC_TeamDTO>>> GetGroupsAndTeams() {
 
         Student student = await FetchLoggedInStudent(HttpContext);
 
@@ -31,7 +31,8 @@ public class StudentController : ControllerBase {
                 .ThenInclude(g => g.Teacher)
                     .ThenInclude(t => t.User)
             .Include(t => t.Students)
-            .Where(teams => teams.Students.Contains(student))
+                .ThenInclude(s => s.User)
+            .Where(t => t.Students.Any(s => s.StudentID == student.StudentID))
             .ToListAsync();
 
         var teamDTOs = teams.Select(
