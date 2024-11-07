@@ -48,7 +48,7 @@ const Login: React.FC = () => {
     };
 
 
-    console.log(`Signing in as ${userType} with email: ${email} and password: ${password}`);
+    //console.log(`Signing in as ${userType} with email: ${email} and password: ${password}`);
 
   };
 

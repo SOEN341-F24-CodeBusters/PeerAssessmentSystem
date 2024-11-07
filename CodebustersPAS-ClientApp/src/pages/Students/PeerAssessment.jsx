@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CourseListingStudentsPage.css";
 import CourseItem from "./CourseItem";
+import TeamItem from "./TeamItem";
 
 function PeerAssessment() {
+
   const [courseData, setCourseData] = React.useState([]);
-  const navigate = useNavigate();
+  const [teamData, setTeamData] = useState([]);
 
   React.useEffect(() => {
     updateCourseData();
+    getTeamData();
   }, []);
 
   async function updateCourseData() {
@@ -30,13 +33,54 @@ function PeerAssessment() {
     return temp_data;
   }
 
+
+  async function getTeamData() {
+
+    const apiUrl = 'https://localhost:7010/api/Student/GetGroupsAndTeams';
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+
+      if (response.ok){
+        const data = await response.json();
+        setTeamData(data);
+        console.log('Team is fetched successfully:', data);
+
+      }else{
+        const errorData = await response.json();
+        console.error('Error fetching team data:', errorData);
+        alert(errorData);
+      }
+    }catch (error) {
+      console.error('Request failed:', error);
+      alert('An error occurred. Please check your connection and try again.');
+    }
+    /*For deisplay test: 
+    const teamData = [
+      {
+        teamName: "Demo1",
+        members: ["tina", "louis", "pacifique", "theo", "omar", "valeriia"],
+      },
+    ];
+    setTeamData(teamData);*/
+    
+  };
+
+
+
   return (
     <div className="container">
       <header className="header">
         <h1 className="title">Peer Assessment</h1>
         <nav className="studentTab">Student's Tab</nav>
       </header>
-      <section className="courseContainer">
+      <section className="courseTeamContainer">
         <h2 className="courseListTitle">Your courses are listed here</h2>
         <div className="courseColumns">
           <h3>Course Name</h3>
@@ -49,8 +93,30 @@ function PeerAssessment() {
           {courseData.map((course, index) => (
             <CourseItem key={index} {...course} />
           ))}
+
         </div>
+
+        <div className="teamColumns">
+          <h3>Team Name</h3>
+          <h3>Members</h3>
+        </div>
+
+        <div className="teamItems-list">
+          <div className="teamItem">
+          {teamData.length > 0 ? (
+            teamData.map((team, index) => (
+              <TeamItem key={index} {...team} />
+            ))
+          ) : (
+            <p className="teamMembers">You are not assigned in any team yet</p>
+          )}
+          </div>
+          
+        </div>
+        
       </section>
+      
+      
     </div>
   );
 }
