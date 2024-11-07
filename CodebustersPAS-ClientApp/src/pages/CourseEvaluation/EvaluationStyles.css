@@ -7,46 +7,54 @@ body {
 }
 
 html {
+  all: unset;
   font-size: 62.5%;
   overflow-x: hidden;
 
   scroll-behavior: smooth;
 }
 
-.container {
-  background-color: #1e1e1e;
+.container-evaluation {
+  height: 100vh;
+  padding: 100px;
 
-  /* height: 100vh; */
-  width: 100vw;
+  padding: 100px 180px 100px 180px;
 
-  padding: 44px 66px;
+  background-color: #252525;
 }
 
-.container-evaluation {
-  background-color: #1c1c1c;
+.container-dimension {
   color: #ffffff;
   padding: 20px;
+
   border-radius: 10px;
 
   margin: 0 auto;
-  /* text-align: center; */
+  margin-bottom: 30px;
 }
 
 .evaluation-title {
   font-size: 24px;
   font-weight: bold;
+
+  margin-bottom: 20px;
 }
 
 .evaluation-info {
   background-color: #333;
-  padding: 15px;
+  padding: 20px 50px;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  width: fit-content;
 }
 
 .evaluation-instructions {
-  font-size: 14px;
-  margin: 20px 0;
+  color: #a6a6a6;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 20px;
 }
 
 .btn-submit {
@@ -56,7 +64,6 @@ html {
   border-radius: 5px;
   border: none;
   cursor: pointer;
-  margin-top: 20px;
 }
 
 .container-dimension {
@@ -65,6 +72,45 @@ html {
   border-radius: 8px;
 }
 .dimension-title {
-  font-size: 18px;
-  font-weight: bold;
+  color: #fff;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.dimension-description {
+  color: #c2c2c2;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 26px;
+
+  padding-right: 100px;
+}
+
+.dimention-explanation {
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  margin-bottom: 10px;
+}
+
+.container-member {
+  margin-left: 10px;
+}
+
+.member-label {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.member-input {
+  margin-bottom: 10px;
+  padding: 5px;
 }

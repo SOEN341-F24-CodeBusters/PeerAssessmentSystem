@@ -1,4 +1,3 @@
-
 body {
   font-family: Arial, sans-serif;
   background-color: #1a1a1a;
@@ -10,7 +9,6 @@ body {
   align-items: center;
   height: 100vh;
 }
-
 
 .app-container {
   text-align: center;
@@ -36,9 +34,8 @@ body {
   text-align: center;
 }
 
-
 .create-team-btn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -51,13 +48,11 @@ body {
   background-color: #45a049;
 }
 
-
 .teams-container {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
 }
-
 
 .team-card {
   background-color: #333333;
@@ -126,7 +121,7 @@ body {
 }
 
 .popup-btn.green {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
 }
 
