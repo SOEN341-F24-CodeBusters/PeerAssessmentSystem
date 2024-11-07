@@ -35,13 +35,17 @@ public class StudentController : ControllerBase {
             .Where(t => t.Students.Any(s => s.StudentID == student.StudentID))
             .ToListAsync();
 
-        var teamDTOs = teams.Select(
-            team => new SC_TeamDTO(
-                team.TeamName,
-                team.Group.Teacher.User!.FirstName + " " + team.Group.Teacher.User!.LastName,
-                team.Group.Name,
-                team.Students.Select(s => new SC_StudentDTO(s.StudentID, s.User?.FirstName + " " + s.User?.LastName))
-            )
+        var teamDTOs = teams
+            .OrderBy(t => t.Group.Name)
+            .Select(
+                team => new SC_TeamDTO(
+                    team.TeamName,
+                    team.Group.Teacher.User!.FirstName + " " + team.Group.Teacher.User!.LastName,
+                    team.Group.Name,
+                    team.Students
+                        .OrderBy(s => s.User?.FirstName + " " + s.User?.LastName)
+                        .Select(s => new SC_StudentDTO(s.StudentID, s.User?.FirstName + " " + s.User?.LastName))
+                )
         );
 
         return Ok(teamDTOs);

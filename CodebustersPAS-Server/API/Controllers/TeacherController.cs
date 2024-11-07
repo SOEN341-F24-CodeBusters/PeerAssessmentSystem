@@ -44,7 +44,7 @@ public class TeacherController : Controller {
                         team.Id,
                         team.TeamName,
                         team.Students
-                            .OrderBy(s => s.User?.LastName)
+                            .OrderBy(s => s.User?.LastName + " " + s.User?.FirstName)
                             .Select(student => new TC_StudentDTO(
                                 student.Id,
                                 student.StudentID,
