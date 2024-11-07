@@ -80,7 +80,7 @@ function PeerAssessment() {
         <h1 className="title">Peer Assessment</h1>
         <nav className="studentTab">Student's Tab</nav>
       </header>
-      <section className="courseContainer">
+      <section className="courseTeamContainer">
         <h2 className="courseListTitle">Your courses are listed here</h2>
         <div className="courseColumns">
           <h3>Course Name</h3>
@@ -93,26 +93,29 @@ function PeerAssessment() {
           {courseData.map((course, index) => (
             <CourseItem key={index} {...course} />
           ))}
+
         </div>
-      </section>
-      
-      <section className="teamContainer">
-        <h2 className="teamListTitle">Your teams are listed here</h2>
+
         <div className="teamColumns">
           <h3>Team Name</h3>
           <h3>Members</h3>
         </div>
 
         <div className="teamItems-list">
+          <div className="teamItem">
           {teamData.length > 0 ? (
             teamData.map((team, index) => (
               <TeamItem key={index} {...team} />
             ))
           ) : (
-            <p>You are not assigned in any team yet</p>
+            <p className="teamMembers">You are not assigned in any team yet</p>
           )}
+          </div>
+          
         </div>
+        
       </section>
+      
       
     </div>
   );
