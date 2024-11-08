@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import SignIn from "./pages/LoginPage";
 import CreateAccount from "./pages/CreateAccountPage";
 import GroupEvaluation from "./pages/CourseEvaluation/GroupEvaluation";
-//import CreateTeam from "./pages/Teacher/CreateTeam/CreateTeam.tsx";
 import PeerAssessment from "./pages/Students/PeerAssessment";
 
 
 import TeamOverview from "./pages/Teacher/CreateTeam/TeamOverview.jsx";
 import Navbar from './pages/NavBar';
+
 
 const App: React.FC = () => {
   const location = useLocation();

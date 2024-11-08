@@ -34,7 +34,7 @@ const CreateAccount: React.FC = () => {
       });
   
       if (response.ok) {
-        console.log('User created successfully'+'User signed up<\n>'+userData);
+        console.log('User created successfully'+'User signed up<\n>');
 
         navigate('/'); 
       } else {
