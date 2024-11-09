@@ -21,7 +21,7 @@ public class StudentController : ControllerBase {
         _dbContext = dbContext;
     }
 
-    
+
     [HttpGet, ActionName("GetGroupsAndTeams")]
     public async Task<ActionResult<IEnumerable<SC_TeamDTO>>> GetGroupsAndTeams() {
 
@@ -32,32 +32,44 @@ public class StudentController : ControllerBase {
                 .ThenInclude(g => g.Teacher)
                     .ThenInclude(t => t.User)
             .Include(t => t.Students)
-                .ThenInclude(s => s.EvaluationsRecived.Where(e => e.Evaluator.StudentID.Equals(student.StudentID)))
+            .Include(t => t.StudentEvaluations)
             .Where(teams => teams.Students.Contains(student))
             .ToListAsync();
 
         var teamDTOs = teams.Select(
             team => new SC_TeamDTO(
+                team.Id,
                 team.TeamName,
                 team.Group.Teacher.User!.FirstName + " " + team.Group.Teacher.User!.LastName,
                 team.Group.Name,
-                team.Students.Select(s => new SC_StudentDTO(s.StudentID, s.User?.FirstName + " " + s.User?.LastName))
-            )
-        );
+                team.Students.Select(s => new SC_StudentDTO(
+                    s.StudentID,
+                    s.User?.FirstName + " " + s.User?.LastName, 
+                    s.Equals(student) || team.StudentEvaluations.Any(e => e.Evaluator.Equals(student) && e.Evaluated.Equals(s))
+                ))
+            ));
 
         return Ok(teamDTOs);
     }
 
     [HttpPost, ActionName("RateStudents")]
     public async Task<ActionResult> RateStudents(SC_RatingDTO ratingDTO) {
-        
+
         Student student = await FetchLoggedInStudent(HttpContext);
         Team team = await _dbContext.Teams
             .Include(t => t.Students)
             .FirstAsync(t => t.Id.Equals(ratingDTO.teamId));
 
-        foreach(SC_StudentRatingDTO rating in ratingDTO.ratings) {
+        foreach (SC_StudentRatingDTO rating in ratingDTO.ratings) {
             Student studentToRate = team.Students.First(s => s.StudentID.Equals(rating.studentId));
+
+            // Skip if evaluating yourself.
+            if (studentToRate.StudentID == student.StudentID)
+                continue;
+
+            // Skip if already evaluated
+            if (await _dbContext.StudentEvaluation.AnyAsync(SE => SE.Evaluator.Equals(student) && SE.Evaluated.Equals(studentToRate)))
+                continue;
 
             StudentEvaluation studentEvaluation = new StudentEvaluation {
                 Id = Guid.NewGuid(),
@@ -68,7 +80,7 @@ public class StudentController : ControllerBase {
                 Comments = rating.comment ?? "",
             };
 
-            await _dbContext.StudentEvaluations.AddAsync(studentEvaluation);
+            await _dbContext.StudentEvaluation.AddAsync(studentEvaluation);
         }
 
         await _dbContext.SaveChangesAsync();
@@ -87,7 +99,7 @@ public class StudentController : ControllerBase {
     }
 
 
-    public record SC_TeamDTO(string teamName, string teacherName, string groupName, IEnumerable<SC_StudentDTO> studentList);
+    public record SC_TeamDTO(Guid teamId, string teamName, string teacherName, string groupName, IEnumerable<SC_StudentDTO> studentList);
     public record SC_StudentDTO(int studentId, string name, bool isRated);
     public record SC_RatingDTO(Guid teamId, List<SC_StudentRatingDTO> ratings);
     public record SC_StudentRatingDTO(int studentId, int score, string? comment);

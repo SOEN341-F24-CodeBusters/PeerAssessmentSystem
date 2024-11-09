@@ -8,7 +8,7 @@ namespace Infrastructure {
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Team> Teams { get; set; }
-        public DbSet<StudentEvaluation> StudentEvaluations { get; set; }
+        public DbSet<StudentEvaluation> StudentEvaluation { get; set; }
 
         public string DbPath { get; }
 
