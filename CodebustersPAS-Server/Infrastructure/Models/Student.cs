@@ -12,5 +12,8 @@ namespace Infrastructure.Models {
         public User? User { get; set; }
 
         public List<Team>? Teams { get; set; }
+
+        public List<StudentEvaluation>? EvaluationsGiven { get; set; }
+        public List<StudentEvaluation>? EvaluationsRecived { get; set; }
     }
 }

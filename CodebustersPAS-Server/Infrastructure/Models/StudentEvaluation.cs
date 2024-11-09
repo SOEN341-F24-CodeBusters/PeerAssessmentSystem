@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models;
 
-public class Evaluation {
+public class StudentEvaluation {
     [Key]
     public Guid Id { get; set; }
     
