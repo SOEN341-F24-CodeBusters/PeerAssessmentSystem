@@ -12,3 +12,4 @@ export default defineConfig({
     setupFiles: ['test/setupTests.ts'],
   },
 })
+

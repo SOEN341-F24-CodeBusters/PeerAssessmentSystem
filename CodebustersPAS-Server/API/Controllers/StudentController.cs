@@ -32,17 +32,22 @@ public class StudentController : ControllerBase {
                 .ThenInclude(g => g.Teacher)
                     .ThenInclude(t => t.User)
             .Include(t => t.Students)
+                .ThenInclude(s => s.User)
             .Include(t => t.StudentEvaluations)
             .Where(teams => teams.Students.Contains(student))
             .ToListAsync();
 
-        var teamDTOs = teams.Select(
-            team => new SC_TeamDTO(
-                team.Id,
-                team.TeamName,
-                team.Group.Teacher.User!.FirstName + " " + team.Group.Teacher.User!.LastName,
-                team.Group.Name,
-                team.Students.Select(s => new SC_StudentDTO(
+        var teamDTOs = teams
+            .OrderBy(t => t.Group.Name)
+            .Select(
+                team => new SC_TeamDTO(
+                    team.Id,
+                    team.TeamName,
+                    team.Group.Teacher.User!.FirstName + " " + team.Group.Teacher.User!.LastName,
+                    team.Group.Name,
+                    team.Students
+                        .OrderBy(s => s.User?.FirstName + " " + s.User?.LastName)
+                        .Select(s => new SC_StudentDTO(
                     s.StudentID,
                     s.User?.FirstName + " " + s.User?.LastName, 
                     s.Equals(student) || team.StudentEvaluations.Any(e => e.Evaluator.Equals(student) && e.Evaluated.Equals(s))
