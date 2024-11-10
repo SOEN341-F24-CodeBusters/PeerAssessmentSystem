@@ -49,7 +49,7 @@ const GroupEvaluation = () => {
         members={["John Doe", "John Doe", "John Doe"]}
       />
 
-      <button className="btn-submit">Submit</button>
+      <button className="btn-next">Next</button>
     </div>
   );
 };
