@@ -8,6 +8,7 @@ namespace Infrastructure {
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<StudentEvaluation> StudentEvaluation { get; set; }
 
         public string DbPath { get; }
 
@@ -35,6 +36,24 @@ namespace Infrastructure {
                 .HasOne(u => u.teacher)
                 .WithOne(t => t.User)
                 .HasForeignKey<Teacher>(e => e.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Student>()
+                .HasMany(s => s.EvaluationsGiven)
+                .WithOne(e => e.Evaluator)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Student>()
+                .HasMany(s => s.EvaluationsRecived)
+                .WithOne(e => e.Evaluated)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Team>()
+                .HasMany(t => t.StudentEvaluations)
+                .WithOne(e => e.Team)
+                .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);

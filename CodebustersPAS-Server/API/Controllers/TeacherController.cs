@@ -88,7 +88,8 @@ public class TeacherController : Controller {
             Id = new Guid(),
             TeamName = name,
             Group = group,
-            Students = new List<Student>()
+            Students = new List<Student>(),
+            StudentEvaluations = new List<StudentEvaluation>(),
         });
         await _dbContext.SaveChangesAsync();
 
@@ -155,7 +156,8 @@ public class TeacherController : Controller {
                 Id = new Guid(), 
                 TeamName = values[0].Trim(),
                 Group = group,
-                Students = new List<Student>()
+                Students = new List<Student>(),
+                StudentEvaluations = new List<StudentEvaluation>(),
             };
 
             // Create students in team from the rest of the values in row
