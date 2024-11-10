@@ -7,5 +7,7 @@ namespace Infrastructure.Models {
         public required string TeamName { get; set; }
         public required Group Group { get; set; }
         public required List<Student> Students { get; set; }
+        public required List<StudentEvaluation> StudentEvaluations { get; set; }
+
     }
 }

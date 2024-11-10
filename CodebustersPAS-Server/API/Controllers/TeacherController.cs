@@ -88,7 +88,8 @@ public class TeacherController : Controller {
             Id = new Guid(),
             TeamName = name,
             Group = group,
-            Students = new List<Student>()
+            Students = new List<Student>(),
+            StudentEvaluations = new List<StudentEvaluation>(),
         });
         await _dbContext.SaveChangesAsync();
 
@@ -148,25 +149,36 @@ public class TeacherController : Controller {
                 continue;
             }
 
-            var values = line.Split(',');
+            var values = line.Split(',').Where(v => !string.IsNullOrWhiteSpace(v)).ToArray();
 
             // Create team from first value in row
             Team team = new Team {
-                Id = new Guid(),
+                Id = new Guid(), 
                 TeamName = values[0].Trim(),
                 Group = group,
-                Students = new List<Student>()
+                Students = new List<Student>(),
+                StudentEvaluations = new List<StudentEvaluation>(),
             };
 
             // Create students in team from the rest of the values in row
-            team.Students.AddRange(values
-                .Skip(1)
-                .Where(value => !string.IsNullOrWhiteSpace(value))
-                .Select(value => new Student {
+            foreach (var studentId in values.Skip(1)) {
+                
+                if(string.IsNullOrWhiteSpace(studentId)) {
+                    continue;
+                }
+
+                // Check if student already exists and add student to the team
+                var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.StudentID == int.Parse(studentId));
+                if(student is not null) {
+                    team.Students.Add(student);
+                    continue;
+                }
+
+                team.Students.Add(new Student {
                     Id = new Guid(),
-                    StudentID = int.Parse(value.Trim())
-                })
-            );
+                    StudentID = int.Parse(studentId)
+                });
+            }
 
             group.Teams.Add(team);
         }
