@@ -11,7 +11,15 @@ const TeamOverview = () => {
     const [selectedGroupId, setSelectedGroupId] = useState(null); // State for selected group ID
     const [selectedTeamId, setSelectedTeamId] = useState(null); // State for selected team
 
-
+    const handleTeamsUpload = (data) => {
+        // Process uploaded teams from CSV
+        const teamsFromCsv = data.map((row) => ({
+            name: row['Team Name'],
+            members: row['Class'] || 'N/A', // Adjust as needed
+        }));
+        setTeams(teamsFromCsv);
+    };
+    
     const handleOpenPopup = () => {
         setIsPopupOpen(true);
     };
