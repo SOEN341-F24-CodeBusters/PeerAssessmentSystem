@@ -1,8 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./EvaluationStyles.css";
 import AssessmentDimension from "./AssessmentDimension";
 
 const GroupEvaluation = () => {
+
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    navigate("/Student/SummaryComments");
+  };
+
   return (
     <div className="container-evaluation">
       <h1 className="evaluation-title">Class Group Work Evaluation</h1>
@@ -49,7 +57,7 @@ const GroupEvaluation = () => {
         members={["John Doe", "John Doe", "John Doe"]}
       />
 
-      <button className="btn-next">Next</button>
+    <button className="btn-submit" onClick={handleSubmit}>Next</button>
     </div>
   );
 };
