@@ -58,7 +58,7 @@ const SummaryComments: React.FC = () => {
                 </tbody>
             </table>
 
-            <h3>Comments to your team members</h3>
+            <h4>Comments to your team members</h4>
             <p className="instructions">
                 Please provide feedback to your team members. Remember that your feedback to them will be anonymous.
             </p>
