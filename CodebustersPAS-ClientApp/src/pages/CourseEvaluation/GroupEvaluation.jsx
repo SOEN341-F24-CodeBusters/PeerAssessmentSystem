@@ -7,7 +7,7 @@ const GroupEvaluation = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleNext = () => {
     navigate("/Student/SummaryComments");
   };
 
@@ -57,7 +57,7 @@ const GroupEvaluation = () => {
         members={["John Doe", "John Doe", "John Doe"]}
       />
 
-    <button className="btn-submit" onClick={handleSubmit}>Next</button>
+    <button className="btn-next" onClick={handleNext}>Next</button>
     </div>
   );
 };
