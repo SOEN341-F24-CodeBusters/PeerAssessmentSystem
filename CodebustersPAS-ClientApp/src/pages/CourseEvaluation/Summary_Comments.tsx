@@ -18,7 +18,10 @@ const SummaryComments: React.FC = () => {
     const navigate = useNavigate();
     const handleBack = () => {
         navigate(-1);
-      };
+    };
+    const handleNext = () => {
+        navigate("/Student/SelfAssessment");
+    };
 
     const [teamMembers, setTeamMembers] = React.useState<TeamMember[]>([
         { name: 'John Doe', scores: { cooperation: 5, conceptualContributions: 3, practicalContributions: 5, workEthic: 5 }, comment: '' },
@@ -77,7 +80,7 @@ const SummaryComments: React.FC = () => {
             </div>
             <div className="button-container">
             <button className="btn-back" onClick={handleBack}>Back</button>
-            <button className="next-button">Next</button>
+            <button className="next-button" onClick={handleNext}>Next</button>
             </div>
         </div>
     );

@@ -28,7 +28,7 @@ const App: React.FC = () => {
         <Route path="/signup" element={<CreateAccount />} /> {}
         <Route path="/group-evaluation" element={<GroupEvaluation />} />
         <Route path="/Student/SelfAssessment" element={<SelfAssessment />} />
-        <Route path="/Students/PeerAssessment" element={<PeerAssessment />} />
+        <Route path="/Student/PeerAssessment" element={<PeerAssessment />} />
         <Route path="/Teacher/TeamOverview" element={<TeamOverview />} /> {}
         <Route path="/Student/SummaryComments" element={<SummaryComments />} />
       </Routes>

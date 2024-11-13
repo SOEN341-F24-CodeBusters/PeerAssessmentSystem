@@ -7,7 +7,7 @@ const SelfAssessment = () => {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    navigate("/Student/SelfSummaryComments");
+    navigate("/Student/PeerAssessment");
   };
 
   return (
