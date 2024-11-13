@@ -6,6 +6,10 @@ import AssessmentDimension from "./AssessmentDimension";
 const SelfAssessment = () => {
   const navigate = useNavigate();
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   const handleSubmit = () => {
     navigate("/Student/PeerAssessment");
   };
@@ -61,9 +65,9 @@ const SelfAssessment = () => {
         ></textarea>
       </div>
 
-      <button className="btn-submit" onClick={handleSubmit}>
+      {/* <button className="btn-submit" onClick={handleSubmit}>
         Submit
-      </button>
+      </button> */}
 
       <div className="button-container">
         <button className="btn-back" onClick={handleBack}>
