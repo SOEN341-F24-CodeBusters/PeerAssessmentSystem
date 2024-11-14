@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EvaluationStyles.css";
 import AssessmentDimension from "./AssessmentDimension";
@@ -73,31 +73,20 @@ const SelfAssessment = () => {
         Please assess yourself based on the 5 assessment dimensions below.
       </p>
 
-      <AssessmentDimension
-        title="Cooperation"
-        description="Actively participating in meetings; Communicating within the group; Cooperating within the group; Assisting team-mates when needed; Volunteering for tasks."
-        members={teamData.map((member) => member.name)}
-      />
-      <AssessmentDimension
-        title="Conceptual Contribution"
-        description="Researching and gathering information; Quality of individual contribution; Suggesting ideas; Tying ideas together; Identifying difficulties; Identifying effective approaches."
-        members={teamData.map((member) => member.name)}
-      />
-      <AssessmentDimension
-        title="Practical Contribution"
-        description="Writing of the report(s); Reviewing others’ report(s) or section(s); Providing constructive feedback on the report(s) or the presentation; Contributing to the organization of the work; Contributing to the preparation of presentation(s) (if appropriate)."
-        members={teamData.map((member) => member.name)}
-      />
-      <AssessmentDimension
-        title="Work Ethic"
-        description="Displaying a positive attitude; Respecting team-mates; Respecting commitments; Respecting deadlines; Respecting team-mates’ ideas."
-        members={teamData.map((member) => member.name)}
-      />
-      <AssessmentDimension
-        title="Problem Solving"
-        description="Demonstrating critical thinking; Proposing solutions; Adaptability to challenges; Addressing issues proactively; Implementing effective resolutions."
-        members={teamData.map((member) => member.name)}
-      />
+      {[
+        { title: "Cooperation", description: "Actively participating in meetings; Communicating within the group; Cooperating within the group; Assisting team-mates when needed; Volunteering for tasks." },
+        { title: "Conceptual Contribution", description: "Researching and gathering information; Quality of individual contribution; Suggesting ideas; Tying ideas together; Identifying difficulties; Identifying effective approaches." },
+        { title: "Practical Contribution", description: "Writing of the report(s); Reviewing others’ report(s) or section(s); Providing constructive feedback on the report(s) or the presentation; Contributing to the organization of the work; Contributing to the preparation of presentation(s) (if appropriate)." },
+        { title: "Work Ethic", description: "Displaying a positive attitude; Respecting team-mates; Respecting commitments; Respecting deadlines; Respecting team-mates’ ideas." },
+        { title: "Problem Solving", description: "Demonstrating critical thinking; Proposing solutions; Adaptability to challenges; Addressing issues proactively; Implementing effective resolutions." }
+      ].map((dimension, index) => (
+        <AssessmentDimension
+          key={index}
+          title={dimension.title}
+          description={dimension.description}
+          members={teamData.map((member) => member.name)} // Only other team members
+        />
+      ))}
 
       <div className="comment-section">
         <label htmlFor="comments">Additional Comments:</label>
