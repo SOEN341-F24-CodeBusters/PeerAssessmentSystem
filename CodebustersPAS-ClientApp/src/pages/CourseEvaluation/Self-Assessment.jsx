@@ -70,7 +70,7 @@ const SelfAssessment = () => {
       </button> */}
 
       <div className="button-container">
-        <button className="btn-back" onClick={handleBack}>
+        <button className="btn-submit-back" onClick={handleBack}>
           Back
         </button>
         <button className="btn-submit" onClick={handleSubmit}>

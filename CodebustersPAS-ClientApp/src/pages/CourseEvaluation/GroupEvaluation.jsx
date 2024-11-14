@@ -4,7 +4,6 @@ import "./EvaluationStyles.css";
 import AssessmentDimension from "./AssessmentDimension";
 
 const GroupEvaluation = () => {
-
   const navigate = useNavigate();
 
   const handleNext = () => {
@@ -57,7 +56,11 @@ const GroupEvaluation = () => {
         members={["John Doe", "John Doe", "John Doe"]}
       />
 
-    <button className="btn-next" onClick={handleNext}>Next</button>
+      <div className="button-container">
+        <button className="btn-next" onClick={handleNext}>
+          Next
+        </button>
+      </div>
     </div>
   );
 };
