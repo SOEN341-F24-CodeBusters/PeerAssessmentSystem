@@ -9,6 +9,10 @@ const SelfAssessment = () => {
   const [loggedInUserName, setLoggedInUserName] = useState("");
 
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   const handleSubmit = () => {
     navigate("/Student/PeerAssessment");
   };
@@ -98,9 +102,18 @@ const SelfAssessment = () => {
         ></textarea>
       </div>
 
-      <button className="btn-submit" onClick={handleSubmit}>
+      {/* <button className="btn-submit" onClick={handleSubmit}>
         Submit
-      </button>
+      </button> */}
+
+      <div className="button-container">
+        <button className="btn-submit-back" onClick={handleBack}>
+          Back
+        </button>
+        <button className="btn-submit" onClick={handleSubmit}>
+          Submit
+        </button>
+      </div>
     </div>
   );
 };
