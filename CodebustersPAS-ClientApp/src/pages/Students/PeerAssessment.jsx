@@ -76,26 +76,17 @@ function PeerAssessment() {
       <section className="courseTeamContainer">
         <h2 className="courseListTitle">Your courses are listed here</h2>
         <div className="courseColumns">
-          {/* <h3>Course Name</h3>
-          <h3>Project Description</h3>
-          <h3>Course Duration</h3>
-          <h3>Status</h3> */}
-
-          <h3>Team Name</h3>
           <h3>Course Name</h3>
+          <h3>Team Name</h3>
           <h3>Members</h3>
         </div>
 
-        <div className="courseItems-list">
+        {/*<div className="courseItems-list">
           {courseData.map((course, index) => (
             <CourseItem key={index} {...course} />
           ))}
-        </div>
+        </div>*/}
 
-        <div className="teamColumns">
-          <h3>Team Name</h3>
-          <h3>Members</h3>
-        </div>
 
         <div className="teamItems-list">
           <div className="teamItem">

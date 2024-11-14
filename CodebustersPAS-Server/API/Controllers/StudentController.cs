@@ -93,6 +93,18 @@ public class StudentController : ControllerBase {
         return Ok();
     }
 
+    [HttpGet, ActionName("GetLoggedInUserName")]
+    public async Task<ActionResult<string>> GetLoggedInUserName() {
+        // Fetch the logged-in student
+        Student student = await FetchLoggedInStudent(HttpContext);
+
+        // Retrieve the student's name
+        string studentName = $"{student.User?.FirstName} {student.User?.LastName}";
+
+        return Ok(new { name = studentName });
+    }
+
+
     private async Task<Student> FetchLoggedInStudent(HttpContext httpContext) {
         Guid userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
         User user = await _dbContext.Users

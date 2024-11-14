@@ -10,12 +10,31 @@ const SelfAssessment = () => {
 
 
   const handleBack = () => {
-    navigate(-1);
+    navigate("/Student/SummaryComments");
   };
 
   const handleSubmit = () => {
     navigate("/Student/PeerAssessment");
   };
+
+  async function fetchUserName() {
+    try {
+      const response = await fetch("https://localhost:7010/api/Student/GetLoggedInUserName", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setLoggedInUserName(data.name);
+      } else {
+        console.error("Error fetching logged in user name");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+    }
+  }
 
   async function getTeamData() {
 
@@ -36,10 +55,7 @@ const SelfAssessment = () => {
         //-->
         const teamList = data[0]?.studentList || [];
 
-        // Identify the logged-in user from the list
-        const loggedInUser = teamList.find((member) => member.isRated);
-        setLoggedInUserName(loggedInUser ? loggedInUser.name : "Logged-in User");
-
+        
         // Set the teamData excluding the logged-in user
         setTeamData(teamList.filter((member) => !member.isRated));
         //<--
@@ -58,6 +74,7 @@ const SelfAssessment = () => {
   };
 
   useEffect(() => {
+    fetchUserName();
     getTeamData();
   }, []);
 
@@ -88,7 +105,7 @@ const SelfAssessment = () => {
           key={index}
           title={dimension.title}
           description={dimension.description}
-          members={teamData.map((member) => member.name)} // Only other team members
+          members={[loggedInUserName]} // Only other team members
         />
       ))}
 

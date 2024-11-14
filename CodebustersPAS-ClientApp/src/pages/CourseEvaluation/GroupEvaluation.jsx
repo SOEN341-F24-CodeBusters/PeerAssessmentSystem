@@ -13,6 +13,25 @@ const GroupEvaluation = () => {
     navigate("/Student/SummaryComments");
   };
 
+  async function fetchUserName() {
+    try {
+      const response = await fetch("https://localhost:7010/api/Student/GetLoggedInUserName", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setLoggedInUserName(data.name);
+      } else {
+        console.error("Error fetching logged in user name");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+    }
+  }
+
   async function getTeamData() {
 
     const apiUrl = 'https://localhost:7010/api/Student/GetGroupsAndTeams';
@@ -32,10 +51,6 @@ const GroupEvaluation = () => {
         //-->
         const teamList = data[0]?.studentList || [];
 
-        // Identify the logged-in user from the list
-        const loggedInUser = teamList.find((member) => member.isRated);
-        setLoggedInUserName(loggedInUser ? loggedInUser.name : "Logged-in User");
-
         // Set the teamData excluding the logged-in user
         setTeamData(teamList.filter((member) => !member.isRated));
         //<--
@@ -53,8 +68,11 @@ const GroupEvaluation = () => {
     
   };
 
+
   useEffect(() => {
+    fetchUserName();
     getTeamData();
+
   }, []);
 
 
