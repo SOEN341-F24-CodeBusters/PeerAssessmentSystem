@@ -10,7 +10,7 @@ const SelfAssessment = () => {
 
 
   const handleBack = () => {
-    navigate("/Student/SummaryComments");
+    navigate(-1);
   };
 
   const handleSubmit = () => {

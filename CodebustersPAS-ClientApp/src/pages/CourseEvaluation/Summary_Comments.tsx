@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import './Summary_Comments.css';
 
@@ -14,20 +14,94 @@ interface TeamMember {
 }
 
 const SummaryComments: React.FC = () => {
-
+    const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+    const [loggedInUserName, setLoggedInUserName] = useState("");
     const navigate = useNavigate();
+
     const handleBack = () => {
         navigate(-1);
     };
     const handleNext = () => {
         navigate("/Student/SelfAssessment");
     };
+    
+    async function fetchUserName() {
+        try {
+          const response = await fetch("https://localhost:7010/api/Student/GetLoggedInUserName", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            setLoggedInUserName(data.name);
+          } else {
+            console.error("Error fetching logged in user name");
+          }
+        } catch (error) {
+          console.error("Request failed:", error);
+        }
+      }
 
-    const [teamMembers, setTeamMembers] = React.useState<TeamMember[]>([
-        { name: 'John Doe', scores: { cooperation: 5, conceptualContributions: 3, practicalContributions: 5, workEthic: 5 }, comment: '' },
-        { name: 'John Doe', scores: { cooperation: 4, conceptualContributions: 3, practicalContributions: 5, workEthic: 3 }, comment: '' },
-        { name: 'John Doe', scores: { cooperation: 3, conceptualContributions: 4, practicalContributions: 5, workEthic: 3 }, comment: '' }
-    ]);
+    async function getTeamData() {
+
+        const apiUrl = 'https://localhost:7010/api/Student/GetGroupsAndTeams';
+
+        try {
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok){
+            const data = await response.json();
+            //setTeamData(data);
+            //-->
+            const teamList = data[0]?.studentList || [];
+
+            // Filter out the logged-in user from the team list
+            const filteredTeamMembers = teamList.filter((member: any) => member.name !== loggedInUserName);
+
+            // Set the team data with the filtered members
+            setTeamMembers(filteredTeamMembers.map((member: any) => ({
+                name: member.name,
+                scores: {
+                    cooperation: 0,
+                    conceptualContributions: 0,
+                    practicalContributions: 0,
+                    workEthic: 0,
+                },
+                comment: ''
+            })));
+
+            console.log('Team is fetched successfully:', data);
+
+        }else{
+            const errorData = await response.json();
+            console.error('Error fetching team data:', errorData);
+            alert(errorData);
+        }
+        }catch (error) {
+        console.error('Request failed:', error);
+        alert('An error occurred. Please check your connection and try again.');
+        }
+        
+    };
+
+    useEffect(() => {
+        fetchUserName();
+    }, []);
+    
+    useEffect(() => {
+        if (loggedInUserName) {
+            getTeamData();
+        }
+    }, [loggedInUserName]);
+
 
     const handleCommentChange = (index: number, newComment: string) => {
         const updatedTeamMembers = [...teamMembers];
