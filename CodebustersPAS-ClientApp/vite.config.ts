@@ -9,15 +9,6 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['test/setupTests.ts'],
-  },
-  server: {
-    watch: {
-      usePolling: true,
-    }
-  },
-  preview: {
-    host: 'localhost',
-    port: 8080
   }
 })
 
