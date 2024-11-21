@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import './Summary_Comments.css';
+
 
 interface TeamMember {
     name: string;
@@ -17,32 +18,32 @@ const SummaryComments: React.FC = () => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
     const [loggedInUserName, setLoggedInUserName] = useState("");
     const navigate = useNavigate();
+    //const [scoreData, setScoreData] = useState([]);
+    const location = useLocation();
+    const { teamData, scoreData } = location.state || { teamData: [], scoreData: [] };
 
+    useEffect(() => {
+        console.log('Team Data:', teamData);
+        console.log('Score Data:', scoreData);
+      
+        
+      }, [teamData, scoreData]);
+      
+      
+      
+      
     const handleBack = () => {
         navigate(-1);
     };
     const handleNext = () => {
         navigate("/Student/SelfAssessment");
     };
-    
-    async function fetchUserName() {
-        try {
-          const response = await fetch("https://localhost:7010/api/Student/GetLoggedInUserName", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          });
-    
-          if (response.ok) {
-            const data = await response.json();
-            setLoggedInUserName(data.name);
-          } else {
-            console.error("Error fetching logged in user name");
-          }
-        } catch (error) {
-          console.error("Request failed:", error);
+
+    useEffect(() => {
+        if (loggedInUserName) {
+            getTeamData();
         }
-      }
+    }, [loggedInUserName]);
 
     async function getTeamData() {
 
@@ -67,16 +68,23 @@ const SummaryComments: React.FC = () => {
             const filteredTeamMembers = teamList.filter((member: any) => member.name !== loggedInUserName);
 
             // Set the team data with the filtered members
-            setTeamMembers(filteredTeamMembers.map((member: any) => ({
-                name: member.name,
-                scores: {
-                    cooperation: 0,
-                    conceptualContributions: 0,
-                    practicalContributions: 0,
-                    workEthic: 0,
-                },
-                comment: ''
-            })));
+            const mergedTeamMembers = filteredTeamMembers.map((member: any) => {
+                const matchingScore = scoreData.find((score: any) => score.name === member.name);
+                return {
+                  name: member.name,
+                  scores: matchingScore
+                    ? matchingScore.scores
+                    : {
+                        cooperation: 0,
+                        conceptualContributions: 0,
+                        practicalContributions: 0,
+                        workEthic: 0,
+                      },
+                  comment: "",
+                };
+            });
+            setTeamMembers(mergedTeamMembers);
+
 
             console.log('Team is fetched successfully:', data);
 
@@ -92,22 +100,39 @@ const SummaryComments: React.FC = () => {
         
     };
 
+    async function fetchUserName() {
+        try {
+          const response = await fetch("https://localhost:7010/api/Student/GetLoggedInUserName", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            setLoggedInUserName(data.name);
+          } else {
+            console.error("Error fetching logged in user name");
+          }
+        } catch (error) {
+          console.error("Request failed:", error);
+        }
+      }
+
+    
+
     useEffect(() => {
         fetchUserName();
     }, []);
     
-    useEffect(() => {
-        if (loggedInUserName) {
-            getTeamData();
-        }
-    }, [loggedInUserName]);
-
+    
 
     const handleCommentChange = (index: number, newComment: string) => {
         const updatedTeamMembers = [...teamMembers];
         updatedTeamMembers[index].comment = newComment;
         setTeamMembers(updatedTeamMembers);
     };
+    
 
     return (
         <div className="summary-comments-page">
@@ -144,10 +169,10 @@ const SummaryComments: React.FC = () => {
                     <div key={index} className="comment-box">
                         <label htmlFor={`comment-${index}`}>{member.name}</label>
                         <textarea
-                            id={`comment-${index}`}
-                            value={member.comment}
-                            onChange={(e) => handleCommentChange(index, e.target.value)}
-                            placeholder="Enter your comments here"
+                        id={`comment-${index}`}
+                        value={member.comment}
+                        onChange={(e) => handleCommentChange(index, e.target.value)}
+                        placeholder="Enter your comments here"
                         />
                     </div>
                 ))}

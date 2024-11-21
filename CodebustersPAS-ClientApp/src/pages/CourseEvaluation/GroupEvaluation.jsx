@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import "./EvaluationStyles.css";
 import AssessmentDimension from "./AssessmentDimension";
 
+
 const GroupEvaluation = () => {
   const navigate = useNavigate();
   const [teamData, setTeamData] = useState([]);
   const [loggedInUserName, setLoggedInUserName] = useState("");
-
+  const [scoreData, setScoreData] = useState([]);
 
   const handleNext = () => {
-    navigate("/Student/SummaryComments");
+    navigate("/Student/SummaryComments", { state: { teamData, scoreData } });
   };
 
   async function fetchUserName() {
@@ -47,10 +48,8 @@ const GroupEvaluation = () => {
 
       if (response.ok){
         const data = await response.json();
-        //setTeamData(data);
-        //-->
-        const teamList = data[0]?.studentList || [];
-
+        
+        const teamList = data.flatMap(group => group.studentList || []);
         // Set the teamData excluding the logged-in user
         setTeamData(teamList.filter((member) => !member.isRated));
         //<--
@@ -72,8 +71,22 @@ const GroupEvaluation = () => {
   useEffect(() => {
     fetchUserName();
     getTeamData();
-
   }, []);
+
+  const handleScoreChange = (memberName, dimension, score) => {
+    const updatedScoreData = scoreData.map((member) =>
+      member.name === memberName
+        ? {
+            ...member,
+            scores: { ...member.scores, [dimension]: score },
+          }
+        : member
+    );
+  
+    setScoreData(updatedScoreData); // Ensure the updated scoreData is correctly set
+  };
+  
+  
 
 
   return (
@@ -107,6 +120,7 @@ const GroupEvaluation = () => {
           title={dimension.title}
           description={dimension.description}
           members={teamData.map((member) => member.name)} // Only other team members
+          onScoreChange={handleScoreChange}
         />
       ))}
 

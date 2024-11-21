@@ -1,6 +1,6 @@
 import React from "react";
 
-const AssessmentDimension = ({ title, description, members }) => {
+const AssessmentDimension = ({ title, description, members, onScoreChange }) => {
   return (
     <div className="container-dimension">
       <h2 className="dimension-title">{title}</h2>
@@ -12,7 +12,10 @@ const AssessmentDimension = ({ title, description, members }) => {
       {members.map((member, index) => (
         <div key={index} className="container-member">
           <label className="member-label">{member}</label>
-          <select className="member-input">
+          <select
+            className="member-input"
+            onChange={(e) => onScoreChange(member, title.toLowerCase().replace(/\s/g, ""), parseInt(e.target.value))}
+          >
             <option>Choose 1 - 5</option>
             {[...Array(5)].map((_, i) => (
               <option key={i} value={i + 1}>
@@ -20,6 +23,7 @@ const AssessmentDimension = ({ title, description, members }) => {
               </option>
             ))}
           </select>
+
         </div>
       ))}
     </div>
