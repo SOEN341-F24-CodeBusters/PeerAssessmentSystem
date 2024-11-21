@@ -4,10 +4,10 @@ import react from '@vitejs/plugin-react-swc'
 
 // https://vitejs.dev/config/
 
-const isProduction = process.env.NODE_ENV === 'deploy';
+const isDeployment = process.env.NODE_ENV === 'deploy';
 
 export default defineConfig({
-  base: isProduction ? '/PeerAssessmentSystem/' : '/',
+  base: isDeployment ? '/PeerAssessmentSystem/' : '/',
   plugins: [react()],
   test: {
     globals: true,
