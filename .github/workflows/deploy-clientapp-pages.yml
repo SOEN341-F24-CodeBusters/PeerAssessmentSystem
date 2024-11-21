@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NODE_ENV: production
+      NODE_ENV: deploy
 
     defaults:
       run:
