@@ -3,7 +3,7 @@ name: Deploy clientapp content to Pages
 
 on:
   push:
-    branches: ['main', 'automaticaly-build-and-publish-on-docker']
+    branches: ['main']
 
   workflow_dispatch:
 
