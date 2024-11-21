@@ -26,6 +26,9 @@ jobs:
     
     runs-on: ubuntu-latest
 
+    env:
+      NODE_ENV: production
+
     defaults:
       run:
         working-directory: './CodebustersPAS-ClientApp'
