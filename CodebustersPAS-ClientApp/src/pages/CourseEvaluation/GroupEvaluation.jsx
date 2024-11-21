@@ -74,16 +74,24 @@ const GroupEvaluation = () => {
   }, []);
 
   const handleScoreChange = (memberName, dimension, score) => {
-    const updatedScoreData = scoreData.map((member) =>
-      member.name === memberName
-        ? {
-            ...member,
-            scores: { ...member.scores, [dimension]: score },
-          }
-        : member
-    );
+    const updatedScoreData = [...scoreData];
+    const memberIndex = updatedScoreData.findIndex((member) => member.name === memberName);
   
-    setScoreData(updatedScoreData); // Ensure the updated scoreData is correctly set
+    if (memberIndex !== -1) {
+      // Update existing member's score
+      updatedScoreData[memberIndex].scores = {
+        ...updatedScoreData[memberIndex].scores,
+        [dimension]: score,
+      };
+    } else {
+      // Add new member with score
+      updatedScoreData.push({
+        name: memberName,
+        scores: { [dimension]: score },
+      });
+    }
+  
+    setScoreData(updatedScoreData);
   };
   
   
