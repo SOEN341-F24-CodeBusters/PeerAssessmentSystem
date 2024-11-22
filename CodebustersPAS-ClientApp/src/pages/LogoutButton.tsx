@@ -7,7 +7,7 @@ const LogoutButton: React.FC = () => {
     const navigate = useNavigate();
   
     const handleLogout = async () => {
-        const apiUrl = `${config.apiBaseUrl}:7010/api/Authentification/LogOut`;
+        const apiUrl = `${config.apiBaseUrl}/api/Authentification/LogOut`;
     
         try {
           const response = await fetch(apiUrl, {
