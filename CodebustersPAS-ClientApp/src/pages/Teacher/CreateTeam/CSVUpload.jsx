@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Papa from 'papaparse';
+import config from '../../../../config';
 
 console.log("CSVUpload rendered");
 
@@ -71,7 +72,7 @@ const CSVUpload = () => {
     formData.append("groupName", groupName);
 
     try {
-      const response = await fetch("https://localhost:7010/api/Teacher/upload-csv", {
+      const response = await fetch(`${config.apiBaseUrl}/api/Teacher/upload-csv`, {
         method: "POST",
         credentials: "include",
         body: formData,

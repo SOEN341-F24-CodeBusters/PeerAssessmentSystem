@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./CourseListingStudentsPage.css";
 import CourseItem from "./CourseItem";
 import TeamItem from "./TeamItem";
+import config from "../../../config";
 
 function PeerAssessment() {
   const [courseData, setCourseData] = React.useState([]);
@@ -33,7 +34,7 @@ function PeerAssessment() {
   }
 
   async function getTeamData() {
-    const apiUrl = "https://localhost:7010/api/Student/GetGroupsAndTeams";
+    const apiUrl = `${config.apiBaseUrl}:7010/api/Student/GetGroupsAndTeams`;
 
     try {
       const response = await fetch(apiUrl, {
