@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import CSVUpload from './CSVUpload'; 
 import CreateTeamPopup from './CreateTeamPopup';
 import './TeamOverview.css';
@@ -109,7 +110,11 @@ const TeamOverview = () => {
                 <div className="groupItems-list">
                     {groups.map((group) => (
                         <div key={group.id} className="groupItem">
-                            <div className="groupCell">{group.name}</div>
+                            <div className="groupCell">
+                            <Link to={`/Teacher/Dashboard/${group.name}`} className="group-link">   
+                                {group.name}
+                                </Link>
+                                </div>
                             <div className="groupCell">
                                 {group.teams.length > 0 ? (
                                     group.teams.map((team) => (
