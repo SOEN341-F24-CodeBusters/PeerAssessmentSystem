@@ -23,5 +23,8 @@ COPY --from=build /src/out .
 # Expose the port the application runs on
 EXPOSE 8080
 
+# EXPOSE data
+VOLUME /data
+
 # Set the entry point for the application
 ENTRYPOINT ["dotnet", "API.dll"]
