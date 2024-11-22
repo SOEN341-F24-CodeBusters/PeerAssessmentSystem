@@ -70,6 +70,12 @@ public class AuthentificationController : ControllerBase {
             return Unauthorized(new { message = "User with this email already exits." });
         }
 
+        await _dbContext.Users
+            .Include(u => u.student)
+            .Where(u => u.student != null)
+            .Where(u => u.student!.StudentID == signUpDTO.studentId)
+            .FirstOrDefaultAsync();
+
         if (signUpDTO.userType == 0) {
 
             // Check if student exists
