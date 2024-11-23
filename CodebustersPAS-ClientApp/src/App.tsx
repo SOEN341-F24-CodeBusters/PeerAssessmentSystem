@@ -28,7 +28,6 @@ const App: React.FC = () => {
       <Navbar showLogout={showLogout} />
       <div className="content"></div>
       <Routes>
-  
         <Route path={`${base}`} element={<SignIn />} /> {}
         <Route path={`${base}signup`} element={<CreateAccount />} /> {}
         <Route path={`${base}group-evaluation`} element={<GroupEvaluation />} />
@@ -36,7 +35,7 @@ const App: React.FC = () => {
         <Route path={`${base}Student/PeerAssessment`} element={<PeerAssessment />} />
         <Route path={`${base}Teacher/TeamOverview`} element={<TeamOverview />} /> {}
         <Route path={`${base}Student/SummaryComments`} element={<SummaryComments />} />
-        <Route path={`${base}Teacher/Dashboard/:groupName'} element={<InstructorDashboard />} />
+        <Route path={`${base}Teacher/Dashboard/:groupName`} element={<InstructorDashboard />} />
 
       </Routes>
     </div>
