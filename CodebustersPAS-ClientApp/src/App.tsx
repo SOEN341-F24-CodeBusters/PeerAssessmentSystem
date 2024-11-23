@@ -20,9 +20,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'deploy') {  
-      const redirectPath = sessionStorage.getItem("redirect");
+      const redirectPath = sessionStorage.getItem("redirectPath");
       if (redirectPath) {
-        sessionStorage.removeItem("redirect");
+        sessionStorage.removeItem("redirectPath");
         console.log("Redirecting to: ", redirectPath);
         navigate(redirectPath);
       }
