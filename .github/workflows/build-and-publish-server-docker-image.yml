@@ -2,7 +2,7 @@ name: Build and Publish Server Docker Image
 
 on:
   push:
-    branches: ["main", "build-docker-server"]
+    branches: ["main"]
 
 jobs:
   build:
