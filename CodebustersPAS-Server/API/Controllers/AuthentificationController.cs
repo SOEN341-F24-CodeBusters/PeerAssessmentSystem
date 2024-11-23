@@ -64,17 +64,25 @@ public class AuthentificationController : ControllerBase {
     [HttpPost, ActionName("SignUp")]
     public async Task<ActionResult> SignUp(SignUpDTO signUpDTO) {
 
-        // Check if user exists
-        User? user = await _dbContext.Users.FirstOrDefaultAsync(User => User.email == signUpDTO.email);
-        if (user is not null) {
+        // Check if user with same email exists
+        bool checkIfUserWithSameEmail = await _dbContext.Users
+            .Where(User => User.email == signUpDTO.email)
+            .AnyAsync();
+        if (checkIfUserWithSameEmail) {
             return Unauthorized(new { message = "User with this email already exits." });
         }
 
-        await _dbContext.Users
+        // Check if user with same studentId exists
+        bool checkIfUserWithSameStudentId = await _dbContext.Users
             .Include(u => u.student)
             .Where(u => u.student != null)
             .Where(u => u.student!.StudentID == signUpDTO.studentId)
-            .FirstOrDefaultAsync();
+            .AnyAsync();
+        if (checkIfUserWithSameStudentId) {
+            return Unauthorized(new { message = "User with this student ID already exits." });
+        }
+
+        User? user = null;
 
         if (signUpDTO.userType == 0) {
 
