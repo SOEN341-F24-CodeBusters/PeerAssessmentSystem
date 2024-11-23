@@ -3,7 +3,7 @@ name: Deploy clientapp content to Pages
 
 on:
   push:
-    branches: ['main', 'BUG-hotfix-github-pages']
+    branches: ['main']
 
   workflow_dispatch:
 
