@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import SignIn from "./pages/LoginPage";
 import CreateAccount from "./pages/CreateAccountPage";
@@ -15,10 +16,17 @@ import Navbar from "./pages/NavBar";
 import SummaryComments from "./pages/CourseEvaluation/Summary_Comments.tsx";
 
 const App: React.FC = () => {
-  const location = useLocation();
+  const navigate = useNavigate();
 
-  const isDeployment = process.env.NODE_ENV === 'deploy';
-  const base = isDeployment ? '/PeerAssessmentSystem/' : '/';
+  if(process.env.NODE_ENV === 'deploy') {  
+    const redirectPath = sessionStorage.getItem("redirect");
+    if (redirectPath) {
+      sessionStorage.removeItem("redirect");
+      navigate(redirectPath);
+    }
+  }
+
+  const location = useLocation();
 
   const showLogout = !["/", "/signup"].includes(location.pathname);
 
@@ -27,13 +35,13 @@ const App: React.FC = () => {
       <Navbar showLogout={showLogout} />
       <div className="content"></div>
       <Routes>
-        <Route path={`${base}`} element={<SignIn />} /> {}
-        <Route path={`${base}signup`} element={<CreateAccount />} /> {}
-        <Route path={`${base}group-evaluation`} element={<GroupEvaluation />} />
-        <Route path={`${base}Student/SelfAssessment`} element={<SelfAssessment />} />
-        <Route path={`${base}Student/PeerAssessment`} element={<PeerAssessment />} />
-        <Route path={`${base}Teacher/TeamOverview`} element={<TeamOverview />} /> {}
-        <Route path={`${base}Student/SummaryComments`} element={<SummaryComments />} />
+        <Route path="" element={<SignIn />} /> {}
+        <Route path="signup" element={<CreateAccount />} /> {}
+        <Route path="group-evaluation" element={<GroupEvaluation />} />
+        <Route path="Student/SelfAssessment" element={<SelfAssessment />} />
+        <Route path="Student/PeerAssessment" element={<PeerAssessment />} />
+        <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
+        <Route path="Student/SummaryComments" element={<SummaryComments />} />
       </Routes>
     </div>
   );
