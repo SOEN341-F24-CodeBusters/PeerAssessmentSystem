@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateAccountPage.css'; 
+import config from '../../config';
 
 const CreateAccount: React.FC = () => {
   const [userType, setUserType] = useState<'student' | 'instructor'>('student');
@@ -14,7 +15,7 @@ const CreateAccount: React.FC = () => {
   const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();
 
-    const apiUrl = 'https://localhost:7010/api/Authentification/SignUp';
+    const apiUrl = `${config.apiBaseUrl}/api/Authentification/SignUp`;
     
     const userData={
       userType: userType === 'student' ? 0 : 1,

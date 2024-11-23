@@ -18,6 +18,9 @@ import InstructorDashboard from "./pages/Teacher/InstructorDashboard";
 const App: React.FC = () => {
   const location = useLocation();
 
+  const isDeployment = process.env.NODE_ENV === 'deploy';
+  const base = isDeployment ? '/PeerAssessmentSystem/' : '/';
+
   const showLogout = !["/", "/signup"].includes(location.pathname);
 
   return (
@@ -25,14 +28,16 @@ const App: React.FC = () => {
       <Navbar showLogout={showLogout} />
       <div className="content"></div>
       <Routes>
-        <Route path="/" element={<SignIn />} /> {}
-        <Route path="/signup" element={<CreateAccount />} /> {}
-        <Route path="/group-evaluation" element={<GroupEvaluation />} />
-        <Route path="/Student/SelfAssessment" element={<SelfAssessment />} />
-        <Route path="/Student/PeerAssessment" element={<PeerAssessment />} />
-        <Route path="/Teacher/TeamOverview" element={<TeamOverview />} /> {}
-        <Route path="/Student/SummaryComments" element={<SummaryComments />} />
-        <Route path="/Teacher/Dashboard/:groupName" element={<InstructorDashboard />} />
+  
+        <Route path={`${base}`} element={<SignIn />} /> {}
+        <Route path={`${base}signup`} element={<CreateAccount />} /> {}
+        <Route path={`${base}group-evaluation`} element={<GroupEvaluation />} />
+        <Route path={`${base}Student/SelfAssessment`} element={<SelfAssessment />} />
+        <Route path={`${base}Student/PeerAssessment`} element={<PeerAssessment />} />
+        <Route path={`${base}Teacher/TeamOverview`} element={<TeamOverview />} /> {}
+        <Route path={`${base}Student/SummaryComments`} element={<SummaryComments />} />
+        <Route path={`${base}Teacher/Dashboard/:groupName'} element={<InstructorDashboard />} />
+
       </Routes>
     </div>
   );

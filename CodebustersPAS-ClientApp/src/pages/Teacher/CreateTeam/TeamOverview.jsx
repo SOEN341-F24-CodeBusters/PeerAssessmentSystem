@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import CSVUpload from './CSVUpload'; 
 import CreateTeamPopup from './CreateTeamPopup';
 import './TeamOverview.css';
+import config from '../../../../config';
+
 
 const TeamOverview = () => {
     const [groups, setGroups] = useState([]);
@@ -19,7 +21,7 @@ const TeamOverview = () => {
     const fetchGroupsAndTeams = async () => {
         try {
             console.log("Fetching groups and teams...");
-            const response = await fetch("https://localhost:7010/api/Teacher/GetGroupsAndTeams", {
+            const response = await fetch(`${config.apiBaseUrl}/api/Teacher/GetGroupsAndTeams`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -47,7 +49,7 @@ const TeamOverview = () => {
         }
         try {
             console.log("Creating new group:", groupName);
-            const response = await fetch("https://localhost:7010/api/Teacher/group", {
+            const response = await fetch(`${config.apiBaseUrl}/api/Teacher/group`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
