@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,13 +18,16 @@ import SummaryComments from "./pages/CourseEvaluation/Summary_Comments.tsx";
 const App: React.FC = () => {
   const navigate = useNavigate();
 
-  if(process.env.NODE_ENV === 'deploy') {  
-    const redirectPath = sessionStorage.getItem("redirect");
-    if (redirectPath) {
-      sessionStorage.removeItem("redirect");
-      navigate(redirectPath);
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'deploy') {  
+      const redirectPath = sessionStorage.getItem("redirect");
+      if (redirectPath) {
+        sessionStorage.removeItem("redirect");
+        console.log("Redirecting to: ", redirectPath);
+        navigate(redirectPath);
+      }
     }
-  }
+  }, [navigate]);
 
   const location = useLocation();
 
