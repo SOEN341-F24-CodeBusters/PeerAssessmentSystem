@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
+import config from '../../config';
 
 const Login: React.FC = () => {
   const [userType, setUserType] = useState<'student' | 'instructor'>('student');
@@ -11,7 +12,7 @@ const Login: React.FC = () => {
   const handleSignIn = async (e: FormEvent) => {
     e.preventDefault();
     // Handling sign-in for both student or instructor
-    const apiUrl = 'https://localhost:7010/api/Authentification/LogIn';
+    const apiUrl = `${config.apiBaseUrl}/api/Authentification/LogIn`;
     
     const loginData = {
       userType: userType === 'student' ? 0 : 1,
