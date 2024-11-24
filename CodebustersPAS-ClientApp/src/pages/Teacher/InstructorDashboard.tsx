@@ -9,7 +9,7 @@ const InstructorDashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
       <div className="header">
-        <h1>Details for Group {groupName} </h1>
+        <h1>Details for Course {groupName} </h1>
       </div>
       <div className="links-container">
         <a href="/summary" className="dashboard-link">Summary of results</a>

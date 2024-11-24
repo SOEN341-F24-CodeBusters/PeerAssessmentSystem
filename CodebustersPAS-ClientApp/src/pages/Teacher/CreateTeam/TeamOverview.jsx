@@ -82,29 +82,29 @@ const TeamOverview = () => {
                 <nav className="studentTab">Teacher's Tab</nav>
             </header>
             <section className="courseTeamContainer">
-                <h2 className="courseListTitle">Manage your groups and teams</h2>
+                <h2 className="courseListTitle">Manage your courses and teams</h2>
                 
                 <div className="csv-upload">
                     <CSVUpload onTeamsUpload={(data) => console.log("CSV Data:", data)} />
                 </div>
 
                 <div className="groupSection">
-                    <h3>Create a New Group</h3>
+                    <h3>Create a New Course</h3>
                     <input
                         type="text"
-                        placeholder="Enter Group Name"
+                        placeholder="Enter Course Name"
                         value={groupName}
                         onChange={(e) => setGroupName(e.target.value)}
                         className="group-input"
                     />
                     <button className="create-group-btn" onClick={handleCreateGroup}>
-                        Create Group
+                        Create Course
                     </button>
                     {error && <p className="error-message">{error}</p>}
                 </div>
 
                 <div className="groupColumns">
-                    <h3>Group Name</h3>
+                    <h3>Course Name</h3>
                     <h3>Teams</h3>
                     <h3>Actions</h3>
                 </div>
