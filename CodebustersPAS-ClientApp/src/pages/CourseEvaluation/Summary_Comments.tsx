@@ -10,28 +10,67 @@ interface TeamMember {
         conceptualContributions: number;
         practicalContributions: number;
         workEthic: number;
+        problemSolving:number;
     };
     comment: string;
 }
 
 const SummaryComments: React.FC = () => {
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-    const [loggedInUserName, setLoggedInUserName] = useState("");
+    //const [loggedInUserName, setLoggedInUserName] = useState("");
     const navigate = useNavigate();
     //const [scoreData, setScoreData] = useState([]);
     const location = useLocation();
-    const { teamData, scoreData } = location.state || { teamData: [], scoreData: [] };
+    const { teamData = [], scoreData = [] } = location.state || { };
 
     useEffect(() => {
         console.log('Team Data:', teamData);
         console.log('Score Data:', scoreData);
+    
+        if (!teamData || !scoreData) {
+            return;
+        }
+    
+        const mergedTeamMembers = teamData.map((member: any) => {
+            const matchingScore = scoreData.find(
+                (score: any) => score.name === member.name
+            );
+            return {
+                name: member.name,
+                scores: matchingScore
+                    ? {
+                          cooperation: matchingScore.scores.cooperation || 0,
+                          conceptualContributions: matchingScore.scores.conceptualcontribution || 0,
+                          practicalContributions: matchingScore.scores.practicalcontribution || 0,
+                          workEthic: matchingScore.scores.workethic || 0,
+                          problemSolving: matchingScore.scores.problemsolving || 0,
+                      }
+                    : {
+                          cooperation: 0,
+                          conceptualContributions: 0,
+                          practicalContributions: 0,
+                          workEthic: 0,
+                          problemSolving: 0,
+                      },
+                comment: "",
+            };
+        });
+    
+        console.log('Merged Team Members:', mergedTeamMembers);
+    
+        setTeamMembers(mergedTeamMembers);
+    }, [teamData, scoreData]);
       
-        
-      }, [teamData, scoreData]);
-      
-      
-      
-      
+
+    const handleCommentChange = (name: string, newComment: string) => {
+        const updatedTeamMembers = teamMembers.map((member) =>
+            member.name === name
+                ? { ...member, comment: newComment }
+                : member
+        );
+        setTeamMembers(updatedTeamMembers);
+    };
+    
     const handleBack = () => {
         navigate(-1);
     };
@@ -39,12 +78,13 @@ const SummaryComments: React.FC = () => {
         navigate("/Student/SelfAssessment");
     };
 
+/*
     useEffect(() => {
         if (loggedInUserName) {
             getTeamData();
         }
     }, [loggedInUserName]);
-
+    
     async function getTeamData() {
 
         const apiUrl = 'https://localhost:7010/api/Student/GetGroupsAndTeams';
@@ -79,6 +119,7 @@ const SummaryComments: React.FC = () => {
                         conceptualContributions: 0,
                         practicalContributions: 0,
                         workEthic: 0,
+                        problemSolving: 0,
                       },
                   comment: "",
                 };
@@ -99,7 +140,7 @@ const SummaryComments: React.FC = () => {
         }
         
     };
-
+    
     async function fetchUserName() {
         try {
           const response = await fetch("https://localhost:7010/api/Student/GetLoggedInUserName", {
@@ -110,7 +151,7 @@ const SummaryComments: React.FC = () => {
     
           if (response.ok) {
             const data = await response.json();
-            setLoggedInUserName(data.name);
+            //setLoggedInUserName(data.name);
           } else {
             console.error("Error fetching logged in user name");
           }
@@ -118,20 +159,13 @@ const SummaryComments: React.FC = () => {
           console.error("Request failed:", error);
         }
       }
-
     
-
     useEffect(() => {
         fetchUserName();
-    }, []);
-    
-    
+    }, []);*/
 
-    const handleCommentChange = (index: number, newComment: string) => {
-        const updatedTeamMembers = [...teamMembers];
-        updatedTeamMembers[index].comment = newComment;
-        setTeamMembers(updatedTeamMembers);
-    };
+
+    
     
 
     return (
@@ -145,6 +179,7 @@ const SummaryComments: React.FC = () => {
                         <th>2. Conceptual Contributions</th>
                         <th>3. Practical Contributions</th>
                         <th>4. Work Ethic</th>
+                        <th>5. Problem Solving</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -155,6 +190,7 @@ const SummaryComments: React.FC = () => {
                             <td>{member.scores.conceptualContributions}</td>
                             <td>{member.scores.practicalContributions}</td>
                             <td>{member.scores.workEthic}</td>
+                            <td>{member.scores.problemSolving}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -171,7 +207,7 @@ const SummaryComments: React.FC = () => {
                         <textarea
                         id={`comment-${index}`}
                         value={member.comment}
-                        onChange={(e) => handleCommentChange(index, e.target.value)}
+                        onChange={(e) => handleCommentChange(member.name, e.target.value)}
                         placeholder="Enter your comments here"
                         />
                     </div>

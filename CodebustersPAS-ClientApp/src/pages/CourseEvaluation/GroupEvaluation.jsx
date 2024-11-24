@@ -90,6 +90,8 @@ const GroupEvaluation = () => {
         scores: { [dimension]: score },
       });
     }
+
+    console.log("New Score Data", updatedScoreData);
   
     setScoreData(updatedScoreData);
   };
