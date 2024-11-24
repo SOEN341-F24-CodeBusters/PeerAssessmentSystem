@@ -1,12 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 
 const LogoutButton: React.FC = () => {
     const navigate = useNavigate();
   
     const handleLogout = async () => {
-        const apiUrl = 'https://localhost:7010/api/Authentification/LogOut';
+        const apiUrl = `${config.apiBaseUrl}/api/Authentification/LogOut`;
     
         try {
           const response = await fetch(apiUrl, {

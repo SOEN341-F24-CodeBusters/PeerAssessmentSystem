@@ -50,7 +50,7 @@ public class StudentController : ControllerBase {
                         .Select(s => new SC_StudentDTO(
                     s.StudentID,
                     s.User?.FirstName + " " + s.User?.LastName, 
-                    s.Equals(student) || team.StudentEvaluations.Any(e => e.Evaluator.Equals(student) && e.Evaluated.Equals(s))
+                    team.StudentEvaluations.Any(e => e.Evaluator.Equals(student) && e.Evaluated.Equals(s))
                 ))
             ));
 
@@ -68,10 +68,6 @@ public class StudentController : ControllerBase {
         foreach (SC_StudentRatingDTO rating in ratingDTO.ratings) {
             Student studentToRate = team.Students.First(s => s.StudentID.Equals(rating.studentId));
 
-            // Skip if evaluating yourself.
-            if (studentToRate.StudentID == student.StudentID)
-                continue;
-
             // Skip if already evaluated
             if (await _dbContext.StudentEvaluation.AnyAsync(SE => SE.Evaluator.Equals(student) && SE.Evaluated.Equals(studentToRate)))
                 continue;
@@ -81,7 +77,10 @@ public class StudentController : ControllerBase {
                 Team = team,
                 Evaluator = student,
                 Evaluated = studentToRate,
-                Score = rating.score,
+                cooperation = rating.cooperation,
+                conceptualContributions = rating.conceptualContributions,
+                practicalContributions = rating.practicalContributions,
+                workEthic = rating.workEthic,
                 Comments = rating.comment ?? "",
             };
 
@@ -91,6 +90,19 @@ public class StudentController : ControllerBase {
         await _dbContext.SaveChangesAsync();
 
         return Ok();
+    }
+
+    [HttpGet, ActionName("GetComments")]
+    public async Task<ActionResult<List<string>>> GetComments() {
+        
+        Student student = await FetchLoggedInStudent(HttpContext);
+
+        List<string> comments = await _dbContext.StudentEvaluation
+            .Where(SE => SE.Evaluated.Equals(student))
+            .Select(SE => SE.Comments)
+            .ToListAsync();
+
+        return Ok(comments);
     }
 
     [HttpGet, ActionName("GetLoggedInUserName")]
@@ -119,5 +131,5 @@ public class StudentController : ControllerBase {
     public record SC_TeamDTO(Guid teamId, string teamName, string teacherName, string groupName, IEnumerable<SC_StudentDTO> studentList);
     public record SC_StudentDTO(int studentId, string name, bool isRated);
     public record SC_RatingDTO(Guid teamId, List<SC_StudentRatingDTO> ratings);
-    public record SC_StudentRatingDTO(int studentId, int score, string? comment);
+    public record SC_StudentRatingDTO(int studentId, short cooperation, short conceptualContributions, short practicalContributions, short workEthic, string? comment);
 }
