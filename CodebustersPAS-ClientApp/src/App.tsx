@@ -14,6 +14,7 @@ import PeerAssessment from "./pages/Students/PeerAssessment";
 import TeamOverview from "./pages/Teacher/CreateTeam/TeamOverview.jsx";
 import Navbar from "./pages/NavBar";
 import SummaryComments from "./pages/CourseEvaluation/Summary_Comments.tsx";
+import InstructorDashboard from "./pages/Teacher/InstructorDashboard";
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -41,10 +42,13 @@ const App: React.FC = () => {
         <Route path="" element={<SignIn />} /> {}
         <Route path="signup" element={<CreateAccount />} /> {}
         <Route path="group-evaluation" element={<GroupEvaluation />} />
+        
         <Route path="Student/SelfAssessment" element={<SelfAssessment />} />
         <Route path="Student/PeerAssessment" element={<PeerAssessment />} />
-        <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
         <Route path="Student/SummaryComments" element={<SummaryComments />} />
+        
+        <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
+        <Route path="Teacher/Dashboard/:groupName`} element={<InstructorDashboard />} />
       </Routes>
     </div>
   );
