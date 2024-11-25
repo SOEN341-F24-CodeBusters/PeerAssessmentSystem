@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import CSVUpload from './CSVUpload'; 
 import CreateTeamPopup from './CreateTeamPopup';
 import './TeamOverview.css';
@@ -81,29 +82,29 @@ const TeamOverview = () => {
                 <nav className="studentTab">Teacher's Tab</nav>
             </header>
             <section className="courseTeamContainer">
-                <h2 className="courseListTitle">Manage your groups and teams</h2>
+                <h2 className="courseListTitle">Manage your courses and teams</h2>
                 
                 <div className="csv-upload">
                     <CSVUpload onTeamsUpload={(data) => console.log("CSV Data:", data)} />
                 </div>
 
                 <div className="groupSection">
-                    <h3>Create a New Group</h3>
+                    <h3>Create a New Course</h3>
                     <input
                         type="text"
-                        placeholder="Enter Group Name"
+                        placeholder="Enter Course Name"
                         value={groupName}
                         onChange={(e) => setGroupName(e.target.value)}
                         className="group-input"
                     />
                     <button className="create-group-btn" onClick={handleCreateGroup}>
-                        Create Group
+                        Create Course
                     </button>
                     {error && <p className="error-message">{error}</p>}
                 </div>
 
                 <div className="groupColumns">
-                    <h3>Group Name</h3>
+                    <h3>Course Name</h3>
                     <h3>Teams</h3>
                     <h3>Actions</h3>
                 </div>
@@ -111,7 +112,11 @@ const TeamOverview = () => {
                 <div className="groupItems-list">
                     {groups.map((group) => (
                         <div key={group.id} className="groupItem">
-                            <div className="groupCell">{group.name}</div>
+                            <div className="groupCell">
+                            <Link to={`/Teacher/Dashboard/${group.name}`} className="group-link">   
+                                {group.name}
+                                </Link>
+                                </div>
                             <div className="groupCell">
                                 {group.teams.length > 0 ? (
                                     group.teams.map((team) => (

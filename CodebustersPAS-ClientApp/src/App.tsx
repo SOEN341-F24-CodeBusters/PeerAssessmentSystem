@@ -13,6 +13,7 @@ import PeerAssessment from "./pages/Students/PeerAssessment";
 import TeamOverview from "./pages/Teacher/CreateTeam/TeamOverview.jsx";
 import Navbar from "./pages/NavBar";
 import SummaryComments from "./pages/CourseEvaluation/Summary_Comments.tsx";
+import InstructorDashboard from "./pages/Teacher/InstructorDashboard";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -34,6 +35,8 @@ const App: React.FC = () => {
         <Route path={`${base}Student/PeerAssessment`} element={<PeerAssessment />} />
         <Route path={`${base}Teacher/TeamOverview`} element={<TeamOverview />} /> {}
         <Route path={`${base}Student/SummaryComments`} element={<SummaryComments />} />
+        <Route path={`${base}Teacher/Dashboard/:groupName`} element={<InstructorDashboard />} />
+
       </Routes>
     </div>
   );
