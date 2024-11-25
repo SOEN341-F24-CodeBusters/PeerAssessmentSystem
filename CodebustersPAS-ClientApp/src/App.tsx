@@ -48,7 +48,7 @@ const App: React.FC = () => {
         <Route path="Student/SummaryComments" element={<SummaryComments />} />
         
         <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
-        <Route path="Teacher/Dashboard/:groupName`} element={<InstructorDashboard />} />
+        <Route path="Teacher/Dashboard/:groupName" element={<InstructorDashboard />} />
       </Routes>
     </div>
   );
