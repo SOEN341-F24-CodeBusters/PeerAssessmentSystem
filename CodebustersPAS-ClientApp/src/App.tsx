@@ -15,6 +15,7 @@ import TeamOverview from "./pages/Teacher/CreateTeam/TeamOverview.jsx";
 import Navbar from "./pages/NavBar";
 import SummaryComments from "./pages/CourseEvaluation/Summary_Comments.tsx";
 import InstructorDashboard from "./pages/Teacher/InstructorDashboard";
+import CourseEvaluation from './pages/CourseEvaluation/CourseEvaluation'; // Corrected import statement
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const App: React.FC = () => {
         
         <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
         <Route path="Teacher/Dashboard/:groupName" element={<InstructorDashboard />} />
+        <Route path="Teacher/CourseEvaluation" element={<CourseEvaluation />} /> {/* Add the new route */}
       </Routes>
     </div>
   );
