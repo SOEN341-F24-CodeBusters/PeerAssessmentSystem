@@ -10,7 +10,6 @@ interface TeamMember {
         conceptualContributions: number;
         practicalContributions: number;
         workEthic: number;
-        problemSolving:number;
     };
     comment: string;
 }
@@ -43,14 +42,12 @@ const SummaryComments: React.FC = () => {
                           conceptualContributions: matchingScore.scores.conceptualcontribution || 0,
                           practicalContributions: matchingScore.scores.practicalcontribution || 0,
                           workEthic: matchingScore.scores.workethic || 0,
-                          problemSolving: matchingScore.scores.problemsolving || 0,
                       }
                     : {
                           cooperation: 0,
                           conceptualContributions: 0,
                           practicalContributions: 0,
                           workEthic: 0,
-                          problemSolving: 0,
                       },
                 comment: "",
             };
@@ -179,7 +176,6 @@ const SummaryComments: React.FC = () => {
                         <th>2. Conceptual Contributions</th>
                         <th>3. Practical Contributions</th>
                         <th>4. Work Ethic</th>
-                        <th>5. Problem Solving</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -190,7 +186,6 @@ const SummaryComments: React.FC = () => {
                             <td>{member.scores.conceptualContributions}</td>
                             <td>{member.scores.practicalContributions}</td>
                             <td>{member.scores.workEthic}</td>
-                            <td>{member.scores.problemSolving}</td>
                         </tr>
                     ))}
                 </tbody>
