@@ -90,16 +90,17 @@ function PeerAssessment() {
 
 
         <div className="teamItems-list">
-          <div className="teamItem">
-            {teamData.length > 0 ? (
-              teamData.map((team, index) => <TeamItem key={index} {...team} />)
-            ) : (
-              <p className="teamMembers">
-                You are not assigned in any team yet
-              </p>
-            )}
-          </div>
+          {teamData.length > 0 ? (
+          teamData.map((team, index) => (
+        <div key={index} className="teamItem">
+            <TeamItem key={index} {...team} />
         </div>
+        ))
+        ) : (
+        <p className="teamMembers">You are not assigned to any team yet</p>
+        )}
+      </div>
+
       </section>
     </div>
   );
