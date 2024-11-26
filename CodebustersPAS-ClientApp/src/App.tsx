@@ -21,7 +21,7 @@ const App: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'deploy') {  
+    if (process.env.NODE_ENV === "deploy") {
       const redirectPath = sessionStorage.getItem("redirectPath");
       if (redirectPath) {
         sessionStorage.removeItem("redirectPath");
@@ -40,17 +40,17 @@ const App: React.FC = () => {
       <Navbar showLogout={showLogout} />
       <div className="content"></div>
       <Routes>
-        <Route path="" element={<SignIn />} /> {}
-        <Route path="signup" element={<CreateAccount />} /> {}
+        <Route path="" element={<SignIn />} />
+        <Route path="signup" element={<CreateAccount />} />
         <Route path="group-evaluation" element={<GroupEvaluation />} />
-        
+
         <Route path="Student/SelfAssessment" element={<SelfAssessment />} />
         <Route path="Student/PeerAssessment" element={<PeerAssessment />} />
         <Route path="Student/SummaryComments" element={<SummaryComments />} />
-        
+
         <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
         <Route path="Teacher/Dashboard/:groupName" element={<InstructorDashboard />} />
-        <Route path="Teacher/TeamEvaluation" element={<TeamEvaluation />} /> {/* Add this route */}
+        <Route path="Teacher/Dashboard/Charts" element={<TeamEvaluation />} /> {/* Updated Route */}
       </Routes>
     </div>
   );
