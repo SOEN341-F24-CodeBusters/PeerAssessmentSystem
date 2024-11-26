@@ -80,19 +80,17 @@ public class TeacherController : Controller {
         Group.Teams.ForEach(team => {
             team.Students.ForEach(student => {
 
-                int cooperationSum = 0;
-                int conceptualContributionsSum = 0;
-                int practicalContributionsSum = 0;
-                int workEthicSum = 0;
+                // Remove self evaluations
+                var evaluations = student.EvaluationsRecived
+                    .Where(e => e.Evaluated.Id != e.Evaluator.Id)
+                    .ToList();
 
-                foreach (var evaluation in student.EvaluationsRecived) {
-                    cooperationSum += evaluation.cooperation;
-                    conceptualContributionsSum += evaluation.conceptualContributions;
-                    practicalContributionsSum += evaluation.practicalContributions;
-                    workEthicSum += evaluation.workEthic;
-                }
+                int cooperationSum = evaluations.Sum(e => e.cooperation);
+                int conceptualContributionsSum = evaluations.Sum(e => e.conceptualContributions);
+                int practicalContributionsSum = evaluations.Sum(e => e.practicalContributions);
+                int workEthicSum = evaluations.Sum(e => e.workEthic);
+                int count = evaluations.Count;
 
-                int count = team.StudentEvaluations.Count(e => e.Evaluated.Id == student.Id);
 
                 studentEvaluations.Add(new TC_SummaryStudent(
                     student.StudentID,
@@ -144,7 +142,7 @@ public class TeacherController : Controller {
 
                 var evaluations = new List<TC_DetailedEvaluation>();
 
-                foreach (StudentEvaluation evaluation in student.EvaluationsRecived) {
+                foreach (StudentEvaluation evaluation in student.EvaluationsRecived.Where(e => e.Evaluated.Id != e.Evaluator.Id)) {
                     
                     evaluations.Add(new TC_DetailedEvaluation(
                         evaluation.Evaluator.StudentID,
@@ -158,9 +156,23 @@ public class TeacherController : Controller {
                     ));
                 }
 
+                var selfEvaluation = student.EvaluationsGiven.FirstOrDefault(e => e.Evaluator.Id == student.Id);
+
+                var detailedSelfEvaluation = (selfEvaluation is not null) ? new TC_DetailedEvaluation(
+                    selfEvaluation.Evaluator.StudentID,
+                    selfEvaluation.Evaluator.User?.FirstName + " " + selfEvaluation.Evaluator.User?.LastName,
+                    selfEvaluation.cooperation,
+                    selfEvaluation.conceptualContributions,
+                    selfEvaluation.practicalContributions,
+                    selfEvaluation.workEthic,
+                    (selfEvaluation.cooperation + selfEvaluation.conceptualContributions + selfEvaluation.practicalContributions + selfEvaluation.workEthic) / 4,
+                    selfEvaluation.Comments
+                ) : null;
+
                 detailedStudents.Add(new TC_DetailedStudent(
                     student.StudentID,
                     student.User?.FirstName + " " + student.User?.LastName,
+                    detailedSelfEvaluation,
                     evaluations
                 ));
             }
@@ -376,7 +388,8 @@ public class TeacherController : Controller {
     public record TC_DetailedStudent(
         int studentId,
         string studentName,
-        IEnumerable<TC_DetailedEvaluation> Evaluations
+        TC_DetailedEvaluation? selfEvaluation,
+        IEnumerable<TC_DetailedEvaluation> evaluations
     );
 
     public record TC_DetailedEvaluation(
