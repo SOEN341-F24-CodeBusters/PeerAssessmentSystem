@@ -43,6 +43,10 @@ const TeamEvaluationChart = ({ data }) => {
         title: {
           display: true,
           text: "Team Members",
+          color: "#000", // Axis label color
+          font: {
+            size: 14, // Axis label font size
+          },
         },
       },
       y: {
@@ -50,6 +54,10 @@ const TeamEvaluationChart = ({ data }) => {
         title: {
           display: true,
           text: "Scores",
+          color: "#000", // Axis label color
+          font: {
+            size: 14, // Axis label font size
+          },
         },
       },
     },
@@ -57,7 +65,7 @@ const TeamEvaluationChart = ({ data }) => {
 
   return (
     <div style={{ maxWidth: "800px", margin: "auto", padding: "20px" }}>
-      <h2>{data.teamName} - Peer Evaluation</h2>
+      <h2 style={{ color: "#333", fontSize: "24px" }}>{data.teamName} - Peer Evaluation</h2>
       <Bar data={chartData} options={options} />
     </div>
   );

@@ -1,25 +1,67 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import './InstructorDashboard.css';
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import SignIn from "../LoginPage";
+import CreateAccount from "../CreateAccountPage";
+import GroupEvaluation from "../CourseEvaluation/GroupEvaluation";
+import SelfAssessment from "../CourseEvaluation/Self-Assessment";
+import PeerAssessment from "../Students/PeerAssessment";
+import TeamOverview from "../Teacher/CreateTeam/TeamOverview";
+import Navbar from "../NavBar";
+import SummaryComments from "../CourseEvaluation/Summary_Comments";
+import InstructorDashboard from "../Teacher/InstructorDashboard";
+import TeamEvaluation from "../Teacher/TeamEvaluation"; // Import the TeamEvaluation component
 
-const InstructorDashboard: React.FC = () => {
-  const { groupName } = useParams<{ groupName: string }>();
+const App: React.FC = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'deploy') {  
+      const redirectPath = sessionStorage.getItem("redirectPath");
+      if (redirectPath) {
+        sessionStorage.removeItem("redirectPath");
+        console.log("Redirecting to: ", redirectPath);
+        navigate(redirectPath);
+      }
+    }
+  }, [navigate]);
+
+  const location = useLocation();
+
+  const showLogout = !["/", "/signup"].includes(location.pathname);
 
   return (
-    <div className="dashboard-container">
-      <div className="header">
-        <h1>Details for Course: {groupName} </h1>
-      </div>
-      <div className="links-container">
-        <a href="/summary" className="dashboard-link">Summary of results</a>
-        <a href="/detailed-summary" className="dashboard-link">Detailed Summary of results</a>
-        <a href="/charts" className="dashboard-link">Charts</a>
-        <a href="/Teacher/TeamOverview" className="dashboard-link">Return to main menu</a>
-        {/* Add a link to the charts */}
-        <Link to="/Teacher/TeamEvaluation" className="dashboard-link">View Team Evaluation Charts</Link>
-      </div>
+    <div className="App">
+      <Navbar showLogout={showLogout} />
+      <div className="content"></div>
+      <Routes>
+        <Route path="" element={<SignIn />} /> {}
+        <Route path="signup" element={<CreateAccount />} /> {}
+        <Route path="group-evaluation" element={<GroupEvaluation />} />
+        
+        <Route path="Student/SelfAssessment" element={<SelfAssessment />} />
+        <Route path="Student/PeerAssessment" element={<PeerAssessment />} />
+        <Route path="Student/SummaryComments" element={<SummaryComments />} />
+        
+        <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
+        <Route path="Teacher/Dashboard/:groupName" element={<InstructorDashboard />} />
+        <Route path="Teacher/TeamEvaluation" element={<TeamEvaluation />} /> {/* Add this route */}
+      </Routes>
     </div>
   );
 };
 
-export default InstructorDashboard;
+const AppContent: React.FC = () => {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+};
+
+export default AppContent;
