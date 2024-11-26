@@ -51,9 +51,10 @@ const GroupEvaluation = () => {
         
         const teamList = data.flatMap(group => group.studentList || []);
         // Set the teamData excluding the logged-in user
-        setTeamData(teamList.filter((member) => !member.isRated));
-        //<--
-        console.log('Group Evaluation Team is fetched successfully:',teamData );
+        const filteredTeamList = teamList.filter((member) => !member.isRated);
+        setTeamData(filteredTeamList);
+
+        console.log('Group Evaluation Team is fetched successfully:',filteredTeamList );
 
       }else{
         const errorData = await response.json();

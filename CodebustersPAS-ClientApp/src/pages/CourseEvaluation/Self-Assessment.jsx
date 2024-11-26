@@ -1,54 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./EvaluationStyles.css";
 import AssessmentDimension from "./AssessmentDimension";
 
 const SelfAssessment = () => {
   const navigate = useNavigate();
-  const [teamData, setTeamData] = useState([]);
+  const location = useLocation();
+  const { teamData = [], groupEvaluationScores = [] } = location.state || {};
+  
+  //const [teamData, setTeamData] = useState([]);
   const [loggedInUserName, setLoggedInUserName] = useState("");
-  const [scoreData, setScoreData] = useState({});
-  const [comments, setComments] = useState("");
+  const [selfAssessmentData, setSelfAssessmentData] = useState({
+    scores: { cooperation: 0, conceptualContributions: 0, practicalContributions: 0, workEthic: 0 },
+    comment: "",
+  });
+  
+  
 
   const handleBack = () => {
     navigate(-1);
-  };
-
-  const handleSubmit = async () => {
-    const ratings = teamData.map((member) => ({
-      studentId: member.id,
-      cooperation: scoreData.cooperation || 0,
-      conceptualContributions: scoreData.conceptualContributions || 0,
-      practicalContributions: scoreData.practicalContributions || 0,
-      workEthic: scoreData.workEthic || 0,
-      comment: comments,
-    }));
-
-    const payload = {
-      teamId: teamData[0]?.teamId || "", // Assuming all members belong to the same team
-      ratings,
-    };
-
-    try {
-      const response = await fetch("https://localhost:7010/api/Student/RateStudents", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        alert("Ratings submitted successfully!");
-        navigate("/Student/PeerAssessment");
-      } else {
-        console.error("Error submitting ratings");
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
-    }
-    navigate("/Student/PeerAssessment");
   };
 
   async function fetchUserName() {
@@ -70,6 +40,61 @@ const SelfAssessment = () => {
     }
   }
 
+  const handleSelfAssessmentChange = (dimension, score) => {
+    const updatedScores = {
+      ...selfAssessmentData.scores,
+      [dimension]: score,
+    };
+
+    setSelfAssessmentData((prev) => ({
+      ...prev,
+      scores: updatedScores,
+    }));
+
+    console.log("Updated Self-Assessment Data:", selfAssessmentData);
+  };
+  
+  const handleSelfAssessmentCommentChange = (newComment) => {
+    setSelfAssessmentData((prev) => ({
+      ...prev,
+      comment: newComment,
+    }));
+
+    console.log("Self assess comment data:", selfAssessmentData);
+  };
+  
+
+  const handleSubmit = async () => {
+    const combinedData = {
+      groupEvaluations: location.state.finalData, // From GroupEvaluation + SummaryComments
+      selfAssessment: {
+        ...selfAssessmentData,
+        name: loggedInUserName, // Include logged-in user's name
+      }, 
+    };
+  
+    try {
+      const response = await fetch("https://localhost:7010/api/Student/SubmitEvaluations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(combinedData),
+      });
+  
+      if (response.ok) {
+        console.log("Evaluation submitted successfully!");
+        alert("Evaluation submitted successfully!");
+        navigate("/Student/PeerAssessment");
+      } else {
+        console.error("Error submitting evaluation");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+    }
+    //navigate("/Student/PeerAssessment");
+  };
+
+  /*
   async function getTeamData() {
 
     const apiUrl = 'https://localhost:7010/api/Student/GetGroupsAndTeams';
@@ -105,18 +130,12 @@ const SelfAssessment = () => {
       alert('An error occurred. Please check your connection and try again.');
     }
     
-  };
+  };*/
 
-  const handleScoreChange = (dimension, score) => {
-    setScoreData((prev) => ({
-      ...prev,
-      [dimension]: score,
-    }));
-  };
+
 
   useEffect(() => {
     fetchUserName();
-    getTeamData();
   }, []);
 
 
@@ -146,7 +165,7 @@ const SelfAssessment = () => {
           title={dimension.title}
           description={dimension.description}
           members={[loggedInUserName]} // Only other team members
-          onScoreChange={(score) => handleScoreChange(dimension.title, score)}
+          onScoreChange={(score) => handleSelfAssessmentChange(dimension.title, score)}
         />
       ))}
 
@@ -157,8 +176,8 @@ const SelfAssessment = () => {
           name="comments"
           rows="4"
           placeholder="Add any comments or feedback..."
-          value={comments}
-          onChange={(e) => setComments(e.target.value)}
+          value={selfAssessmentData.comment}
+          onChange={(e) => handleSelfAssessmentCommentChange(e.target.value)}
         ></textarea>
       </div>
 
