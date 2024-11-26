@@ -14,8 +14,18 @@ namespace Infrastructure {
 
 
         public PeerAssessmentSystemDbContext() {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
+
+            #if RELEASE
+                var path = "/data/";
+            #else
+                var folder = Environment.SpecialFolder.LocalApplicationData;
+                var path = Environment.GetFolderPath(folder);
+            #endif
+
+            if (!Directory.Exists(path)) {
+                Directory.CreateDirectory(path);
+            }
+
             DbPath = System.IO.Path.Join(path, "CodebustersPAS.db");
         }
 
