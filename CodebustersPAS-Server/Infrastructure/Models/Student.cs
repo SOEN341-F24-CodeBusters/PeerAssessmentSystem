@@ -13,7 +13,7 @@ namespace Infrastructure.Models {
 
         public List<Team>? Teams { get; set; }
 
-        public List<StudentEvaluation>? EvaluationsGiven { get; set; }
-        public List<StudentEvaluation>? EvaluationsRecived { get; set; }
+        public required List<StudentEvaluation> EvaluationsGiven { get; set; }
+        public required List<StudentEvaluation> EvaluationsRecived { get; set; }
     }
 }
