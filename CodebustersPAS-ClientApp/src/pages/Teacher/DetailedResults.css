@@ -1,0 +1,104 @@
+/* Global reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .detailed-results-container {
+    padding: 30px;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    height: 90vh;
+    overflow-y: auto;
+    justify-content: center;
+  }
+  
+  .detailed-results-container h1 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    padding: 15px 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    color: #333;
+    width: fit-content;
+  }
+  
+  .team-section,
+  .student-section {
+    margin-bottom: 40px;
+    color: black;
+  }
+  
+  .results-table {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .results-table th {
+    background-color: #007acc; 
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .results-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    color: #333;
+  }
+  
+  .comments-section {
+    margin-top: 20px;
+  }
+  
+  .comments-section p {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .evaluation-comment {
+    font-size: 14px;
+    color: #555;
+    margin-top: 10px;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    font-size: 18px;
+    color: #007acc;
+    padding: 20px;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    padding-top: 80px; 
+  }
+  
+  .error,
+  .loading {
+    font-size: 18px;
+    color: rgb(228, 235, 30);
+    padding: 20px;
+    text-align: center;
+  }
+  
+  
+  
