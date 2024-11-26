@@ -52,7 +52,7 @@ const App: React.FC = () => {
         <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
         <Route path="Teacher/Dashboard/:groupName" element={<InstructorDashboard />} />
 
-        <Route path="/summary/:groupName" element={<SummaryResults />} />
+        <Route path="/summary/:groupId" Component={SummaryResults} />
 
       </Routes>
     </div>
