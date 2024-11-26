@@ -3,7 +3,6 @@ using Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static API.Controllers.StudentController;
 
 namespace API.Controllers;
 
@@ -60,6 +59,128 @@ public class TeacherController : Controller {
         return Ok(groupDTO);
     }
 
+    [HttpGet, ActionName("SummaryOfResults")]
+    public async Task<ActionResult<TC_GroupSummaryOfResults>> SummaryOfResults(Guid groupId) {
+
+        var Group = await _dbContext.Groups
+            .Include(g => g.Teams)
+                .ThenInclude(t => t.StudentEvaluations)
+                .ThenInclude(e => e.Evaluated)
+                .ThenInclude(s => s.User)
+            .Include(g => g.Teams)
+                .ThenInclude(t => t.StudentEvaluations)
+                .ThenInclude(e => e.Evaluator)
+                .ThenInclude(s => s.User)
+            .FirstOrDefaultAsync(group => group.Id == groupId);
+
+        if (Group is null) return NotFound("Group not found");
+
+        var studentEvaluations = new List<TC_SummaryStudent>();
+
+        Group.Teams.ForEach(team => {
+            team.Students.ForEach(student => {
+
+                int cooperationSum = 0;
+                int conceptualContributionsSum = 0;
+                int practicalContributionsSum = 0;
+                int workEthicSum = 0;
+
+                foreach (var evaluation in student.EvaluationsRecived) {
+                    cooperationSum += evaluation.cooperation;
+                    conceptualContributionsSum += evaluation.conceptualContributions;
+                    practicalContributionsSum += evaluation.practicalContributions;
+                    workEthicSum += evaluation.workEthic;
+                }
+
+                int count = team.StudentEvaluations.Count(e => e.Evaluated.Id == student.Id);
+
+                studentEvaluations.Add(new TC_SummaryStudent(
+                    student.StudentID,
+                    student.User?.FirstName + " " + student.User?.LastName,
+                    team.TeamName,
+                    cooperationSum/count,
+                    conceptualContributionsSum/count,
+                    practicalContributionsSum/count,
+                    workEthicSum/count,
+                    (cooperationSum + conceptualContributionsSum + practicalContributionsSum + workEthicSum) / count / 4,
+                    count
+                ));
+
+            });
+        });
+
+        var result = new TC_GroupSummaryOfResults(
+            Group.Id,
+            Group.Name,
+            studentEvaluations.OrderBy(s => s.StudentId).ToList()
+        );
+
+        return Ok(result);
+    }
+
+    [HttpGet, ActionName("DetailedResults")]
+    public async Task<ActionResult<TC_GroupDetailedResults>> DetailedResults(Guid groupId) {
+
+        var Group = await _dbContext.Groups
+            .Include(g => g.Teams)
+                .ThenInclude(t => t.StudentEvaluations)
+                .ThenInclude(e => e.Evaluated)
+                .ThenInclude(s => s.User)
+            .Include(g => g.Teams)
+                .ThenInclude(t => t.StudentEvaluations)
+                .ThenInclude(e => e.Evaluator)
+                .ThenInclude(s => s.User)
+            .FirstOrDefaultAsync(group => group.Id == groupId);
+
+        if (Group is null) return NotFound("Group not found");
+
+        var detailedTeams = new List<TC_DetailedTeam>();
+
+        foreach (Team team in Group.Teams) {
+
+            var detailedStudents = new List<TC_DetailedStudent>();
+
+            foreach (Student student in team.Students) {
+
+                var evaluations = new List<TC_DetailedEvaluation>();
+
+                foreach (StudentEvaluation evaluation in student.EvaluationsRecived) {
+                    
+                    evaluations.Add(new TC_DetailedEvaluation(
+                        evaluation.Evaluator.StudentID,
+                        evaluation.Evaluator.User?.FirstName + " " + evaluation.Evaluator.User?.LastName,
+                        evaluation.cooperation,
+                        evaluation.conceptualContributions,
+                        evaluation.practicalContributions,
+                        evaluation.workEthic,
+                        (evaluation.cooperation + evaluation.conceptualContributions + evaluation.practicalContributions + evaluation.workEthic) / 4,
+                        evaluation.Comments
+                    ));
+                }
+
+                detailedStudents.Add(new TC_DetailedStudent(
+                    student.StudentID,
+                    student.User?.FirstName + " " + student.User?.LastName,
+                    evaluations
+                ));
+            }
+
+            detailedTeams.Add(new TC_DetailedTeam(
+                team.Id,
+                team.TeamName,
+                detailedStudents
+            ));
+        }
+
+        var result = new TC_GroupDetailedResults(
+            Group.Id,
+            Group.Name,
+            detailedTeams
+        );
+
+        return Ok(result);
+    }
+
     [HttpPost, ActionName("group")]
     public async Task<ActionResult> CreateGroup(string name) {
 
@@ -110,6 +231,8 @@ public class TeacherController : Controller {
             student = new Student {
                 Id = new Guid(),
                 StudentID = studentId,
+                EvaluationsGiven = new List<StudentEvaluation>(),
+                EvaluationsRecived = new List<StudentEvaluation>(),
             };
             _dbContext.Students.Add(student);
             await _dbContext.SaveChangesAsync();
@@ -176,7 +299,9 @@ public class TeacherController : Controller {
 
                 team.Students.Add(new Student {
                     Id = new Guid(),
-                    StudentID = int.Parse(studentId)
+                    StudentID = int.Parse(studentId),
+                    EvaluationsGiven = new List<StudentEvaluation>(),
+                    EvaluationsRecived = new List<StudentEvaluation>(),
                 });
             }
 
@@ -216,5 +341,52 @@ public class TeacherController : Controller {
         Guid id,
         string Name,
         IEnumerable<TC_TeamDTO> Teams
+    );
+
+    public record TC_GroupSummaryOfResults(
+        Guid GroupId,
+        string GroupName,
+        IEnumerable<TC_SummaryStudent> Students
+    );
+
+    public record TC_SummaryStudent(
+        int StudentId,
+        string StudentName,
+        string team,
+        int cooperation,
+        int conceptualContributions,
+        int practicalContributions,
+        int workEthic,
+        double average,
+        int count
+    );
+
+    public record TC_GroupDetailedResults (
+        Guid GroupId,
+        string GroupName,
+        IEnumerable<TC_DetailedTeam> Teams
+    );
+
+    public record TC_DetailedTeam(
+        Guid TeamId,
+        string TeamName,
+        IEnumerable<TC_DetailedStudent> Students
+    );
+
+    public record TC_DetailedStudent(
+        int studentId,
+        string studentName,
+        IEnumerable<TC_DetailedEvaluation> Evaluations
+    );
+
+    public record TC_DetailedEvaluation(
+        int evaluatorStudentId,
+        string evaluatorStudentName,
+        int cooperation,
+        int conceptualContributions,
+        int practicalContributions,
+        int workEthic,
+        double average,
+        string comment
     );
 }
