@@ -1,0 +1,76 @@
+/* Container for the summary results */
+.summary-results-container {
+    width: 80%;
+    margin: 20px auto;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Table styling */
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Table header styling */
+  .summary-table thead {
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: left;
+  }
+  
+  .summary-table th {
+    padding: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  /* Table row styling */
+  .summary-table tbody tr {
+    transition: background-color 0.3s ease;
+  }
+  
+  .summary-table tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .summary-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Alternate row styling for better readability */
+  .summary-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .summary-table tbody tr:nth-child(odd) {
+    background-color: #fff;
+  }
+  
+  /* Styling for the header */
+  h1 {
+    font-size: 24px;
+    color:white;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Error message styling */
+  .error {
+    color: red;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* Loading message styling */
+  .loading {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  

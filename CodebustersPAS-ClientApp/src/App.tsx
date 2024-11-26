@@ -16,6 +16,8 @@ import Navbar from "./pages/NavBar";
 import SummaryComments from "./pages/CourseEvaluation/Summary_Comments.tsx";
 import InstructorDashboard from "./pages/Teacher/InstructorDashboard";
 
+import SummaryResults from "./pages/Teacher/SummaryResults";
+
 const App: React.FC = () => {
   const navigate = useNavigate();
 
@@ -49,6 +51,9 @@ const App: React.FC = () => {
         
         <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
         <Route path="Teacher/Dashboard/:groupName" element={<InstructorDashboard />} />
+
+        <Route path="/summary/:groupName" element={<SummaryResults />} />
+
       </Routes>
     </div>
   );

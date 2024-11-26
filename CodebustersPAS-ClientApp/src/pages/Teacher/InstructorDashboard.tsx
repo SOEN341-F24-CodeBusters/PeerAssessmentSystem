@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './InstructorDashboard.css';
 
 const InstructorDashboard: React.FC = () => {
@@ -12,7 +12,9 @@ const InstructorDashboard: React.FC = () => {
         <h1>Details for Course: {groupName} </h1>
       </div>
       <div className="links-container">
-        <a href="/summary" className="dashboard-link">Summary of results</a>
+      <Link to={`/summary/${groupName}`} className="dashboard-link">
+          Summary of results
+        </Link>
         <a href="/detailed-summary" className="dashboard-link">Detailed Summary of results</a>
         <a href="/charts" className="dashboard-link">Charts</a>
         <a href="/Teacher/TeamOverview" className="dashboard-link">Return to main menu</a>
