@@ -15,6 +15,7 @@ import TeamOverview from "./pages/Teacher/CreateTeam/TeamOverview.jsx";
 import Navbar from "./pages/NavBar";
 import SummaryComments from "./pages/CourseEvaluation/Summary_Comments.tsx";
 import InstructorDashboard from "./pages/Teacher/InstructorDashboard";
+import TeamEvaluation from "./pages/Teacher/TeamEvaluation"; // Import the TeamEvaluation component
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const App: React.FC = () => {
         
         <Route path="Teacher/TeamOverview" element={<TeamOverview />} />
         <Route path="Teacher/Dashboard/:groupName" element={<InstructorDashboard />} />
+        <Route path="Teacher/TeamEvaluation" element={<TeamEvaluation />} /> {/* Add this route */}
       </Routes>
     </div>
   );
