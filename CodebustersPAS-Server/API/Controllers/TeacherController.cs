@@ -80,22 +80,16 @@ public class TeacherController : Controller {
         Group.Teams.ForEach(team => {
             team.Students.ForEach(student => {
 
-                int cooperationSum = 0;
-                int conceptualContributionsSum = 0;
-                int practicalContributionsSum = 0;
-                int workEthicSum = 0;
-                int count = 0;
-
                 // Remove self evaluations
                 var evaluations = student.EvaluationsRecived
                     .Where(e => e.Evaluated.Id != e.Evaluator.Id)
                     .ToList();
 
-                cooperationSum = evaluations.Sum(e => e.cooperation);
-                conceptualContributionsSum = evaluations.Sum(e => e.conceptualContributions);
-                practicalContributionsSum = evaluations.Sum(e => e.practicalContributions);
-                workEthicSum = evaluations.Sum(e => e.workEthic);
-                count = evaluations.Count;
+                int cooperationSum = evaluations.Sum(e => e.cooperation);
+                int conceptualContributionsSum = evaluations.Sum(e => e.conceptualContributions);
+                int practicalContributionsSum = evaluations.Sum(e => e.practicalContributions);
+                int workEthicSum = evaluations.Sum(e => e.workEthic);
+                int count = evaluations.Count;
 
 
                 studentEvaluations.Add(new TC_SummaryStudent(
