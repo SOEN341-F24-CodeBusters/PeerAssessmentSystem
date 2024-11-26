@@ -7,13 +7,47 @@ const SelfAssessment = () => {
   const navigate = useNavigate();
   const [teamData, setTeamData] = useState([]);
   const [loggedInUserName, setLoggedInUserName] = useState("");
-
+  const [scoreData, setScoreData] = useState({});
+  const [comments, setComments] = useState("");
 
   const handleBack = () => {
     navigate(-1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const ratings = teamData.map((member) => ({
+      studentId: member.id,
+      cooperation: scoreData.cooperation || 0,
+      conceptualContributions: scoreData.conceptualContributions || 0,
+      practicalContributions: scoreData.practicalContributions || 0,
+      workEthic: scoreData.workEthic || 0,
+      comment: comments,
+    }));
+
+    const payload = {
+      teamId: teamData[0]?.teamId || "", // Assuming all members belong to the same team
+      ratings,
+    };
+
+    try {
+      const response = await fetch("https://localhost:7010/api/Student/RateStudents", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        alert("Ratings submitted successfully!");
+        navigate("/Student/PeerAssessment");
+      } else {
+        console.error("Error submitting ratings");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+    }
     navigate("/Student/PeerAssessment");
   };
 
@@ -73,6 +107,13 @@ const SelfAssessment = () => {
     
   };
 
+  const handleScoreChange = (dimension, score) => {
+    setScoreData((prev) => ({
+      ...prev,
+      [dimension]: score,
+    }));
+  };
+
   useEffect(() => {
     fetchUserName();
     getTeamData();
@@ -105,6 +146,7 @@ const SelfAssessment = () => {
           title={dimension.title}
           description={dimension.description}
           members={[loggedInUserName]} // Only other team members
+          onScoreChange={(score) => handleScoreChange(dimension.title, score)}
         />
       ))}
 
@@ -115,6 +157,8 @@ const SelfAssessment = () => {
           name="comments"
           rows="4"
           placeholder="Add any comments or feedback..."
+          value={comments}
+          onChange={(e) => setComments(e.target.value)}
         ></textarea>
       </div>
 

@@ -14,7 +14,16 @@ const AssessmentDimension = ({ title, description, members, onScoreChange }) => 
           <label className="member-label">{member}</label>
           <select
             className="member-input"
-            onChange={(e) => onScoreChange(member, title.toLowerCase().replace(/\s/g, ""), parseInt(e.target.value))}
+            onChange={
+              onScoreChange
+                ? (e) =>
+                    onScoreChange(
+                      member,
+                      title.toLowerCase().replace(/\s/g, ""),
+                      parseInt(e.target.value)
+                    )
+                : null
+            }
           >
             <option>Choose 1 - 5</option>
             {[...Array(5)].map((_, i) => (

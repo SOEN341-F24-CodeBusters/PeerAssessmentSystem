@@ -53,7 +53,7 @@ const GroupEvaluation = () => {
         // Set the teamData excluding the logged-in user
         setTeamData(teamList.filter((member) => !member.isRated));
         //<--
-        console.log('Team is fetched successfully:', data);
+        console.log('Group Evaluation Team is fetched successfully:',teamData );
 
       }else{
         const errorData = await response.json();

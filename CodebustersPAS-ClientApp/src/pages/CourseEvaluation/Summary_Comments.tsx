@@ -66,13 +66,20 @@ const SummaryComments: React.FC = () => {
                 : member
         );
         setTeamMembers(updatedTeamMembers);
+        console.log(teamMembers);
     };
     
     const handleBack = () => {
         navigate(-1);
     };
     const handleNext = () => {
-        navigate("/Student/SelfAssessment");
+        const finalData = teamMembers.map((member) => ({
+            name: member.name,
+            scores: member.scores,
+            comment: member.comment,
+          }));
+          console.log("final data:",finalData);
+        navigate("/Student/SelfAssessment", { state: { finalData }});
     };
 
 /*

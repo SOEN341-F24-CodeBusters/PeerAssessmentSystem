@@ -48,7 +48,7 @@ function PeerAssessment() {
       if (response.ok) {
         const data = await response.json();
         setTeamData(data);
-        console.log("Team is fetched successfully:", data);
+        console.log("All Team Members are fetched successfully:", data);
       } else {
         const errorData = await response.json();
         console.error("Error fetching team data:", errorData);
