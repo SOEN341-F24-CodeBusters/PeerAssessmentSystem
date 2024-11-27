@@ -24,6 +24,7 @@ const GroupEvaluation = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log({fetchUserName:data.name});
         setLoggedInUserName(data.name);
       } else {
         console.error("Error fetching logged in user name");
@@ -50,7 +51,9 @@ const GroupEvaluation = () => {
         
         const teamList = data.flatMap(group => group.studentList || []);
         // Set the teamData excluding the logged-in user
-        const filteredTeamList = teamList.filter((member) => !member.isRated);
+        console.log({teamList:teamList,loggedInUserName:loggedInUserName});
+        const filteredTeamList = teamList.filter((member) => member.name!== loggedInUserName);
+        console.log({filteredTeamList:filteredTeamList});
         setTeamData(filteredTeamList);
 
         console.log('Group Evaluation Team is fetched successfully:',filteredTeamList );
@@ -69,7 +72,7 @@ const GroupEvaluation = () => {
   useEffect(() => {
     fetchUserName();
     getTeamData();
-  }, []);
+  }, [loggedInUserName]);
 
   const handleScoreChange = (memberName, dimension, score) => {
     const updatedScoreData = [...scoreData];
@@ -116,10 +119,10 @@ const GroupEvaluation = () => {
         title: "Cooperation",
         description: "Actively participating in meetings; Communicating within the group; Cooperating within the group; Assisting team-mates when needed; Volunteering for tasks."
       }, {
-        title: "Conceptual Contribution",
+        title: "Conceptual Contributions",
         description: "Researching and gathering information; Quality of individual contribution; Suggesting ideas; Tying ideas together; Identifying difficulties; Identifying effective approaches."
       }, {
-        title: "Practical Contribution",
+        title: "Practical Contributions",
         description: "Writing of the report(s); Reviewing others’ report(s) or section(s); Providing constructive feedback on the report(s) or the presentation; Contributing to the organization of the work; Contributing to the preparation of presentation(s) (if appropriate)."
       }, {
         title: "Work Ethic",

@@ -34,21 +34,22 @@ const SummaryComments: React.FC = () => {
             const matchingScore = scoreData.find(
                 (score: any) => score.name === member.name
             );
+            
             return {
                 name: member.name,
                 scores: matchingScore
-                    ? {
-                          cooperation: matchingScore.scores.cooperation || 0,
-                          conceptualContributions: matchingScore.scores.conceptualcontribution || 0,
-                          practicalContributions: matchingScore.scores.practicalcontribution || 0,
-                          workEthic: matchingScore.scores.workethic || 0,
-                      }
-                    : {
-                          cooperation: 0,
-                          conceptualContributions: 0,
-                          practicalContributions: 0,
-                          workEthic: 0,
-                      },
+            ? {
+                  cooperation: matchingScore.scores?.cooperation ?? 0,
+                  conceptualContributions: matchingScore.scores?.conceptualContributions ?? 0,
+                  practicalContributions: matchingScore.scores?.practicalContributions ?? 0,
+                  workEthic: matchingScore.scores?.workEthic ?? 0,
+              }
+            : {
+                  cooperation: 0,
+                  conceptualContributions: 0,
+                  practicalContributions: 0,
+                  workEthic: 0,
+              },
                 comment: "",
             };
         });
@@ -73,13 +74,13 @@ const SummaryComments: React.FC = () => {
         navigate(-1);
     };
     const handleNext = () => {
-        const finalData = teamMembers.map((member) => ({
+        const groupEvaluationScores = teamMembers.map((member) => ({
             name: member.name,
-            scores: member.scores,
+            scores: member.scores ?? 0,
             comment: member.comment,
           }));
-          console.log("final data:",finalData);
-        navigate("/Student/SelfAssessment", { state: { finalData }});
+          console.log("final data:",groupEvaluationScores);
+        navigate("/Student/SelfAssessment", { state: { groupEvaluationScores }});
     };
 
 /*
@@ -189,10 +190,10 @@ const SummaryComments: React.FC = () => {
                     {teamMembers.map((member, index) => (
                         <tr key={index}>
                             <td>{member.name}</td>
-                            <td>{member.scores.cooperation}</td>
-                            <td>{member.scores.conceptualContributions}</td>
-                            <td>{member.scores.practicalContributions}</td>
-                            <td>{member.scores.workEthic}</td>
+                            <td>{member.scores.cooperation ?? 0}</td>
+                            <td>{member.scores.conceptualContributions ?? 0}</td>
+                            <td>{member.scores.practicalContributions ?? 0}</td>
+                            <td>{member.scores.workEthic ?? 0}</td>
                         </tr>
                     ))}
                 </tbody>

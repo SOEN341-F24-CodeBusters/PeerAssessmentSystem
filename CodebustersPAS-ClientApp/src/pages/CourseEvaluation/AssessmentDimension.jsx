@@ -16,12 +16,18 @@ const AssessmentDimension = ({ title, description, members, onScoreChange }) => 
             className="member-input"
             onChange={
               onScoreChange
-                ? (e) =>
+                ? (e) =>{              
+                  const formattedTitle = title
+                  .toLowerCase()
+                  .replace(/\s(.)/g, (match, group1) => group1.toUpperCase())
+                  .replace(/\s/g, "");
+
                     onScoreChange(
                       member,
-                      title.toLowerCase().replace(/\s/g, ""),
+                      formattedTitle,
                       parseInt(e.target.value)
                     )
+                  }
                 : null
             }
           >
