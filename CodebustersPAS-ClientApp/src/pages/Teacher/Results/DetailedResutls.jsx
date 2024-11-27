@@ -39,7 +39,7 @@ const DetailedResutls = () => {
 
     return (
         <div className="results">
-            <h1 className="results__h1">Results</h1>
+            <h1 className="results__h1">Detailed Results</h1>
             <div className="results__group">
                 Group: {results.groupName}
             </div>
