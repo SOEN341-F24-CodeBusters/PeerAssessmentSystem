@@ -12,6 +12,8 @@ const SelfAssessment = () => {
   const [teamId, setTeamId] = useState("");
   const [loggedInUserName, setLoggedInUserName] = useState("");
   const [loggedInUserId, setLoggedInUserId] = useState(null);
+  const [groupName, setGroupName] = useState("");  // New state for Group Name
+  const [teamName, setTeamName] = useState(""); 
 
   const [selfAssessmentData, setSelfAssessmentData] = useState({
     scores: { cooperation: 0, conceptualContributions: 0, practicalContributions: 0, workEthic: 0 },
@@ -172,6 +174,8 @@ const SelfAssessment = () => {
 
         const loggedInUser = studentList.find(member => member.name === loggedInUserName);
         const loggedInStudentId = loggedInUser ? loggedInUser.studentId : null;
+        setGroupName(data[0]?.groupName || "N/A");  // Assuming the API provides groupName
+        setTeamName(data[0]?.teamName || "N/A");    // Assuming the API provides teamName
 
         // Log the studentId for the logged-in user
         console.log('Logged-in user studentId:', loggedInStudentId);
@@ -217,10 +221,10 @@ const SelfAssessment = () => {
       <h1 className="evaluation-title">Self-Assessment</h1>
       <div className="evaluation-info">
         <p>
-          Course: <strong>Soen 341</strong>
+          Course: <strong>{groupName}</strong>
         </p>
         <p>
-          Team Name: <strong>teamName</strong>
+          Team Name: <strong>{teamName}</strong>
         </p>
         <p>
           Name: <strong>{loggedInUserName}</strong>
