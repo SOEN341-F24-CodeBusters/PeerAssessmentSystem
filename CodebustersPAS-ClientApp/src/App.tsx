@@ -15,6 +15,7 @@ import TeamOverview from "./pages/Teacher/CreateTeam/TeamOverview.jsx";
 import Navbar from "./pages/NavBar";
 import SummaryComments from "./pages/CourseEvaluation/Summary_Comments.tsx";
 import InstructorDashboard from "./pages/Teacher/InstructorDashboard";
+import ChangePassword from "./pages/ChangePassword";
 import SummaryResults from "./pages/Teacher/Results/SummaryResults.jsx";
 import DetailedResults from "./pages/Teacher/Results/DetailedResutls.jsx";
 import TeamEvaluation from "./pages/Teacher/TeamEvaluation"; // Import the TeamEvaluation component
@@ -44,6 +45,8 @@ const App: React.FC = () => {
       <Routes>
         <Route path="" element={<SignIn />} />
         <Route path="signup" element={<CreateAccount />} />
+        <Route path="change-password" element={<ChangePassword />} />
+        
         <Route path="group-evaluation" element={<GroupEvaluation />} />
 
         <Route path="Student/SelfAssessment" element={<SelfAssessment />} />
