@@ -65,11 +65,8 @@ public class TeacherController : Controller {
         var Group = await _dbContext.Groups
             .Include(g => g.Teams)
                 .ThenInclude(t => t.StudentEvaluations)
-                .ThenInclude(e => e.Evaluated)
-                .ThenInclude(s => s.User)
             .Include(g => g.Teams)
-                .ThenInclude(t => t.StudentEvaluations)
-                .ThenInclude(e => e.Evaluator)
+                .ThenInclude(t => t.Students)
                 .ThenInclude(s => s.User)
             .FirstOrDefaultAsync(group => group.Id == groupId);
 
@@ -81,26 +78,25 @@ public class TeacherController : Controller {
             team.Students.ForEach(student => {
 
                 // Remove self evaluations
-                var evaluations = student.EvaluationsRecived
+                var evaluations = student.EvaluationsRecived?
                     .Where(e => e.Evaluated.Id != e.Evaluator.Id)
                     .ToList();
 
-                int cooperationSum = evaluations.Sum(e => e.cooperation);
-                int conceptualContributionsSum = evaluations.Sum(e => e.conceptualContributions);
-                int practicalContributionsSum = evaluations.Sum(e => e.practicalContributions);
-                int workEthicSum = evaluations.Sum(e => e.workEthic);
-                int count = evaluations.Count;
-
+                int cooperationSum = evaluations?.Sum(e => e.cooperation) ?? 0;
+                int conceptualContributionsSum = evaluations?.Sum(e => e.conceptualContributions) ?? 0;
+                int practicalContributionsSum = evaluations?.Sum(e => e.practicalContributions) ?? 0;
+                int workEthicSum = evaluations?.Sum(e => e.workEthic) ?? 0;
+                int count = evaluations?.Count ?? 0;
 
                 studentEvaluations.Add(new TC_SummaryStudent(
                     student.StudentID,
                     student.User?.FirstName + " " + student.User?.LastName,
                     team.TeamName,
-                    cooperationSum/count,
-                    conceptualContributionsSum/count,
-                    practicalContributionsSum/count,
-                    workEthicSum/count,
-                    (cooperationSum + conceptualContributionsSum + practicalContributionsSum + workEthicSum) / count / 4,
+                    count == 0 ? 0 : cooperationSum / count,
+                    count == 0 ? 0 : conceptualContributionsSum / count,
+                    count == 0 ? 0 : practicalContributionsSum / count,
+                    count == 0 ? 0 : workEthicSum / count,
+                    count == 0 ? 0 : (cooperationSum + conceptualContributionsSum + practicalContributionsSum + workEthicSum) / count / 4,
                     count
                 ));
 
@@ -121,13 +117,17 @@ public class TeacherController : Controller {
 
         var Group = await _dbContext.Groups
             .Include(g => g.Teams)
-                .ThenInclude(t => t.StudentEvaluations)
-                .ThenInclude(e => e.Evaluated)
+                .ThenInclude(t => t.Students)
                 .ThenInclude(s => s.User)
             .Include(g => g.Teams)
-                .ThenInclude(t => t.StudentEvaluations)
+                .ThenInclude(t => t.Students)
+                .ThenInclude(s => s.EvaluationsRecived)
                 .ThenInclude(e => e.Evaluator)
                 .ThenInclude(s => s.User)
+            .Include(g => g.Teams)
+                .ThenInclude(t => t.Students)
+                .ThenInclude(s => s.EvaluationsGiven)
+
             .FirstOrDefaultAsync(group => group.Id == groupId);
 
         if (Group is null) return NotFound("Group not found");
@@ -142,8 +142,12 @@ public class TeacherController : Controller {
 
                 var evaluations = new List<TC_DetailedEvaluation>();
 
-                foreach (StudentEvaluation evaluation in student.EvaluationsRecived.Where(e => e.Evaluated.Id != e.Evaluator.Id)) {
-                    
+                var studentEvaluations = student.EvaluationsRecived
+                    .Where(e => e.Evaluated.Id != e.Evaluator.Id)
+                    .ToList();
+
+                foreach (StudentEvaluation evaluation in studentEvaluations) {
+
                     evaluations.Add(new TC_DetailedEvaluation(
                         evaluation.Evaluator.StudentID,
                         evaluation.Evaluator.User?.FirstName + " " + evaluation.Evaluator.User?.LastName,
@@ -156,7 +160,7 @@ public class TeacherController : Controller {
                     ));
                 }
 
-                var selfEvaluation = student.EvaluationsGiven.FirstOrDefault(e => e.Evaluator.Id == student.Id);
+                var selfEvaluation = student.EvaluationsGiven.FirstOrDefault(e => e.Evaluated.Id == student.Id);
 
                 var detailedSelfEvaluation = (selfEvaluation is not null) ? new TC_DetailedEvaluation(
                     selfEvaluation.Evaluator.StudentID,
@@ -288,7 +292,7 @@ public class TeacherController : Controller {
 
             // Create team from first value in row
             Team team = new Team {
-                Id = new Guid(), 
+                Id = new Guid(),
                 TeamName = values[0].Trim(),
                 Group = group,
                 Students = new List<Student>(),
@@ -297,14 +301,14 @@ public class TeacherController : Controller {
 
             // Create students in team from the rest of the values in row
             foreach (var studentId in values.Skip(1)) {
-                
-                if(string.IsNullOrWhiteSpace(studentId)) {
+
+                if (string.IsNullOrWhiteSpace(studentId)) {
                     continue;
                 }
 
                 // Check if student already exists and add student to the team
                 var student = await _dbContext.Students.FirstOrDefaultAsync(s => s.StudentID == int.Parse(studentId));
-                if(student is not null) {
+                if (student is not null) {
                     team.Students.Add(student);
                     continue;
                 }
@@ -373,7 +377,7 @@ public class TeacherController : Controller {
         int count
     );
 
-    public record TC_GroupDetailedResults (
+    public record TC_GroupDetailedResults(
         Guid GroupId,
         string GroupName,
         IEnumerable<TC_DetailedTeam> Teams

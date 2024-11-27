@@ -117,6 +117,30 @@ public class StudentController : ControllerBase {
     }
 
 
+    [HttpGet, ActionName("GetCommentsV2")]
+    public async Task<ActionResult<IEnumerable<SC_CommentsDTO>>> GetCommentsV2() {
+        
+        Student student = await FetchLoggedInStudent(HttpContext);
+
+        var teams = await _dbContext.Teams
+            .Include(t => t.StudentEvaluations)
+            .Where(t => t.Students.Contains(student))
+            .ToListAsync();
+        
+        var comments = teams.Select(t => new SC_CommentsDTO(
+            t.TeamName,
+            t.StudentEvaluations
+                .Where(SE => SE.Evaluated.Equals(student))
+                .Select(SE => SE.Comments),
+            t.StudentEvaluations
+                .Where(SE => SE.Evaluated.Equals(student) && SE.Evaluator.Equals(student))
+                .Select(SE => SE.Comments)
+                .FirstOrDefault()
+        ));
+
+        return Ok(comments);
+    }
+
     private async Task<Student> FetchLoggedInStudent(HttpContext httpContext) {
         Guid userId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type.Equals("Guid")).Value);
         User user = await _dbContext.Users
@@ -132,4 +156,5 @@ public class StudentController : ControllerBase {
     public record SC_StudentDTO(int studentId, string name, bool isRated);
     public record SC_RatingDTO(Guid teamId, List<SC_StudentRatingDTO> ratings);
     public record SC_StudentRatingDTO(int studentId, short cooperation, short conceptualContributions, short practicalContributions, short workEthic, string? comment);
+    public record SC_CommentsDTO(string teamName, IEnumerable<string> comments, string? selfComment);
 }
