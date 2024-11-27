@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import CSVUpload from './CSVUpload'; 
+import CSVUpload from './CSVUpload';
 import CreateTeamPopup from './CreateTeamPopup';
 import './TeamOverview.css';
 import config from '../../../../config';
@@ -83,7 +83,7 @@ const TeamOverview = () => {
             </header>
             <section className="courseTeamContainer">
                 <h2 className="courseListTitle">Manage your courses and teams</h2>
-                
+
                 <div className="csv-upload">
                     <CSVUpload onTeamsUpload={(data) => console.log("CSV Data:", data)} />
                 </div>
@@ -113,10 +113,10 @@ const TeamOverview = () => {
                     {groups.map((group) => (
                         <div key={group.id} className="groupItem">
                             <div className="groupCell">
-                            <Link to={`/Teacher/Dashboard/${group.name}`} className="group-link">   
-                                {group.name}
+                                <Link to={`/Teacher/Dashboard/${group.name}`} className="group-link">
+                                    {group.name}
                                 </Link>
-                                </div>
+                            </div>
                             <div className="groupCell">
                                 {group.teams.length > 0 ? (
                                     group.teams.map((team) => (
@@ -129,6 +129,16 @@ const TeamOverview = () => {
                             <div className="groupCell">
                                 <button className="create-team-btn" onClick={handleOpenPopup}>
                                     Add Team
+                                </button>
+                                <button>
+                                    <Link to={`/Teacher/Results/Summary/${group.id}`} className="">
+                                        Summary results
+                                    </Link>
+                                </button>
+                                <button>
+                                    <Link to={`/Teacher/Results/Detailed/${group.id}`} className="">
+                                        Detailed results
+                                    </Link>
                                 </button>
                             </div>
                         </div>
