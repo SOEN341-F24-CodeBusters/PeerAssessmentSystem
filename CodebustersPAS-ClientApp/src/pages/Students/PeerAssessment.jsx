@@ -48,7 +48,7 @@ function PeerAssessment() {
       if (response.ok) {
         const data = await response.json();
         setTeamData(data);
-        console.log("Team is fetched successfully:", data);
+        console.log("All Team Members are fetched successfully:", data);
       } else {
         const errorData = await response.json();
         console.error("Error fetching team data:", errorData);
@@ -77,38 +77,30 @@ function PeerAssessment() {
       <section className="courseTeamContainer">
         <h2 className="courseListTitle">Your courses are listed here</h2>
         <div className="courseColumns">
-          {/* <h3>Course Name</h3>
-          <h3>Project Description</h3>
-          <h3>Course Duration</h3>
-          <h3>Status</h3> */}
-
-          <h3>Team Name</h3>
           <h3>Course Name</h3>
+          <h3>Team Name</h3>
           <h3>Members</h3>
         </div>
 
-        <div className="courseItems-list">
+        {/*<div className="courseItems-list">
           {courseData.map((course, index) => (
             <CourseItem key={index} {...course} />
           ))}
-        </div>
+        </div>*/}
 
-        <div className="teamColumns">
-          <h3>Team Name</h3>
-          <h3>Members</h3>
-        </div>
 
         <div className="teamItems-list">
-          <div className="teamItem">
-            {teamData.length > 0 ? (
-              teamData.map((team, index) => <TeamItem key={index} {...team} />)
-            ) : (
-              <p className="teamMembers">
-                You are not assigned in any team yet
-              </p>
-            )}
-          </div>
+          {teamData.length > 0 ? (
+          teamData.map((team, index) => (
+        <div key={index} className="teamItem">
+            <TeamItem key={index} {...team} />
         </div>
+        ))
+        ) : (
+        <p className="teamMembers">You are not assigned to any team yet</p>
+        )}
+      </div>
+
       </section>
     </div>
   );

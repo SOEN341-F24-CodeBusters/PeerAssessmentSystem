@@ -105,6 +105,18 @@ public class StudentController : ControllerBase {
         return Ok(comments);
     }
 
+    [HttpGet, ActionName("GetLoggedInUserName")]
+    public async Task<ActionResult<string>> GetLoggedInUserName() {
+        // Fetch the logged-in student
+        Student student = await FetchLoggedInStudent(HttpContext);
+
+        // Retrieve the student's name
+        string studentName = $"{student.User?.FirstName} {student.User?.LastName}";
+
+        return Ok(new { name = studentName });
+    }
+
+
     [HttpGet, ActionName("GetCommentsV2")]
     public async Task<ActionResult<IEnumerable<SC_CommentsDTO>>> GetCommentsV2() {
         
