@@ -12,7 +12,7 @@ describe('CSVUpload Component', () => {
     render(<CSVUpload />);
     
     expect(screen.getByText('Upload Teams CSV File')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Enter Group Name')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Enter Course Name')).toBeInTheDocument();
     expect(screen.getByText('Upload CSV')).toBeInTheDocument();
   });
 
