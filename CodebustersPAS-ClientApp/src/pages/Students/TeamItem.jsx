@@ -1,13 +1,23 @@
 import React from "react";
 import "./CourseListingStudentsPage.css";
+import { Link } from "react-router-dom";
 
-function TeamItem({ teamName, studentList }) {
+function TeamItem({ groupName, teamName, studentList }) {
   return (
     <>
+      <Link
+        className="teamName"
+        to={`/Student/Evaluation/${groupName}/${teamName}`}
+      >
+        {groupName}
+      </Link>
       <h3 className="teamName">{teamName}</h3>
-      <p className="teamMembers">{studentList.map(student => student.name).join(", ")}</p>
+      <p className="teamMembers">
+        {studentList.map((student) => student.name).join(", ")}
+      </p>
     </>
   );
 }
 
 export default TeamItem;
+

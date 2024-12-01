@@ -10,7 +10,11 @@ public class StudentEvaluation {
     public required Student Evaluator { get; set; }
     public required Student Evaluated { get; set; }
 
-    public int Score { get; set; }
+
+    public short cooperation { get; set; }
+    public short conceptualContributions { get; set; }
+    public short practicalContributions { get; set; }
+    public short workEthic { get; set; }
     public required string Comments { get; set; }
 
 }

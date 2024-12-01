@@ -64,11 +64,25 @@ public class AuthentificationController : ControllerBase {
     [HttpPost, ActionName("SignUp")]
     public async Task<ActionResult> SignUp(SignUpDTO signUpDTO) {
 
-        // Check if user exists
-        User? user = await _dbContext.Users.FirstOrDefaultAsync(User => User.email == signUpDTO.email);
-        if (user is not null) {
+        // Check if user with same email exists
+        bool checkIfUserWithSameEmail = await _dbContext.Users
+            .Where(User => User.email == signUpDTO.email)
+            .AnyAsync();
+        if (checkIfUserWithSameEmail) {
             return Unauthorized(new { message = "User with this email already exits." });
         }
+
+        // Check if user with same studentId exists
+        bool checkIfUserWithSameStudentId = await _dbContext.Users
+            .Include(u => u.student)
+            .Where(u => u.student != null)
+            .Where(u => u.student!.StudentID == signUpDTO.studentId)
+            .AnyAsync();
+        if (checkIfUserWithSameStudentId) {
+            return Unauthorized(new { message = "User with this student ID already exits." });
+        }
+
+        User? user = null;
 
         if (signUpDTO.userType == 0) {
 
@@ -89,7 +103,9 @@ public class AuthentificationController : ControllerBase {
                     new Infrastructure.Models.Student {
                         Id = new Guid(),
                         StudentID = (int)signUpDTO.studentId!,
-                        User = user
+                        User = user,
+                        EvaluationsGiven = new List<StudentEvaluation>(),
+                        EvaluationsRecived = new List<StudentEvaluation>(),
                     });
             } else {
                 student.User = user;
@@ -123,6 +139,37 @@ public class AuthentificationController : ControllerBase {
 
         return Ok();
     }
+
+
+    [HttpPost, ActionName("ChangePassword")]
+    public async Task<ActionResult> ChangePassword(ChangePasswordDTO changePasswordDTO) {
+        var userId = User.FindFirstValue("Guid");
+        if (userId == null) {
+            return Unauthorized(new { message = "User not authenticated." });
+        }
+
+        var user = await _dbContext.Users.FirstOrDefaultAsync(User => User.Id == Guid.Parse(userId));
+        if (user == null) {
+            return NotFound(new { message = "User not found." });
+        }
+
+        // Check old password
+        if (!changePasswordDTO.oldPassword.Equals(user.Password)) {
+            return Unauthorized(new { message = "Old password is incorrect." });
+        }
+
+        // Update password
+        user.Password = changePasswordDTO.newPassword;
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync();
+
+        return Ok(new { message = "Password changed successfully." });
+    }
+
+    public record ChangePasswordDTO(
+        string oldPassword,
+        string newPassword
+    );
 
     public record LogInDTO(
         int userType,

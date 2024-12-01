@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Papa from 'papaparse';
+import config from '../../../../config';
 
 console.log("CSVUpload rendered");
 
@@ -71,7 +72,7 @@ const CSVUpload = () => {
     formData.append("groupName", groupName);
 
     try {
-      const response = await fetch("https://localhost:7010/api/Teacher/upload-csv", {
+      const response = await fetch(`${config.apiBaseUrl}/api/Teacher/upload-csv`, {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -88,12 +89,12 @@ const CSVUpload = () => {
   };
 
 
-  return (
+  /*return (
     <div>
-      <h2>Upload Teams CSV File</h2>
+      <h2 style={{ color: 'white' }}>Upload Teams CSV File</h2>
       <input 
         type="text" 
-        placeholder="Enter Group Name" 
+        placeholder="Enter Course Name" 
         value={groupName} 
         onChange={(e) => setGroupName(e.target.value)} 
       />
@@ -105,38 +106,6 @@ const CSVUpload = () => {
 
       <button onClick={handleUploadCSV}>Upload CSV</button>
 
-      {/*{csvData.length > 0 && (
-        <div>
-          <h3>CSV Data</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Team Name</th>
-                <th>Class</th>
-                {Array.from({ length: 6 }, (_, i) => (
-                  <React.Fragment key={i}>
-                    <th>Student {i + 1} Name</th>
-                    <th>Student {i + 1} ID</th>
-                  </React.Fragment>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {csvData.map((row, index) => (
-                <tr key={index}>
-                  <td>{row['Team Name']}</td>
-                  {Array.from({ length: 6 }, (_, i) => (
-                    <React.Fragment key={i}>
-                      <td>{row[`Student ${i + 1} ID`] || ""}</td>
-                    </React.Fragment>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>*/}
     
     {csvData.length > 0 && (
         <div>
@@ -157,6 +126,110 @@ const CSVUpload = () => {
                   <td>{row['Student ID 1']}</td>
                   <td>{row['Student ID 2']}</td>
                   <td>{row['Student ID 3']}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};*/
+  return (
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "20px", color: "white" }}>Upload Teams CSV File</h2>
+
+      {/* Group Name Input */}
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Enter Course Name"
+          value={groupName}
+          onChange={(e) => setGroupName(e.target.value)}
+          style={{
+            padding: "10px",
+            width: "100%",
+            maxWidth: "400px",
+            marginBottom: "10px",
+            borderRadius: "5px",
+            border: "1px solid #ccc",
+          }}
+        />
+      </div>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        <button
+          onClick={downloadTemplate}
+          style={{
+            padding: "10px 20px",
+            borderRadius: "5px",
+            backgroundColor: "#007BFF",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Download CSV Template
+        </button>
+
+        <input
+          type="file"
+          accept=".csv"
+          style={{
+            padding: "10px",
+            borderRadius: "5px",
+            cursor: "pointer",
+            color:"black",
+            backgroundColor: "#f8f9fa",
+          }}
+        />
+
+        <button
+          onClick={handleUploadCSV}
+          style={{
+            padding: "10px 20px",
+            borderRadius: "5px",
+            backgroundColor: "#28a745",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Upload CSV
+        </button>
+      </div>
+
+      {/* Feedback Messages */}
+      {error && <p style={{ color: "red", fontWeight: "bold" }}>{error}</p>}
+      {uploadStatus && <p style={{ color: "green", fontWeight: "bold" }}>{uploadStatus}</p>}
+
+      {/* CSV Data Preview */}
+      {csvData.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>CSV Data Preview</h3>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              marginTop: "10px",
+            }}
+          >
+            <thead>
+              <tr style={{ backgroundColor: "#007BFF", color: "white" }}>
+                <th style={{ border: "1px solid #ccc", padding: "10px" }}>Team Name</th>
+                <th style={{ border: "1px solid #ccc", padding: "10px" }}>Student ID 1</th>
+                <th style={{ border: "1px solid #ccc", padding: "10px" }}>Student ID 2</th>
+                <th style={{ border: "1px solid #ccc", padding: "10px" }}>Student ID 3</th>
+              </tr>
+            </thead>
+            <tbody>
+              {csvData.map((row, index) => (
+                <tr key={index} style={{ backgroundColor: index % 2 === 0 ? "#f8f9fa" : "white" }}>
+                  <td style={{ border: "1px solid #ccc", padding: "10px" }}>{row["Team Name"]}</td>
+                  <td style={{ border: "1px solid #ccc", padding: "10px" }}>{row["Student ID 1"]}</td>
+                  <td style={{ border: "1px solid #ccc", padding: "10px" }}>{row["Student ID 2"]}</td>
+                  <td style={{ border: "1px solid #ccc", padding: "10px" }}>{row["Student ID 3"]}</td>
                 </tr>
               ))}
             </tbody>

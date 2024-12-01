@@ -20,6 +20,8 @@ body {
   min-height: 100vh;
   width: 100vw;
   padding: 4.4rem 6.6rem;
+
+  margin-top: 100px;
 }
 
 .header {
@@ -54,13 +56,15 @@ body {
   padding: 1.7rem 2.5rem;
 }
 
-.courseListTitle, .teamListTitle {
+.courseListTitle,
+.teamListTitle {
   color: #a6a6a6;
   font-size: 1.6rem;
   margin-bottom: 3.2rem;
 }
 
-.courseColumns, .teamColumns {
+.courseColumns,
+.teamColumns {
   display: flex;
   width: 100%;
   gap: 1rem;
@@ -71,15 +75,18 @@ body {
   padding: 0px 2rem;
 }
 
-.courseItems-list, .teamItems-list {
-  display: flex;             
-  flex-direction: column;     
-  gap: 1rem;                  
-  width: 100%;              
+.courseItems-list,
+.teamItems-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.5rem 0;
 }
 
 /* Item Styles */
-.courseItem, .teamItem {
+.courseItem,
+.teamItem {
   border-radius: 1.7rem;
   background-color: rgba(56, 55, 57, 1);
   display: flex;
@@ -92,17 +99,21 @@ body {
   margin-bottom: 1rem;
   padding: 2.3rem 2.8rem;
   transition: background-color 0.3s ease;
+  flex-wrap: wrap;
 }
 
-.courseItem:hover, .teamItem:hover {
+.courseItem:hover,
+.teamItem:hover {
   background-color: rgba(66, 65, 67, 1);
 }
 
-.courseName, .teamName {
-  font-size: 2rem;
+.courseName,
+.teamName {
+  font-size: 1.5rem;
 }
 
-.courseDescription, .teamMembers {
+.courseDescription,
+.teamMembers {
   flex-grow: 1;
   width: 23.6rem;
 }

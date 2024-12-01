@@ -50,7 +50,7 @@ public class StudentController : ControllerBase {
                         .Select(s => new SC_StudentDTO(
                     s.StudentID,
                     s.User?.FirstName + " " + s.User?.LastName, 
-                    s.Equals(student) || team.StudentEvaluations.Any(e => e.Evaluator.Equals(student) && e.Evaluated.Equals(s))
+                    team.StudentEvaluations.Any(e => e.Evaluator.Equals(student) && e.Evaluated.Equals(s))
                 ))
             ));
 
@@ -68,10 +68,6 @@ public class StudentController : ControllerBase {
         foreach (SC_StudentRatingDTO rating in ratingDTO.ratings) {
             Student studentToRate = team.Students.First(s => s.StudentID.Equals(rating.studentId));
 
-            // Skip if evaluating yourself.
-            if (studentToRate.StudentID == student.StudentID)
-                continue;
-
             // Skip if already evaluated
             if (await _dbContext.StudentEvaluation.AnyAsync(SE => SE.Evaluator.Equals(student) && SE.Evaluated.Equals(studentToRate)))
                 continue;
@@ -81,7 +77,10 @@ public class StudentController : ControllerBase {
                 Team = team,
                 Evaluator = student,
                 Evaluated = studentToRate,
-                Score = rating.score,
+                cooperation = rating.cooperation,
+                conceptualContributions = rating.conceptualContributions,
+                practicalContributions = rating.practicalContributions,
+                workEthic = rating.workEthic,
                 Comments = rating.comment ?? "",
             };
 
@@ -91,6 +90,55 @@ public class StudentController : ControllerBase {
         await _dbContext.SaveChangesAsync();
 
         return Ok();
+    }
+
+    [HttpGet, ActionName("GetComments")]
+    public async Task<ActionResult<List<string>>> GetComments() {
+        
+        Student student = await FetchLoggedInStudent(HttpContext);
+
+        List<string> comments = await _dbContext.StudentEvaluation
+            .Where(SE => SE.Evaluated.Equals(student))
+            .Select(SE => SE.Comments)
+            .ToListAsync();
+
+        return Ok(comments);
+    }
+
+    [HttpGet, ActionName("GetLoggedInUserName")]
+    public async Task<ActionResult<string>> GetLoggedInUserName() {
+        // Fetch the logged-in student
+        Student student = await FetchLoggedInStudent(HttpContext);
+
+        // Retrieve the student's name
+        string studentName = $"{student.User?.FirstName} {student.User?.LastName}";
+
+        return Ok(new { name = studentName });
+    }
+
+
+    [HttpGet, ActionName("GetCommentsV2")]
+    public async Task<ActionResult<IEnumerable<SC_CommentsDTO>>> GetCommentsV2() {
+        
+        Student student = await FetchLoggedInStudent(HttpContext);
+
+        var teams = await _dbContext.Teams
+            .Include(t => t.StudentEvaluations)
+            .Where(t => t.Students.Contains(student))
+            .ToListAsync();
+        
+        var comments = teams.Select(t => new SC_CommentsDTO(
+            t.TeamName,
+            t.StudentEvaluations
+                .Where(SE => SE.Evaluated.Equals(student))
+                .Select(SE => SE.Comments),
+            t.StudentEvaluations
+                .Where(SE => SE.Evaluated.Equals(student) && SE.Evaluator.Equals(student))
+                .Select(SE => SE.Comments)
+                .FirstOrDefault()
+        ));
+
+        return Ok(comments);
     }
 
     private async Task<Student> FetchLoggedInStudent(HttpContext httpContext) {
@@ -107,5 +155,6 @@ public class StudentController : ControllerBase {
     public record SC_TeamDTO(Guid teamId, string teamName, string teacherName, string groupName, IEnumerable<SC_StudentDTO> studentList);
     public record SC_StudentDTO(int studentId, string name, bool isRated);
     public record SC_RatingDTO(Guid teamId, List<SC_StudentRatingDTO> ratings);
-    public record SC_StudentRatingDTO(int studentId, int score, string? comment);
+    public record SC_StudentRatingDTO(int studentId, short cooperation, short conceptualContributions, short practicalContributions, short workEthic, string? comment);
+    public record SC_CommentsDTO(string teamName, IEnumerable<string> comments, string? selfComment);
 }

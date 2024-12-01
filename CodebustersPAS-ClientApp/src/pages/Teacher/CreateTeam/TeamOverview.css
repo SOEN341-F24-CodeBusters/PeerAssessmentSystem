@@ -1,164 +1,238 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .app-container {
-    text-align: center;
-  }
-  
-  .popup-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it's on top */
-  }
-  
-  .popup-content {
-    background-color: #2b2b2b;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    text-align: center;
-  }
-  
-  .popup-content h2 {
-    margin: 0 0 20px;
-    color: white;
-  }
-  
-  .create-team-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
-  
-  .create-team-btn:hover {
-    background-color: #45a049;
-  }
-  
-  .teams-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-top: 20px; /* Added margin for spacing */
-  }
-  
-  .team-card {
-    background-color: #333333;
-    padding: 20px;
-    border-radius: 5px;
-    width: 150px;
-    text-align: center;
-    margin: 10px;
-  }
-  
-  .team-card h3 {
-    margin: 0;
-    font-size: 18px;
-  }
-  
-  .team-card p {
-    margin: 5px 0 0;
-    font-size: 14px;
-  }
-  
-  .team-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #666666;
-    background-color: #1a1a1a;
-    color: white;
-  }
-  
-  .popup-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .popup-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .popup-btn.green {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .popup-btn.gray {
-    background-color: #888888;
-    color: white;
-  }
-  
-  .team-card button {
-    margin-top: 5px;
-    background-color: #555555;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .team-card button:hover {
-    background-color: #777777;
-  }
-  
-  .team-card button + button {
-    margin-left: 10px;
-  }
-  
-  .members-list {
-    margin-top: 10px;
-    padding-left: 10px;
-  }
-  
-  .members-list p {
-    margin: 0;
-    font-size: 14px;
-    color: #ccc;
-  }
-  
-  /* Styles for the CSV Upload Component */
-  .csv-upload {
-    margin-top: 20px; /* Added margin for spacing */
-  }
-  
-  .csv-upload input[type="file"] {
-    background-color: #333333; /* Consistent background */
-    color: white;
-    padding: 10px;
-    border: 1px solid #666666;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-  }
-  
-  .csv-upload p {
-    margin-top: 10px;
-    color: red; /* Error message color */
-  }
+  font-family: Arial, sans-serif;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
 
-  
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  height: 100vh; /* Make the container take up the full viewport height */
+
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2b2b2b;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.studentTab {
+  font-size: 16px;
+  color: #007BFF;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid #007BFF;
+  border-radius: 5px;
+  padding: 5px 10px;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.courseTeamContainer {
+  margin-top: 20px;
+  background-color: #2b2b2b;
+  padding: 20px;
+  border-radius: 10px;
+  flex-grow: 1; /* Allow this section to grow and fill the remaining space */
+  overflow-y: auto; 
+}
+
+.courseListTitle {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.groupSection {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.group-input {
+  padding: 8px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #333;
+  color: white;
+}
+
+.create-group-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.create-group-btn:hover {
+  background-color: #45a049;
+}
+
+.csv-upload {
+  margin-bottom: 20px;
+}
+
+.csv-upload input[type="file"] {
+  background-color: #333333;
+  color: white;
+  padding: 10px;
+  border: 1px solid #666666;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.csv-upload p {
+  margin-top: 10px;
+  color: red;
+}
+
+.groupColumns, .teamColumns {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.groupItem, .teamItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #555;
+}
+
+.groupCell, .teamCell {
+  flex: 1;
+  text-align: center;
+}
+
+.team-item {
+  background-color: #333;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+.create-team-btn {
+  background-color: #007BFF;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.create-team-btn:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.teamMembers {
+  text-align: center;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.teamColumns {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.table-header, .table-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #555;
+}
+
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: #2b2b2b;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.popup-content h2 {
+  margin: 0 0 20px;
+  color: white;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-btn.green {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.popup-btn.gray {
+  background-color: #888888;
+  color: white;
+}
+
+.groupItems-list {
+  margin-top: 20px;
+  max-height: 500px; /* Set a maximum height for the list */
+  overflow-y: auto; /* Enable vertical scrolling for the list */
+  padding-right: 10px; /* Add padding to prevent overlap with scrollbar */
+}
+
+/* Add a custom scrollbar style (optional) */
+.groupItems-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.groupItems-list::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 5px;
+}
+
+.groupItems-list::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}

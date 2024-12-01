@@ -7,9 +7,9 @@ Team Members and Roles
 | **Name** | **Student Id** | **Role** |
 | - | - | - |
 | Louis Choiniere | 40218808 | DevOps & Backend |
-| Omar Selim | 40155915 | Fullstack |
+| Omar Selim | 40155915 | Frontend |
 | Theodor Salcianu | 40209641 | Fullstack |
-| Pacifique Uwamukiza | 40227229 | Fullstack | 
+| Pacifique Uwamukiza | 40227229 | Frontend | 
 | Jingnan Wang | 40282296 | Fullstack |
 | Valeriia Nikandrova | 40157880 | Frontend |
 

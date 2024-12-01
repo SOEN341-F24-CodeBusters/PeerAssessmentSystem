@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import "./CourseListingStudentsPage.css";
 import CourseItem from "./CourseItem";
 import TeamItem from "./TeamItem";
+import config from "../../../config";
 
 function PeerAssessment() {
-
   const [courseData, setCourseData] = React.useState([]);
   const [teamData, setTeamData] = useState([]);
 
@@ -33,33 +33,30 @@ function PeerAssessment() {
     return temp_data;
   }
 
-
   async function getTeamData() {
-
-    const apiUrl = 'https://localhost:7010/api/Student/GetGroupsAndTeams';
+    const apiUrl = `${config.apiBaseUrl}/api/Student/GetGroupsAndTeams`;
 
     try {
       const response = await fetch(apiUrl, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include'
+        credentials: "include",
       });
 
-      if (response.ok){
+      if (response.ok) {
         const data = await response.json();
         setTeamData(data);
-        console.log('Team is fetched successfully:', data);
-
-      }else{
+        console.log("All Team Members are fetched successfully:", data);
+      } else {
         const errorData = await response.json();
-        console.error('Error fetching team data:', errorData);
+        console.error("Error fetching team data:", errorData);
         alert(errorData);
       }
-    }catch (error) {
-      console.error('Request failed:', error);
-      alert('An error occurred. Please check your connection and try again.');
+    } catch (error) {
+      console.error("Request failed:", error);
+      alert("An error occurred. Please check your connection and try again.");
     }
     /*For deisplay test: 
     const teamData = [
@@ -69,10 +66,7 @@ function PeerAssessment() {
       },
     ];
     setTeamData(teamData);*/
-    
-  };
-
-
+  }
 
   return (
     <div className="container">
@@ -84,42 +78,32 @@ function PeerAssessment() {
         <h2 className="courseListTitle">Your courses are listed here</h2>
         <div className="courseColumns">
           <h3>Course Name</h3>
-          <h3>Project Description</h3>
-          <h3>Course Duration</h3>
-          <h3>Status</h3>
-        </div>
-
-        <div className="courseItems-list">
-          {courseData.map((course, index) => (
-            <CourseItem key={index} {...course} />
-          ))}
-
-        </div>
-
-        <div className="teamColumns">
           <h3>Team Name</h3>
           <h3>Members</h3>
         </div>
 
+        {/*<div className="courseItems-list">
+          {courseData.map((course, index) => (
+            <CourseItem key={index} {...course} />
+          ))}
+        </div>*/}
+
+
         <div className="teamItems-list">
-          <div className="teamItem">
           {teamData.length > 0 ? (
-            teamData.map((team, index) => (
-              <TeamItem key={index} {...team} />
-            ))
-          ) : (
-            <p className="teamMembers">You are not assigned in any team yet</p>
-          )}
-          </div>
-          
+          teamData.map((team, index) => (
+        <div key={index} className="teamItem">
+            <TeamItem key={index} {...team} />
         </div>
-        
+        ))
+        ) : (
+        <p className="teamMembers">You are not assigned to any team yet</p>
+        )}
+      </div>
+
       </section>
-      
-      
     </div>
   );
 }
 
 export default PeerAssessment;
-
